@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.34902.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANIMAL.DAL", "ANIMAL.DAL\ANIMAL.DAL.csproj", "{F8B42D99-2F4E-4533-A13B-E4EAFEF60F11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANIMAL.MODEL", "ANIMAL.MODEL\ANIMAL.MODEL.csproj", "{956E6A5A-309C-49CA-A3DF-4BED4A7A3BEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANIMAL.Repository", "ANIMAL.Repository\ANIMAL.Repository.csproj", "{802F17A5-4220-4EB8-80CB-4E09005FF352}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANIMAL.Repository.Common", "ANIMAL.Repository.Common\ANIMAL.Repository.Common.csproj", "{34FDA341-5C9F-4A13-8482-6CD50AB7FB36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANIMAL.Service", "ANIMAL.Service\ANIMAL.Service.csproj", "{1A147B0A-2B86-48B1-BDAA-DFEDE3DD6E82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANIMAL.Service.Common", "ANIMAL.Service.Common\ANIMAL.Service.Common.csproj", "{56717965-48C7-4A9F-82FC-706737704B18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANIMAL.WebApi", "ANIMAL.WebApi\ANIMAL.WebApi.csproj", "{A6FB77C3-EDC5-4866-9658-E65EF4569DCE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8B42D99-2F4E-4533-A13B-E4EAFEF60F11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8B42D99-2F4E-4533-A13B-E4EAFEF60F11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8B42D99-2F4E-4533-A13B-E4EAFEF60F11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8B42D99-2F4E-4533-A13B-E4EAFEF60F11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{956E6A5A-309C-49CA-A3DF-4BED4A7A3BEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{956E6A5A-309C-49CA-A3DF-4BED4A7A3BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{956E6A5A-309C-49CA-A3DF-4BED4A7A3BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{956E6A5A-309C-49CA-A3DF-4BED4A7A3BEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{802F17A5-4220-4EB8-80CB-4E09005FF352}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{802F17A5-4220-4EB8-80CB-4E09005FF352}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{802F17A5-4220-4EB8-80CB-4E09005FF352}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{802F17A5-4220-4EB8-80CB-4E09005FF352}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34FDA341-5C9F-4A13-8482-6CD50AB7FB36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34FDA341-5C9F-4A13-8482-6CD50AB7FB36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34FDA341-5C9F-4A13-8482-6CD50AB7FB36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34FDA341-5C9F-4A13-8482-6CD50AB7FB36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A147B0A-2B86-48B1-BDAA-DFEDE3DD6E82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A147B0A-2B86-48B1-BDAA-DFEDE3DD6E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A147B0A-2B86-48B1-BDAA-DFEDE3DD6E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A147B0A-2B86-48B1-BDAA-DFEDE3DD6E82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56717965-48C7-4A9F-82FC-706737704B18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56717965-48C7-4A9F-82FC-706737704B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56717965-48C7-4A9F-82FC-706737704B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56717965-48C7-4A9F-82FC-706737704B18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6FB77C3-EDC5-4866-9658-E65EF4569DCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6FB77C3-EDC5-4866-9658-E65EF4569DCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6FB77C3-EDC5-4866-9658-E65EF4569DCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6FB77C3-EDC5-4866-9658-E65EF4569DCE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1840D486-71D8-4442-9A76-7F7CD2770928}
+	EndGlobalSection
+EndGlobal

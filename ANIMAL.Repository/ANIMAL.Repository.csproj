@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ANIMAL.DAL\ANIMAL.DAL.csproj" />
+    <ProjectReference Include="..\ANIMAL.MODEL\ANIMAL.MODEL.csproj" />
+    <ProjectReference Include="..\ANIMAL.Repository.Common\ANIMAL.Repository.Common.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ANIMAL.DAL\ANIMAL.DAL.csproj" />
+    <ProjectReference Include="..\ANIMAL.MODEL\ANIMAL.MODEL.csproj" />
+    <ProjectReference Include="..\ANIMAL.Repository.Common\ANIMAL.Repository.Common.csproj" />
+    <ProjectReference Include="..\ANIMAL.Repository\ANIMAL.Repository.csproj" />
+    <ProjectReference Include="..\ANIMAL.Service.Common\ANIMAL.Service.Common.csproj" />
+  </ItemGroup>
+
+</Project>

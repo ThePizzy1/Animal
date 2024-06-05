@@ -46,7 +46,26 @@ namespace ANIMAL.Repository
         public IEnumerable<AnimalDomain> GetAllAnimalDomain()
         {
             var animalDb = _appDbContext.Animals.ToList();
-            var animalDomain = animalDb.Select(e => new AnimalDomain(e));
+            var animalDomain = animalDb.Select(e => new AnimalDomain(
+                e.IdAnimal,
+                e.Name,
+                e.Family,
+                e.Species,
+                e.Subspecies,
+                e.Age,
+                e.Gender,
+                e.Weight,
+                e.Height,
+                e.Length,
+                e.Neutered,
+                e.Vaccinated,
+                e.Microchipped,
+                e.Trained,
+                e.Socialized,
+                e.HealthIssues,
+                e.PersonalityDescription,
+                e.Adopted));
+
             return animalDomain;
         }
 
@@ -63,13 +82,35 @@ namespace ANIMAL.Repository
 
         public IEnumerable<FishDomain> GetAllFishDomain()
         {
-            var fish = _appDbContext.Fish
-                                .Join(_appDbContext.Animals, f => f.AnimalId, a => a.IdAnimal,
-                                      (f, a) => new { Fish = f, Animal = a })
-                                .Select(x => _mappingService.Map<FishDomain>(x))
-                                .ToList();
+            var fishList = _appDbContext.Fish
+      .Join(_appDbContext.Animals, f => f.AnimalId, a => a.IdAnimal,
+            (f, a) => new { Fish = f, Animal = a })
+      .Select(x => new FishDomain(
+          x.Animal.IdAnimal,
+          x.Animal.Name,
+          x.Animal.Family,
+          x.Animal.Species,
+          x.Animal.Subspecies,
+          x.Animal.Age,
+          x.Animal.Gender,
+          x.Animal.Weight,
+          x.Animal.Height,
+          x.Animal.Length,
+          x.Animal.Neutered,
+          x.Animal.Vaccinated,
+          x.Animal.Microchipped,
+          x.Animal.Trained,
+          x.Animal.Socialized,
+          x.Animal.HealthIssues,
+          x.Animal.PersonalityDescription,
+          x.Animal.Adopted,
+          x.Fish.AnimalId,
+          x.Fish.TankSize,
+          x.Fish.CompatibleSpecies,
+          x.Fish.RecommendedItems))
+      .ToList();
 
-            return fish;
+            return fishList;
         }
 
         public IEnumerable<MammalDomain> GetAllMammalDomain()
@@ -77,7 +118,29 @@ namespace ANIMAL.Repository
             var mammals = _appDbContext.Mammals
                                  .Join(_appDbContext.Animals, m => m.AnimalId, a => a.IdAnimal,
                                        (m, a) => new { Mammal = m, Animal = a })
-                                 .Select(x => _mappingService.Map<MammalDomain>(x))
+                                 .Select(x => new MammalDomain(
+                                     x.Animal.IdAnimal,
+                                     x.Animal.Name,
+                                     x.Animal.Family,
+                                     x.Animal.Species,
+                                     x.Animal.Subspecies,
+                                     x.Animal.Age,
+                                     x.Animal.Gender,
+                                     x.Animal.Weight,
+                                     x.Animal.Height,
+                                     x.Animal.Length,
+                                     x.Animal.Neutered,
+                                     x.Animal.Vaccinated,
+                                     x.Animal.Microchipped,
+                                     x.Animal.Trained,
+                                     x.Animal.Socialized,
+                                     x.Animal.HealthIssues,
+                                     x.Animal.PersonalityDescription,
+                                     x.Animal.Adopted,
+                                     x.Mammal.AnimalId,
+                                     x.Mammal.CoatType,
+                                     x.Mammal.GroomingProducts
+                                 ))
                                  .ToList();
 
             return mammals;
@@ -86,10 +149,34 @@ namespace ANIMAL.Repository
         public IEnumerable<ReptileDomain> GetAllReptileDomain()
         {
             var reptiles = _appDbContext.Reptiles
-                                     .Join(_appDbContext.Animals, r => r.AnimalId, a => a.IdAnimal,
-                                           (r, a) => new { Reptile = r, Animal = a })
-                                     .Select(x => _mappingService.Map<ReptileDomain>(x))
-                                     .ToList();
+                              .Join(_appDbContext.Animals, r => r.AnimalId, a => a.IdAnimal,
+                                    (r, a) => new { Reptile = r, Animal = a })
+                              .Select(x => new ReptileDomain(
+                                  x.Animal.IdAnimal,
+                                  x.Animal.Name,
+                                  x.Animal.Family,
+                                  x.Animal.Species,
+                                  x.Animal.Subspecies,
+                                  x.Animal.Age,
+                                  x.Animal.Gender,
+                                  x.Animal.Weight,
+                                  x.Animal.Height,
+                                  x.Animal.Length,
+                                  x.Animal.Neutered,
+                                  x.Animal.Vaccinated,
+                                  x.Animal.Microchipped,
+                                  x.Animal.Trained,
+                                  x.Animal.Socialized,
+                                  x.Animal.HealthIssues,
+                                  x.Animal.PersonalityDescription,
+                                  x.Animal.Adopted,
+                                  x.Reptile.AnimalId,
+                                  x.Reptile.TankSize,
+                                  x.Reptile.Sociability,
+                                  x.Reptile.CompatibleSpecies,
+                                  x.Reptile.RecommendedItems
+                              ))
+                              .ToList();
 
             return reptiles;
         }

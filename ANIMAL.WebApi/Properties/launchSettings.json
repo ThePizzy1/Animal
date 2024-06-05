@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "animal/animal_db",
+      "launchUrl": "api/animal/animal_db",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "ANIMAL.WebApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "animal/animal_db",
+      "launchUrl": "api/animal/animal_db",
       "applicationUrl": "https://localhost:5001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

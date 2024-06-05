@@ -7,13 +7,14 @@ namespace ANIMAL.MODEL
 {
     public class ReptileDomain : AnimalDomain
     {
-        public ReptileDomain(Reptiles reptile)
+        public ReptileDomain(int idAnimal, string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, string personalityDescription, bool adopted, int animalId, string tankSize, string sociability,string compatibleSpecies, string recommendedItems)
+            : base(idAnimal, name, family, species, subspecies, age, gender, weight, height, length, neutered, vaccinated, microchipped, trained, socialized, healthIssues, personalityDescription, adopted)
         {
-            AnimalId = reptile.AnimalId;
-            TankSize = reptile.TankSize;
-            Sociability = reptile.Sociability;
-            CompatibleSpecies = reptile.CompatibleSpecies;
-            RecommendedItems = reptile.RecommendedItems;
+            AnimalId = animalId;
+            TankSize = tankSize;
+            Sociability = sociability;
+            CompatibleSpecies = compatibleSpecies;
+            RecommendedItems = recommendedItems;
         }
 
         public int AnimalId { get; set; }

@@ -11,11 +11,11 @@ namespace ANIMAL.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AnimalControler : ControllerBase
+    public class AnimalController : ControllerBase
     {
 
         protected IService _service { get; private set; }
-        public AnimalControler(IService service)
+        public AnimalController(IService service)
         {
             _service = service;
         }

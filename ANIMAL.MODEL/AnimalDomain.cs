@@ -9,27 +9,26 @@ namespace ANIMAL.MODEL
     public class AnimalDomain
     {
         public AnimalDomain() { }
-        public AnimalDomain(Animals animal)
+        public AnimalDomain(int idAnimal, string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, string personalityDescription, bool adopted)
         {
-            IdAnimal = animal.IdAnimal;
-            Name = animal.Name;
-            Family = animal.Family;
-            Species = animal.Species;
-            Subspecies = animal.Subspecies;
-            Age = animal.Age;
-            Gender = animal.Gender;
-            Weight = animal.Weight;
-            Height = animal.Height;
-            Length = animal.Length;
-            Neutered = animal.Neutered;
-            Vaccinated = animal.Vaccinated;
-            Microchipped = animal.Microchipped;
-            Trained = animal.Trained;
-            Socialized = animal.Socialized;
-            HealthIssues = animal.HealthIssues;
-            PersonalityDescription = animal.PersonalityDescription;
-           
-            Adopted = animal.Adopted;
+            IdAnimal = idAnimal;
+            Name = name;
+            Family = family;
+            Species = species;
+            Subspecies = subspecies;
+            Age = age;
+            Gender = gender;
+            Weight = weight;
+            Height = height;
+            Length = length;
+            Neutered = neutered;
+            Vaccinated = vaccinated;
+            Microchipped = microchipped;
+            Trained = trained;
+            Socialized = socialized;
+            HealthIssues = healthIssues;
+            PersonalityDescription = personalityDescription;
+            Adopted = adopted;
         }
 
         public int IdAnimal { get; set; }

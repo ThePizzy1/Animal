@@ -7,12 +7,13 @@ namespace ANIMAL.MODEL
 {
     public class BirdDomain: AnimalDomain
     {
-        public BirdDomain(Birds bird) 
+        public BirdDomain(int idAnimal, string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, string personalityDescription, bool adopted, int animalId, string cageSize, string recommendedToys, string sociability)
+            : base(idAnimal, name, family, species, subspecies, age, gender, weight, height, length, neutered, vaccinated, microchipped, trained, socialized, healthIssues, personalityDescription, adopted)
         {
-            AnimalId = bird.AnimalId;
-            CageSize = bird.CageSize;
-            RecommendedToys = bird.RecommendedToys;
-            Sociability = bird.Sociability;
+            AnimalId = animalId;
+            CageSize = cageSize;
+            RecommendedToys = recommendedToys;
+            Sociability = sociability;
         }
 
         public int AnimalId { get; set; }

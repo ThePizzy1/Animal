@@ -30,6 +30,9 @@ namespace ANIMAL.MODEL
         public string Password { get; set; }
         public int NumberOfAdoptedAnimals { get; set; }
         public int NumberOfReturnedAnimals { get; set; }
+
+        public ICollection<AdoptedDomain> Adopted { get; set; } = new List<AdoptedDomain>();
+        public ICollection<ReturnedAnimalDomain> ReturnedAnimal { get; set; } = new List<ReturnedAnimalDomain>();
     }
 
 }

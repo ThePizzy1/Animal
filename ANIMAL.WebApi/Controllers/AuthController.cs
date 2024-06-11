@@ -11,12 +11,13 @@ using System.Text;
 using System.Threading.Tasks;
 using ANIMAL.DAL.DataModel;
 using ANIMAL.Model;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace ANIMAL.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager; // Ispravljeno

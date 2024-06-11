@@ -22,26 +22,68 @@ namespace ANIMAL.Repository
 
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomain()
         {
-            throw new NotImplementedException();
+            var adoptedEntities = _appDbContext.Adopted.ToList();
+            var adoptedDomains = adoptedEntities.Select(a => new AdoptedDomain(a)).ToList();
+            return adoptedDomains;
         }
-
+        public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain()
+        {
+            var returnedAnimalEntities = _appDbContext.ReturnedAnimal.ToList();
+            var returnedAnimalDomains = returnedAnimalEntities.Select(r => new ReturnedAnimalDomain(r)).ToList();
+            return returnedAnimalDomains;
+        }
         public IEnumerable<AdopterDomain> GetAllAdopterDomain()
         {
             var adopterDb = _appDbContext.Adopter.ToList();
-            var adopterDomain = adopterDb.Select(e => new AdopterDomain(e));
+            var adopterDomain = adopterDb.Select(a => new AdopterDomain(
+                a.Id,
+                a.FirstName,
+                a.LastName,
+                a.DateOfBirth,
+                a.Residence,
+                a.Username,
+                a.Password,
+                a.NumAdoptedAnimals,
+                a.NumReturnedAnimals)).ToList();
+
             return adopterDomain;
         }
 
+
+
         public IEnumerable<AmphibianDomain> GetAllAmphibianDomain()
         {
-            var amphibians = _appDbContext.Amphibians
-                                    .Join(_appDbContext.Animals, a => a.AnimalId, b => b.IdAnimal,
-                                          (a, b) => new { Amphibian = a, Animal = b })
-                                    .Select(x => _mappingService.Map<AmphibianDomain>(x))
-                                    .ToList();
+            var amphibianList = _appDbContext.Amphibians
+                .Join(_appDbContext.Animals, a => a.AnimalId, an => an.IdAnimal,
+                    (a, an) => new { Amphibian = a, Animal = an })
+                .Select(x => new AmphibianDomain(
+                    x.Animal.IdAnimal,
+                    x.Animal.Name,
+                    x.Animal.Family,
+                    x.Animal.Species,
+                    x.Animal.Subspecies,
+                    x.Animal.Age,
+                    x.Animal.Gender,
+                    x.Animal.Weight,
+                    x.Animal.Height,
+                    x.Animal.Length,
+                    x.Animal.Neutered,
+                    x.Animal.Vaccinated,
+                    x.Animal.Microchipped,
+                    x.Animal.Trained,
+                    x.Animal.Socialized,
+                    x.Animal.HealthIssues,
+                    x.Animal.Picture,
+                    x.Animal.PersonalityDescription,
+                    x.Animal.Adopted,
+                    x.Amphibian.AnimalId,
+                    x.Amphibian.Humidity,
+                    x.Amphibian.Temperature))
+                .ToList();
 
-            return amphibians;
+            return amphibianList;
         }
+
 
         public IEnumerable<AnimalDomain> GetAllAnimalDomain()
         {
@@ -63,6 +105,8 @@ namespace ANIMAL.Repository
                 e.Trained,
                 e.Socialized,
                 e.HealthIssues,
+                e.Picture,
+               
                 e.PersonalityDescription,
                 e.Adopted));
 
@@ -71,14 +115,39 @@ namespace ANIMAL.Repository
 
         public IEnumerable<BirdDomain> GetAllBirdDomain()
         {
-            var birds = _appDbContext.Birds
-                                .Join(_appDbContext.Animals, b => b.AnimalId, a => a.IdAnimal,
-                                      (b, a) => new { Bird = b, Animal = a })
-                                .Select(x => _mappingService.Map<BirdDomain>(x))
-                                .ToList();
+            var birdList = _appDbContext.Birds
+                .Join(_appDbContext.Animals, b => b.AnimalId, a => a.IdAnimal,
+                    (b, a) => new { Bird = b, Animal = a })
+                .Select(x => new BirdDomain(
+                    x.Animal.IdAnimal,
+                    x.Animal.Name,
+                    x.Animal.Family,
+                    x.Animal.Species,
+                    x.Animal.Subspecies,
+                    x.Animal.Age,
+                    x.Animal.Gender,
+                    x.Animal.Weight,
+                    x.Animal.Height,
+                    x.Animal.Length,
+                    x.Animal.Neutered,
+                    x.Animal.Vaccinated,
+                    x.Animal.Microchipped,
+                    x.Animal.Trained,
+                    x.Animal.Socialized,
+                    x.Animal.HealthIssues,
+                       x.Animal.Picture,
+                    x.Animal.PersonalityDescription,
+                    x.Animal.Adopted,
+                    x.Bird.AnimalId,
+                    x.Bird.CageSize,
+                    x.Bird.RecommendedToys,
+                    x.Bird.Sociability))
+                .ToList();
 
-            return birds;
+            return birdList;
         }
+
+
 
         public IEnumerable<FishDomain> GetAllFishDomain()
         {
@@ -102,6 +171,7 @@ namespace ANIMAL.Repository
           x.Animal.Trained,
           x.Animal.Socialized,
           x.Animal.HealthIssues,
+             x.Animal.Picture,
           x.Animal.PersonalityDescription,
           x.Animal.Adopted,
           x.Fish.AnimalId,
@@ -135,6 +205,7 @@ namespace ANIMAL.Repository
                                      x.Animal.Trained,
                                      x.Animal.Socialized,
                                      x.Animal.HealthIssues,
+                                        x.Animal.Picture,
                                      x.Animal.PersonalityDescription,
                                      x.Animal.Adopted,
                                      x.Mammal.AnimalId,
@@ -168,6 +239,7 @@ namespace ANIMAL.Repository
                                   x.Animal.Trained,
                                   x.Animal.Socialized,
                                   x.Animal.HealthIssues,
+                                     x.Animal.Picture,
                                   x.Animal.PersonalityDescription,
                                   x.Animal.Adopted,
                                   x.Reptile.AnimalId,

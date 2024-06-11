@@ -8,17 +8,35 @@ namespace ANIMAL.MODEL
 {
     public class AdopterDomain
     {
-        public AdopterDomain(Adopter adopter)
+        private int numAdoptedAnimals;
+        private int numReturnedAnimals;
+
+        public AdopterDomain(int id, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, int numAdoptedAnimals, int numReturnedAnimals)
         {
-            Id = adopter.Id;
-            FirstName = adopter.FirstName;
-            LastName = adopter.LastName;
-            DateOfBirth = adopter.DateOfBirth;
-            Residence = adopter.Residence;
-            Username = adopter.Username;
-            Password = adopter.Password;
-            NumberOfAdoptedAnimals = adopter.NumAdoptedAnimals;
-            NumberOfReturnedAnimals = adopter.NumReturnedAnimals;
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+            DateOfBirth = dateOfBirth;
+            Residence = residence;
+            Username = username;
+            Password = password;
+            this.numAdoptedAnimals = numAdoptedAnimals;
+            this.numReturnedAnimals = numReturnedAnimals;
+        }
+
+        public AdopterDomain(int id, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, int numberOfAdoptedAnimals, int numberOfReturnedAnimals, ICollection<AdoptedDomain> adopted, ICollection<ReturnedAnimalDomain> returnedAnimal)
+        {
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+            DateOfBirth = dateOfBirth;
+            Residence = residence;
+            Username = username;
+            Password = password;
+            NumberOfAdoptedAnimals = numberOfAdoptedAnimals;
+            NumberOfReturnedAnimals = numberOfReturnedAnimals;
+            Adopted = adopted;
+            ReturnedAnimal = returnedAnimal;
         }
 
         public int Id { get; set; }

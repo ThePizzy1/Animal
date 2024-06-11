@@ -17,6 +17,6 @@ namespace ANIMAL.Service.Common
         IEnumerable<ReptileDomain> GetAllReptileDomain();
         IEnumerable<FishDomain> GetAllFishDomain();
         IEnumerable<AdoptedDomain> GetAllAdoptedDomain();
-
+        IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain();
     }
 }

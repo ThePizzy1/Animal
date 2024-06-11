@@ -29,6 +29,7 @@ namespace ANIMAL.DAL.DataModel
         public string HealthIssues { get; set; }
         public string PersonalityDescription { get; set; }
         public bool Adopted { get; set; }
+        public byte[] Picture { get; set; }
 
         public virtual Birds Birds { get; set; }
         public virtual Reptiles Reptiles { get; set; }

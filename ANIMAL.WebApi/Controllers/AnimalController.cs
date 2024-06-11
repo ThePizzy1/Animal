@@ -1,5 +1,6 @@
 ﻿using ANIMAL.MODEL;
 using ANIMAL.Service.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,6 +12,7 @@ namespace ANIMAL.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class AnimalController : ControllerBase
     {
 
@@ -74,6 +76,13 @@ namespace ANIMAL.WebApi.Controllers
         {
             IEnumerable<AdoptedDomain> adoptedDb = _service.GetAllAdoptedDomain();
             return adoptedDb;
+        }
+        [HttpGet]
+        [Route("reaturned_db")]
+        public IEnumerable<ReturnedAnimalDomain> GetReaturnedDomains()
+        {
+            IEnumerable<ReturnedAnimalDomain> returnedDb = _service.GetAllReturnedAnimalDomain();
+            return returnedDb;
         }
     }
 }

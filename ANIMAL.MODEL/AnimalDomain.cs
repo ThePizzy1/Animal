@@ -9,7 +9,7 @@ namespace ANIMAL.MODEL
     public class AnimalDomain
     {
         public AnimalDomain() { }
-        public AnimalDomain(int idAnimal, string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, string personalityDescription, bool adopted)
+        public AnimalDomain(int idAnimal, string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues,byte[] picture, string personalityDescription, bool adopted)
         {
             IdAnimal = idAnimal;
             Name = name;
@@ -27,10 +27,12 @@ namespace ANIMAL.MODEL
             Trained = trained;
             Socialized = socialized;
             HealthIssues = healthIssues;
+            Picture = picture;
             PersonalityDescription = personalityDescription;
             Adopted = adopted;
         }
 
+        public byte[] Picture { get; set; }
         public int IdAnimal { get; set; }
         public string Name { get; set; }
         public string Family { get; set; }

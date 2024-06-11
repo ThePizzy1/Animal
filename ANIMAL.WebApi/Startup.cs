@@ -31,38 +31,53 @@ namespace ANIMAL.WebApi
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddDbContext<AnimalRescueDbContext>(options => 
-            options.UseSqlServer(Configuration.GetConnectionString("ANIMAL_DBConnection")));
-            services.AddScoped<IService, Service.Service>();
-            services.AddScoped<IRepository, Repository.Repository>();
-            
-            services.AddScoped<IRepositoryMappingService, RepositoryMappingService>();
-            services.AddCors();
-           
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<AnimalRescueDbContext>().AddDefaultTokenProviders();
+     public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext<AnimalRescueDbContext>(options => 
+        options.UseSqlServer(Configuration.GetConnectionString("ANIMAL_DBConnection")));
+    services.AddScoped<IService, Service.Service>();
+    services.AddScoped<IRepository, Repository.Repository>();
+    
+    services.AddScoped<IRepositoryMappingService, RepositoryMappingService>();
 
-            services.AddAuthentication(options =>
+    services.AddIdentity<ApplicationUser, IdentityRole>()
+        .AddEntityFrameworkStores<AnimalRescueDbContext>().AddDefaultTokenProviders();
+
+    services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(option =>
+    {
+        option.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = Configuration["Jwt:Issuer"],
+            ValidAudience = Configuration["Jwt:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+        };
+    });
+    
+            services.AddCors(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(option =>
-            {
-                option.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                };
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://localhost:5176") // Dozvoljava pristup s odreðenog URL-a
+                                      .AllowAnyHeader() // Dozvoljava sve zaglavlja
+                                      .AllowAnyMethod()); // Dozvoljava sve HTTP metode
             });
-            services.AddControllers();
+
+                services.AddControllers();
+
+            
+
+            
+
+
         }
+
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -74,7 +89,7 @@ namespace ANIMAL.WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseCors("AllowSpecificOrigin");
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

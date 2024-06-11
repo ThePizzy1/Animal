@@ -171,7 +171,7 @@ namespace ANIMAL.Repository.Automaper
 cfg.CreateMap<ReturnedAnimal, ReturnedAnimalDomain>()
      .ForMember(dest => dest.Animal, opt => opt.MapFrom(src => src.Animal))
     .ForMember(dest => dest.AdoptionCodeNavigation, opt => opt.MapFrom(src => new AdoptedDomain(src.AdoptionCodeNavigation)))
-    .ForMember(dest => dest.Adopter, opt => opt.MapFrom(src => new AdopterDomain(src.Adopter)));
+    .ForMember(dest => dest.Adopter, opt => opt.MapFrom(src => src.Adopter));
 
 cfg.CreateMap<ReturnedAnimalDomain, ReturnedAnimal>()
     .ForMember(dest => dest.Animal, opt => opt.Ignore())

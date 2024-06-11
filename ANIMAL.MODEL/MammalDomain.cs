@@ -7,10 +7,10 @@ namespace ANIMAL.MODEL
 {
     public class MammalDomain : AnimalDomain
     {
-        public MammalDomain(int idAnimal, string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, string personalityDescription, bool adopted, int animalId, string coatType, string groomingProducts)
-            : base(idAnimal, name, family, species, subspecies, age, gender, weight, height, length, neutered, vaccinated, microchipped, trained, socialized, healthIssues, personalityDescription, adopted)
+        public MammalDomain(int idAnimal, string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, byte[] picture, string personalityDescription, bool adopted, int animalId, string coatType, string groomingProducts)
+            : base(idAnimal, name, family, species, subspecies, age, gender, weight, height, length, neutered, vaccinated, microchipped, trained, socialized, healthIssues, picture, personalityDescription, adopted)
         {
-            AnimalId = animalId;
+             AnimalId = animalId;
             CoatType = coatType;
             GroomingProducts = groomingProducts;
         }

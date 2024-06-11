@@ -20,7 +20,8 @@ namespace ANIMAL.Service
 
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomain()
         {
-            throw new NotImplementedException();
+            IEnumerable<AdoptedDomain> adoptedDomains = _repository.GetAllAdoptedDomain();
+            return adoptedDomains;
         }
 
         public IEnumerable<AdopterDomain> GetAllAdopterDomain()
@@ -68,6 +69,12 @@ namespace ANIMAL.Service
         public IEnumerable<ReptileDomain> GetAllReptileDomain()
         {
             IEnumerable<ReptileDomain> reptileDomains = _repository.GetAllReptileDomain();
+            return reptileDomains;
+        }
+
+        IEnumerable<ReturnedAnimalDomain> IService.GetAllReturnedAnimalDomain()
+        {
+            IEnumerable<ReturnedAnimalDomain> reptileDomains = _repository.GetAllReturnedAnimalDomain();
             return reptileDomains;
         }
     }

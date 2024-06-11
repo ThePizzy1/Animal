@@ -128,6 +128,11 @@ namespace ANIMAL.DAL.DataModel
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+                entity.Property(e => e.Picture)
+                .IsRequired()
+                .HasColumnType("varbinary(max)")
+                .IsUnicode(false);
+
 
                 entity.Property(e => e.PersonalityDescription)
                     .HasMaxLength(1000)

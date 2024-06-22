@@ -16,6 +16,13 @@ namespace ANIMAL.MODEL
             Humidity = humidity;
                 Temperature =temperature;
             }
+        public AmphibianDomain(int idAnimal, decimal humidity, decimal temperature)
+            : base(idAnimal)
+        {
+            AnimalId = idAnimal;
+            Humidity = humidity;
+            Temperature = temperature;
+        }
         public int AnimalId { get; set; }
              public decimal Humidity { get; set; }
             public decimal Temperature { get; set; }

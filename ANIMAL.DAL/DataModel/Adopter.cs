@@ -20,7 +20,9 @@ namespace ANIMAL.DAL.DataModel
         public string Password { get; set; }
         public int NumAdoptedAnimals { get; set; }
         public int NumReturnedAnimals { get; set; }
+        public bool Flag { get; set; }
 
+        public string RegisterId { get; set; }
         public virtual ICollection<Adopted> Adopted { get; set; }
         public virtual ICollection<ReturnedAnimal> ReturnedAnimal { get; set; }
     }

@@ -15,7 +15,14 @@ namespace ANIMAL.MODEL
             CompatibleSpecies =compatibleSpecies;
             RecommendedItems = recommendedItems;
         }
-
+        public FishDomain(int idAnimal,string tankSize, string compatibleSpecies, string recommendedItems)
+           : base(idAnimal)
+        {
+            AnimalId = idAnimal;
+            TankSize = tankSize;
+            CompatibleSpecies = compatibleSpecies;
+            RecommendedItems = recommendedItems;
+        }
         public int AnimalId { get; set; }
         public string TankSize { get; set; }
         public string CompatibleSpecies { get; set; }

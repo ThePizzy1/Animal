@@ -15,6 +15,14 @@ namespace ANIMAL.MODEL
             RecommendedToys = recommendedToys;
             Sociability = sociability;
         }
+        public BirdDomain(int idAnimal, string cageSize, string recommendedToys, string sociability)
+            : base(idAnimal)
+        {
+            AnimalId = idAnimal;
+            CageSize = cageSize;
+            RecommendedToys = recommendedToys;
+            Sociability = sociability;
+        }
 
         public int AnimalId { get; set; }
         public string CageSize { get; set; }

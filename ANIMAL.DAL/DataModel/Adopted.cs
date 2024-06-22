@@ -14,7 +14,7 @@ namespace ANIMAL.DAL.DataModel
         public int AnimalId { get; set; }
         public int AdopterId { get; set; }
         public DateTime AdoptionDate { get; set; }
-
+        public bool Agreed { get; set; }
         public virtual Adopter Adopter { get; set; }
         public virtual Animals Animal { get; set; }
         public virtual ICollection<ReturnedAnimal> ReturnedAnimal { get; set; }

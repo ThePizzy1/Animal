@@ -8,10 +8,12 @@ namespace ANIMAL.MODEL
 {
     public class AdopterDomain
     {
-        private int numAdoptedAnimals;
-        private int numReturnedAnimals;
 
-        public AdopterDomain(int id, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, int numAdoptedAnimals, int numReturnedAnimals)
+        public AdopterDomain()
+        {
+            
+        }
+        public AdopterDomain(int id, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, int numAdoptedAnimals, int numReturnedAnimals, bool flag, string registerId)
         {
             Id = id;
             FirstName = firstName;
@@ -20,11 +22,13 @@ namespace ANIMAL.MODEL
             Residence = residence;
             Username = username;
             Password = password;
-            this.numAdoptedAnimals = numAdoptedAnimals;
-            this.numReturnedAnimals = numReturnedAnimals;
+            NumberOfAdoptedAnimals = numAdoptedAnimals;
+            NumberOfReturnedAnimals = numReturnedAnimals;
+            Flag = flag;
+            RegisterId = registerId;
         }
 
-        public AdopterDomain(int id, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, int numberOfAdoptedAnimals, int numberOfReturnedAnimals, ICollection<AdoptedDomain> adopted, ICollection<ReturnedAnimalDomain> returnedAnimal)
+        public AdopterDomain(int id, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, int numberOfAdoptedAnimals, int numberOfReturnedAnimals, ICollection<AdoptedDomain> adopted, ICollection<ReturnedAnimalDomain> returnedAnimal,bool flag, string registerId)
         {
             Id = id;
             FirstName = firstName;
@@ -37,6 +41,8 @@ namespace ANIMAL.MODEL
             NumberOfReturnedAnimals = numberOfReturnedAnimals;
             Adopted = adopted;
             ReturnedAnimal = returnedAnimal;
+            Flag = flag;
+            RegisterId = registerId;
         }
 
         public int Id { get; set; }
@@ -48,7 +54,8 @@ namespace ANIMAL.MODEL
         public string Password { get; set; }
         public int NumberOfAdoptedAnimals { get; set; }
         public int NumberOfReturnedAnimals { get; set; }
-
+        public bool Flag { get; set; }
+        public string RegisterId { get; set; }
         public ICollection<AdoptedDomain> Adopted { get; set; } = new List<AdoptedDomain>();
         public ICollection<ReturnedAnimalDomain> ReturnedAnimal { get; set; } = new List<ReturnedAnimalDomain>();
     }

@@ -1,10 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace ANIMAL.DAL.DataModel
 {
-    public partial class AnimalRescueDbContext : DbContext
+    public partial class AnimalRescueDbContext : IdentityDbContext<ApplicationUser>
     {
         public AnimalRescueDbContext()
         {
@@ -25,17 +27,24 @@ namespace ANIMAL.DAL.DataModel
         public virtual DbSet<Reptiles> Reptiles { get; set; }
         public virtual DbSet<ReturnedAnimal> ReturnedAnimal { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=(LocalDb)\\MSSQLLocalDB;Database=AnimalRescue;Integrated Security=True;");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            // Identity configurations
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
+            modelBuilder.Entity<IdentityUserRole<string>>().HasKey(r => new { r.UserId, r.RoleId });
+            modelBuilder.Entity<IdentityUserToken<string>>().HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
+
+            modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
+            modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles");
+            modelBuilder.Entity<IdentityUserRole<string>>().ToTable("AspNetUserRoles");
+            modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AspNetUserClaims");
+            modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("AspNetUserLogins");
+            modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("AspNetRoleClaims");
+            modelBuilder.Entity<IdentityUserToken<string>>().ToTable("AspNetUserTokens");
+
+            // Adopted entity configuration
             modelBuilder.Entity<Adopted>(entity =>
             {
                 entity.HasKey(e => e.Code)
@@ -56,6 +65,7 @@ namespace ANIMAL.DAL.DataModel
                     .HasConstraintName("FK__Adopted__AnimalI__4D94879B");
             });
 
+            // Adopter entity configuration
             modelBuilder.Entity<Adopter>(entity =>
             {
                 entity.Property(e => e.DateOfBirth).HasColumnType("date");
@@ -84,8 +94,19 @@ namespace ANIMAL.DAL.DataModel
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.Property(e => e.NumAdoptedAnimals)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NumReturnedAnimals)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
             });
 
+            // Amphibians entity configuration
             modelBuilder.Entity<Amphibians>(entity =>
             {
                 entity.HasNoKey();
@@ -101,6 +122,7 @@ namespace ANIMAL.DAL.DataModel
                     .HasConstraintName("FK__Amphibian__Anima__5CD6CB2B");
             });
 
+            // Animals entity configuration
             modelBuilder.Entity<Animals>(entity =>
             {
                 entity.HasKey(e => e.IdAnimal)
@@ -128,11 +150,11 @@ namespace ANIMAL.DAL.DataModel
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
-                entity.Property(e => e.Picture)
-                .IsRequired()
-                .HasColumnType("varbinary(max)")
-                .IsUnicode(false);
 
+                entity.Property(e => e.Picture)
+                    .IsRequired()
+                    .HasColumnType("varbinary(max)")
+                    .IsUnicode(false);
 
                 entity.Property(e => e.PersonalityDescription)
                     .HasMaxLength(1000)
@@ -150,6 +172,7 @@ namespace ANIMAL.DAL.DataModel
                 entity.Property(e => e.Weight).HasColumnType("decimal(10, 2)");
             });
 
+            // Birds entity configuration
             modelBuilder.Entity<Birds>(entity =>
             {
                 entity.HasKey(e => e.AnimalId)
@@ -179,6 +202,7 @@ namespace ANIMAL.DAL.DataModel
                     .HasConstraintName("FK__Birds__AnimalId__5812160E");
             });
 
+            // Fish entity configuration
             modelBuilder.Entity<Fish>(entity =>
             {
                 entity.HasNoKey();
@@ -205,6 +229,7 @@ namespace ANIMAL.DAL.DataModel
                     .HasConstraintName("FK__Fish__AnimalId__5EBF139D");
             });
 
+            // Mammals entity configuration
             modelBuilder.Entity<Mammals>(entity =>
             {
                 entity.HasNoKey();
@@ -226,6 +251,7 @@ namespace ANIMAL.DAL.DataModel
                     .HasConstraintName("FK__Mammals__AnimalI__5535A963");
             });
 
+            // Reptiles entity configuration
             modelBuilder.Entity<Reptiles>(entity =>
             {
                 entity.HasKey(e => e.AnimalId)
@@ -258,6 +284,7 @@ namespace ANIMAL.DAL.DataModel
                     .HasConstraintName("FK__Reptiles__Animal__5AEE82B9");
             });
 
+            // ReturnedAnimal entity configuration
             modelBuilder.Entity<ReturnedAnimal>(entity =>
             {
                 entity.HasKey(e => e.ReturnCode)

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using ANIMAL.DAL.DataModel;
 using ANIMAL.Model;
 using Microsoft.AspNetCore.Authorization;
+using ANIMAL.Repository.Automaper;
 
 namespace ANIMAL.WebApi.Controllers
 {
@@ -23,25 +24,54 @@ namespace ANIMAL.WebApi.Controllers
         private readonly UserManager<ApplicationUser> _userManager; // Ispravljeno
         private readonly SignInManager<ApplicationUser> _signInManager; // Ispravljeno
         private readonly IConfiguration _configuration;
-
-        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
+        private readonly AnimalRescueDbContext _context;
+        private IRepositoryMappingService _mappingService;
+        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IRepositoryMappingService mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _mappingService = mapper;
         }
-
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RgisterModel model)
         {
-            var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+           
+
+            var user = new ApplicationUser { UserName = model.Username };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "Korisnik");
                 return Ok(new { message = "User registered successfully" });
             }
+
             return BadRequest(result.Errors);
+        }
+
+        [HttpGet("getUserByUsername/{username}")]
+        public async Task<IActionResult> GetUserByUsername(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound($"Korisnik s korisničkim imenom '{username}' nije pronađen.");
+            }
+
+            var userDto = new
+            {
+                Id = user.Id,
+                Username = user.UserName,
+               
+            };
+
+            return Ok(userDto);
         }
 
         [HttpPost("login")]
@@ -52,19 +82,30 @@ namespace ANIMAL.WebApi.Controllers
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(model.Username);
+
                 var token = GenerateJwtToken(user);
                 return Ok(new { token });
             }
             return Unauthorized();
         }
 
-        private string GenerateJwtToken(ApplicationUser user)
+        private async Task<string> GenerateJwtToken(ApplicationUser user)
         {
-            var claims = new[]
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim("id_usera", user.Id)
+    };
+
+            // Dodajte samo nazive uloga kao tvrdnje
+            foreach (var role in roles)
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

@@ -30,7 +30,7 @@ namespace ANIMAL.DAL.DataModel
         public string PersonalityDescription { get; set; }
         public bool Adopted { get; set; }
         public byte[] Picture { get; set; }
-
+        public string Picture2 { get; set; }
         public virtual Birds Birds { get; set; }
         public virtual Reptiles Reptiles { get; set; }
         public virtual ICollection<Adopted> AdoptedNavigation { get; set; }

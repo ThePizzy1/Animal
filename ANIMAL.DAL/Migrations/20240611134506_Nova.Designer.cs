@@ -4,14 +4,16 @@ using ANIMAL.DAL.DataModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    partial class AnimalRescueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240611134506_Nova")]
+    partial class Nova
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,8 +36,9 @@ namespace ANIMAL.DAL.Migrations
 
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
+
                     b.Property<bool>("Agreed")
-                       .HasColumnType("bit");
+                     .HasColumnType("bit");
 
                     b.HasKey("Code")
                         .HasName("PK__Adopted__A25C5AA69BF7B47B");
@@ -92,14 +95,15 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("varchar(255)")
                         .HasMaxLength(255)
                         .IsUnicode(false);
+
                     b.Property<bool>("Flag")
                        .HasColumnType("bit");
 
                     b.Property<string>("RegisterId")
-                      .IsRequired()
-                      .HasColumnType("nvarchar(450)")
-                      .HasMaxLength(450)
-                      .IsUnicode(false);
+                       .IsRequired()
+                       .HasColumnType("nvarchar(450)")
+                       .HasMaxLength(450)
+                       .IsUnicode(false);
 
                     b.HasKey("Id");
 
@@ -181,10 +185,10 @@ namespace ANIMAL.DAL.Migrations
                         .IsUnicode(false);
 
                     b.Property<string>("Picture2")
-                        .IsRequired()
-                        .HasColumnType("varchar(max)")
-                        .HasMaxLength(10)
-                        .IsUnicode(false);
+                       .IsRequired()
+                       .HasColumnType("varchar(max)")
+                       .HasMaxLength(10)
+                       .IsUnicode(false);
 
                     b.Property<bool>("Socialized")
                         .HasColumnType("bit");

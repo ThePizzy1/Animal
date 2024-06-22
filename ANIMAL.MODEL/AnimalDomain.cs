@@ -31,7 +31,54 @@ namespace ANIMAL.MODEL
             PersonalityDescription = personalityDescription;
             Adopted = adopted;
         }
-
+        public AnimalDomain(int idAnimal, string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues,  string personalityDescription, bool adopted)
+        {
+            IdAnimal = idAnimal;
+            Name = name;
+            Family = family;
+            Species = species;
+            Subspecies = subspecies;
+            Age = age;
+            Gender = gender;
+            Weight = weight;
+            Height = height;
+            Length = length;
+            Neutered = neutered;
+            Vaccinated = vaccinated;
+            Microchipped = microchipped;
+            Trained = trained;
+            Socialized = socialized;
+            HealthIssues = healthIssues;
+            PersonalityDescription = personalityDescription;
+            Adopted = adopted;
+        }
+        public AnimalDomain(int idAnimal, string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, string personalityDescription,string picture, bool adopted)
+        {
+            IdAnimal = idAnimal;
+            Name = name;
+            Family = family;
+            Species = species;
+            Subspecies = subspecies;
+            Age = age;
+            Gender = gender;
+            Weight = weight;
+            Height = height;
+            Length = length;
+            Neutered = neutered;
+            Vaccinated = vaccinated;
+            Microchipped = microchipped;
+            Trained = trained;
+            Socialized = socialized;
+            HealthIssues = healthIssues;
+            Pisture2 = picture;
+            PersonalityDescription = personalityDescription;
+            Adopted = adopted;
+        }
+        public AnimalDomain(int idAnimal)
+        {
+            IdAnimal = idAnimal;
+        
+        }
         public byte[] Picture { get; set; }
         public int IdAnimal { get; set; }
         public string Name { get; set; }
@@ -50,7 +97,7 @@ namespace ANIMAL.MODEL
         public bool Socialized { get; set; }
         public string HealthIssues { get; set; }
         public string PersonalityDescription { get; set; }
-       
+       public string Pisture2 { get; set; }
         public bool Adopted { get; set; }
     }
 }

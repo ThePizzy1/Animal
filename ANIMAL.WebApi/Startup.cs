@@ -1,4 +1,5 @@
 using ANIMAL.DAL.DataModel;
+
 using ANIMAL.Repository.Automaper;
 using ANIMAL.Repository.Common;
 using ANIMAL.Service.Common;
@@ -32,39 +33,41 @@ namespace ANIMAL.WebApi
         public IConfiguration Configuration { get; }
 
      public void ConfigureServices(IServiceCollection services)
-{
-    services.AddDbContext<AnimalRescueDbContext>(options => 
+        {
+     
+            services.AddDbContext<AnimalRescueDbContext>(options => 
         options.UseSqlServer(Configuration.GetConnectionString("ANIMAL_DBConnection")));
     services.AddScoped<IService, Service.Service>();
     services.AddScoped<IRepository, Repository.Repository>();
     
     services.AddScoped<IRepositoryMappingService, RepositoryMappingService>();
 
-    services.AddIdentity<ApplicationUser, IdentityRole>()
-        .AddEntityFrameworkStores<AnimalRescueDbContext>().AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                        .AddEntityFrameworkStores<AnimalRescueDbContext>()
+                        .AddDefaultTokenProviders();
 
-    services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    }).AddJwtBearer(option =>
-    {
-        option.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = Configuration["Jwt:Issuer"],
-            ValidAudience = Configuration["Jwt:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-        };
-    });
-    
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(option =>
+            {
+                option.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
+            });
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:5176") // Dozvoljava pristup s odreðenog URL-a
+                    builder => builder.WithOrigins("http://localhost:5173") // Dozvoljava pristup s odreðenog URL-a
                                       .AllowAnyHeader() // Dozvoljava sve zaglavlja
                                       .AllowAnyMethod()); // Dozvoljava sve HTTP metode
             });
@@ -79,13 +82,13 @@ namespace ANIMAL.WebApi
         }
 
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            CreateRoles(serviceProvider).Wait();
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -96,6 +99,21 @@ namespace ANIMAL.WebApi
             {
                 endpoints.MapControllers();
             });
+        }
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            string[] roleNames = { "Admin", "Korisnik" };
+            IdentityResult roleResult;
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
         }
     }
 }

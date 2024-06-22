@@ -14,6 +14,13 @@ namespace ANIMAL.MODEL
             CoatType = coatType;
             GroomingProducts = groomingProducts;
         }
+        public MammalDomain(int idAnimal, string coatType, string groomingProducts)
+           : base(idAnimal)
+        {
+            AnimalId = idAnimal;
+            CoatType = coatType;
+            GroomingProducts = groomingProducts;
+        }
 
         public int AnimalId { get; set; }
         public string CoatType { get; set; }

@@ -23,16 +23,16 @@ namespace ANIMAL.Service
             IEnumerable<AdoptedDomain> adoptedDomains = _repository.GetAllAdoptedDomain();
             return adoptedDomains;
         }
-
+      
         public IEnumerable<AdopterDomain> GetAllAdopterDomain()
         {
             IEnumerable<AdopterDomain> adopterDomains = _repository.GetAllAdopterDomain();
             return adopterDomains;
         }
 
-        public IEnumerable<AmphibianDomain> GetAllAmphibianDomain()
+        public AmphibianDomain GetAllAmphibianDomain(int id)
         {
-            IEnumerable<AmphibianDomain> amphibianDomains = _repository.GetAllAmphibianDomain();
+           AmphibianDomain amphibianDomains = _repository.GetAllAmphibianDomain(id);
             return amphibianDomains;
         }
 
@@ -43,32 +43,33 @@ namespace ANIMAL.Service
             
         }
 
-        public AnimalDomain GetAllAnimalDomainById(int animalId)
+         AnimalDomain IService.GetAllAnimalById(int animalId)
         {
-         throw new NotImplementedException();
+            AnimalDomain adoptedDomains = _repository.GetAllAnimalById(animalId);
+            return adoptedDomains;
         }
 
-        public IEnumerable<BirdDomain> GetAllBirdDomain()
+         BirdDomain IService.GetAllBirdDomain(int id)
         {
-            IEnumerable<BirdDomain> birdDomains = _repository.GetAllBirdDomain();
+           BirdDomain birdDomains = _repository.GetAllBirdDomain(id);
             return birdDomains;
         }
 
-        public IEnumerable<FishDomain> GetAllFishDomain()
+        FishDomain IService.GetAllFishDomain(int id)
         {
-            IEnumerable<FishDomain> fishDomains = _repository.GetAllFishDomain();
+           FishDomain fishDomains = _repository.GetAllFishDomain(id);
             return fishDomains;
         }
 
-        public IEnumerable<MammalDomain> GetAllMammalDomain()
+         MammalDomain IService.GetAllMammalDomain(int id)
         {
-            IEnumerable<MammalDomain> mamelDomains = _repository.GetAllMammalDomain();
+           MammalDomain mamelDomains = _repository.GetAllMammalDomain(id);
             return mamelDomains;
         }
 
-        public IEnumerable<ReptileDomain> GetAllReptileDomain()
+         ReptileDomain IService.GetAllReptileDomain(int id)
         {
-            IEnumerable<ReptileDomain> reptileDomains = _repository.GetAllReptileDomain();
+           ReptileDomain reptileDomains = _repository.GetAllReptileDomain(id);
             return reptileDomains;
         }
 
@@ -76,6 +77,104 @@ namespace ANIMAL.Service
         {
             IEnumerable<ReturnedAnimalDomain> reptileDomains = _repository.GetAllReturnedAnimalDomain();
             return reptileDomains;
+        }
+
+        IEnumerable<AnimalDomain> IService.GetAllAnimalDomainAdopt()
+        {
+            IEnumerable<AnimalDomain> adoptedDomains = _repository.GetAllAnimalDomainAdopt();
+            return adoptedDomains;
+        }
+
+        AnimalDomain IService.GetAnimalById(int animalId)
+        {
+          AnimalDomain adoptedDomains = _repository.GetAnimalById(animalId);
+            return adoptedDomains;
+        }
+
+        AdopterDomain IService.GetAdopterById(int id)
+        {
+            AdopterDomain adoptedDomains = _repository.GetAdopterById(id);
+            return adoptedDomains;
+        }
+
+        public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId)
+        {
+            IEnumerable<AdoptedDomain> adoptedDomains = _repository.GetAllAdoptedDomainForAdopter(adopterId);
+            return adoptedDomains;
+        }
+
+        Task<AdopterDomain> IService.CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId)
+        {
+            Task<AdopterDomain> adopter =  _repository.CreateAdopterAsync(firstName, lastName, dateOfBirth, residence, username, password, registerId);
+            return adopter;
+        }
+       
+        IEnumerable<AnimalDomain> IService.GetAllAnimalDomainNoPicture()
+        {
+            IEnumerable<AnimalDomain> animalDomains = _repository.GetAllAnimalDomain();
+            return animalDomains;
+        }
+
+        void IService.DeleteAnimal(int idAnimal)
+        {
+            _repository.DeleteAnimal( idAnimal);
+        }
+
+        AdopterDomain IService.GetAdopterByUsername(string username)
+        {
+            AdopterDomain adoptedDomains = _repository.GetAdopterByUsername(username);
+            return adoptedDomains;
+        }
+        public async Task<bool> AddAnimalAsync(
+     string name,
+     string family,
+     string species,
+     string subspecies,
+     int age,
+     string gender,
+     decimal weight,
+     decimal height,
+     decimal length,
+     bool neutered,
+     bool vaccinated,
+     bool microchipped,
+     bool trained,
+     bool socialized,
+     string healthIssues,
+     string pisture2,
+     string personalityDescription,
+     bool adopted)
+        {
+            try
+            {
+                var isSuccess = await _repository.AddAnimalAsync(
+                    name,
+                    family,
+                    species,
+                    subspecies,
+                    age,
+                    gender,
+                    weight,
+                    height,
+                    length,
+                    neutered,
+                    vaccinated,
+                    microchipped,
+                    trained,
+                    socialized,
+                    healthIssues,
+                    pisture2,
+                    personalityDescription,
+                    adopted
+                );
+
+                return isSuccess;
+            }
+            catch (Exception ex)
+            {
+                // Handle exception as needed
+                throw new Exception($"Failed to add animal: {ex.Message}");
+            }
         }
     }
 }

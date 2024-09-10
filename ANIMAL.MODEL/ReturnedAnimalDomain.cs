@@ -7,6 +7,7 @@ namespace ANIMAL.MODEL
 {
     public class ReturnedAnimalDomain
     {
+        public ReturnedAnimalDomain() { }
         public ReturnedAnimalDomain(ReturnedAnimal returnedAnimal)
         {
             ReturnCode = returnedAnimal.ReturnCode;
@@ -16,7 +17,14 @@ namespace ANIMAL.MODEL
             ReturnDate = returnedAnimal.ReturnDate;
             ReturnReason = returnedAnimal.ReturnReason;
         }
-
+        public ReturnedAnimalDomain( int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
+        {
+            AdoptionCode = adoptionCode;
+            AnimalId = animalId;
+            AdopterId = adopterId;
+            ReturnDate = returnDate;
+            ReturnReason = returnReason;
+        }
         public int ReturnCode { get; set; }
         public int AdoptionCode { get; set; }
         public int AnimalId { get; set; }

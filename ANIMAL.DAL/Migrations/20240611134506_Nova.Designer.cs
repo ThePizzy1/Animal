@@ -37,8 +37,7 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Agreed")
-                     .HasColumnType("bit");
+                   
 
                     b.HasKey("Code")
                         .HasName("PK__Adopted__A25C5AA69BF7B47B");
@@ -184,11 +183,7 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("varbinary(max)")
                         .IsUnicode(false);
 
-                    b.Property<string>("Picture2")
-                       .IsRequired()
-                       .HasColumnType("varchar(max)")
-                       .HasMaxLength(10)
-                       .IsUnicode(false);
+                 
 
                     b.Property<bool>("Socialized")
                         .HasColumnType("bit");

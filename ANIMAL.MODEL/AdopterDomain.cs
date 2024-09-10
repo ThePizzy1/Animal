@@ -8,6 +8,8 @@ namespace ANIMAL.MODEL
 {
     public class AdopterDomain
     {
+        private int numAdoptedAnimals;
+        private int numReturnedAnimals;
 
         public AdopterDomain()
         {
@@ -27,7 +29,18 @@ namespace ANIMAL.MODEL
             Flag = flag;
             RegisterId = registerId;
         }
-
+        public AdopterDomain(int id, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, int numAdoptedAnimals, int numReturnedAnimals)
+        {
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+            DateOfBirth = dateOfBirth;
+            Residence = residence;
+            Username = username;
+            NumberOfAdoptedAnimals = numAdoptedAnimals;
+            NumberOfReturnedAnimals = numReturnedAnimals;
+        
+        }
         public AdopterDomain(int id, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, int numberOfAdoptedAnimals, int numberOfReturnedAnimals, ICollection<AdoptedDomain> adopted, ICollection<ReturnedAnimalDomain> returnedAnimal,bool flag, string registerId)
         {
             Id = id;
@@ -43,6 +56,17 @@ namespace ANIMAL.MODEL
             ReturnedAnimal = returnedAnimal;
             Flag = flag;
             RegisterId = registerId;
+        }
+
+        public AdopterDomain(int id, string firstName, string lastName, string residence, DateTime dateOfBirth, int numAdoptedAnimals, int numReturnedAnimals)
+        {
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+            Residence = residence;
+            DateOfBirth = dateOfBirth;
+            this.numAdoptedAnimals = numAdoptedAnimals;
+            this.numReturnedAnimals = numReturnedAnimals;
         }
 
         public int Id { get; set; }

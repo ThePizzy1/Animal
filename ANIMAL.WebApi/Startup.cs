@@ -67,7 +67,7 @@ namespace ANIMAL.WebApi
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:5173") // Dozvoljava pristup s odreðenog URL-a
+                    builder => builder.WithOrigins("http://localhost:5174") // Dozvoljava pristup s odreðenog URL-a
                                       .AllowAnyHeader() // Dozvoljava sve zaglavlja
                                       .AllowAnyMethod()); // Dozvoljava sve HTTP metode
             });

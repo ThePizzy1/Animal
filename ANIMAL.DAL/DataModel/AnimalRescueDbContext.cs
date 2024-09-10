@@ -49,21 +49,19 @@ namespace ANIMAL.DAL.DataModel
             {
                 entity.HasKey(e => e.Code)
                     .HasName("PK__Adopted__A25C5AA69BF7B47B");
-
                 entity.Property(e => e.AdoptionDate).HasColumnType("date");
-
                 entity.HasOne(d => d.Adopter)
                     .WithMany(p => p.Adopted)
                     .HasForeignKey(d => d.AdopterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Adopted__Adopter__4E88ABD4");
-
                 entity.HasOne(d => d.Animal)
                     .WithMany(p => p.AdoptedNavigation)
                     .HasForeignKey(d => d.AnimalId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Adopted__AnimalI__4D94879B");
             });
+      
 
             // Adopter entity configuration
             modelBuilder.Entity<Adopter>(entity =>
@@ -289,26 +287,21 @@ namespace ANIMAL.DAL.DataModel
             {
                 entity.HasKey(e => e.ReturnCode)
                     .HasName("PK__Returned__4CF726C86410F49F");
-
                 entity.Property(e => e.ReturnDate).HasColumnType("date");
-
                 entity.Property(e => e.ReturnReason)
                     .IsRequired()
                     .HasMaxLength(1000)
                     .IsUnicode(false);
-
                 entity.HasOne(d => d.Adopter)
                     .WithMany(p => p.ReturnedAnimal)
                     .HasForeignKey(d => d.AdopterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ReturnedA__Adopt__534D60F1");
-
                 entity.HasOne(d => d.AdoptionCodeNavigation)
                     .WithMany(p => p.ReturnedAnimal)
                     .HasForeignKey(d => d.AdoptionCode)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ReturnedA__Adopt__5165187F");
-
                 entity.HasOne(d => d.Animal)
                     .WithMany(p => p.ReturnedAnimal)
                     .HasForeignKey(d => d.AnimalId)

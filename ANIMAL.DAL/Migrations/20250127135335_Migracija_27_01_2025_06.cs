@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ANIMAL.DAL.Migrations
 {
-    public partial class Migracija23012025 : Migration
+    public partial class Migracija_27_01_2025_06 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -101,6 +101,140 @@ namespace ANIMAL.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Balans",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Iban = table.Column<string>(nullable: true),
+                    Balance = table.Column<decimal>(nullable: false),
+                    LastUpdated = table.Column<DateTime>(nullable: false),
+                    Password = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Balans", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Contact",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    AdopterId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contact", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContageusAnimals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AnimalId = table.Column<int>(nullable: false),
+                    DesisseName = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContageusAnimals", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Euthanasia",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AnimalId = table.Column<int>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    NameOfDesissse = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Euthanasia", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Food",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrandName = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    FoodType = table.Column<string>(nullable: true),
+                    AnimalType = table.Column<string>(nullable: true),
+                    AgeGroup = table.Column<string>(nullable: true),
+                    Weight = table.Column<decimal>(nullable: false),
+                    CaloriesPerServing = table.Column<decimal>(nullable: false),
+                    WeightPerServing = table.Column<decimal>(nullable: false),
+                    MeasurementPerServing = table.Column<string>(nullable: true),
+                    FatContent = table.Column<decimal>(nullable: false),
+                    FiberContent = table.Column<decimal>(nullable: false),
+                    ExporationDate = table.Column<DateTime>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    Notes = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Food", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Funds",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AdopterId = table.Column<int>(nullable: false),
+                    Amount = table.Column<decimal>(nullable: false),
+                    Purpose = table.Column<string>(nullable: true),
+                    DateTimed = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Funds", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Labs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AnimalId = table.Column<int>(nullable: false),
+                    DateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Labs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "News",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    DateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_News", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SystemRecord",
                 columns: table => new
                 {
@@ -113,6 +247,44 @@ namespace ANIMAL.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__SystemRecord", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Toys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrandName = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    AnimalType = table.Column<string>(nullable: true),
+                    ToyType = table.Column<string>(nullable: true),
+                    AgeGroup = table.Column<string>(nullable: true),
+                    Hight = table.Column<decimal>(nullable: false),
+                    Width = table.Column<decimal>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    Notes = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Toys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VetVisits",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AnimalId = table.Column<int>(nullable: false),
+                    StartTime = table.Column<DateTime>(nullable: false),
+                    EndTime = table.Column<DateTime>(nullable: false),
+                    TypeOfVisit = table.Column<string>(nullable: true),
+                    Notes = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VetVisits", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,6 +387,28 @@ namespace ANIMAL.DAL.Migrations
                         principalTable: "Animals",
                         principalColumn: "IdAnimal",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Medicines",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AnimalId = table.Column<int>(nullable: false),
+                    NameOfMedicines = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    VetUsername = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Medicines", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Medicines_Animals_AnimalId",
+                        column: x => x.AnimalId,
+                        principalTable: "Animals",
+                        principalColumn: "IdAnimal",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -379,6 +573,30 @@ namespace ANIMAL.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Parameter",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LabId = table.Column<int>(nullable: false),
+                    ParameterName = table.Column<string>(nullable: true),
+                    ParameterValue = table.Column<string>(nullable: true),
+                    Remarks = table.Column<string>(nullable: true),
+                    MeasurementUnits = table.Column<string>(nullable: true),
+                    LabsId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parameter", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Parameter_Labs_LabsId",
+                        column: x => x.LabsId,
+                        principalTable: "Labs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AnimalRecord",
                 columns: table => new
                 {
@@ -536,6 +754,16 @@ namespace ANIMAL.DAL.Migrations
                 column: "AnimalId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Medicines_AnimalId",
+                table: "Medicines",
+                column: "AnimalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parameter_LabsId",
+                table: "Parameter",
+                column: "LabsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ReturnedAnimal_AdopterId",
                 table: "ReturnedAnimal",
                 column: "AdopterId");
@@ -575,22 +803,55 @@ namespace ANIMAL.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Balans");
+
+            migrationBuilder.DropTable(
                 name: "Birds");
+
+            migrationBuilder.DropTable(
+                name: "Contact");
+
+            migrationBuilder.DropTable(
+                name: "ContageusAnimals");
+
+            migrationBuilder.DropTable(
+                name: "Euthanasia");
 
             migrationBuilder.DropTable(
                 name: "Fish");
 
             migrationBuilder.DropTable(
+                name: "Food");
+
+            migrationBuilder.DropTable(
                 name: "FoundRecord");
 
             migrationBuilder.DropTable(
+                name: "Funds");
+
+            migrationBuilder.DropTable(
                 name: "Mammals");
+
+            migrationBuilder.DropTable(
+                name: "Medicines");
+
+            migrationBuilder.DropTable(
+                name: "News");
+
+            migrationBuilder.DropTable(
+                name: "Parameter");
 
             migrationBuilder.DropTable(
                 name: "Reptiles");
 
             migrationBuilder.DropTable(
                 name: "ReturnedAnimal");
+
+            migrationBuilder.DropTable(
+                name: "Toys");
+
+            migrationBuilder.DropTable(
+                name: "VetVisits");
 
             migrationBuilder.DropTable(
                 name: "SystemRecord");
@@ -600,6 +861,9 @@ namespace ANIMAL.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Labs");
 
             migrationBuilder.DropTable(
                 name: "Adopted");

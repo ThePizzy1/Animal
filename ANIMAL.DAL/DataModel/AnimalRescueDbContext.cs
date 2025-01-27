@@ -26,9 +26,25 @@ namespace ANIMAL.DAL.DataModel
         public virtual DbSet<Mammals> Mammals { get; set; }
         public virtual DbSet<Reptiles> Reptiles { get; set; }
         public virtual DbSet<ReturnedAnimal> ReturnedAnimal { get; set; }
-        //public virtual DbSet<FoundRecord> FoundRecord { get; set; }
+        public virtual DbSet<FoundRecord> FoundRecord { get; set; }
         public virtual DbSet<SystemRecord> SystemRecord { get; set; }
        public virtual DbSet<AnimalRecord> AnimalRecord { get; set; }
+        public virtual DbSet<Balans> Balans { get; set; }
+        public virtual DbSet<Contact> Contact { get; set; }
+        public virtual DbSet<ContageusAnimals> ContageusAnimals { get; set; }
+        public virtual DbSet<Euthanasia> Euthanasia { get; set; }
+        public virtual DbSet<Food> Food { get; set; }
+        public virtual DbSet<Funds> Funds { get; set; }
+        public virtual DbSet<Labs> Labs { get; set; }
+        public virtual DbSet<Medicines> Medicines { get; set; }
+        public virtual DbSet<News> News { get; set; }
+        public virtual DbSet<Parameter> Parameter { get; set; }
+        public virtual DbSet<Toys> Toys { get; set; }
+        public virtual DbSet<VetVisits> VetVisits { get; set; }
+
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

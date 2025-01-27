@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    [Migration("20250123101110_Migracija23012025")]
-    partial class Migracija23012025
+    [Migration("20250127135335_Migracija_27_01_2025_06")]
+    partial class Migracija_27_01_2025_06
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -310,6 +310,33 @@ namespace ANIMAL.DAL.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Balans", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Iban")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Balans");
+                });
+
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Birds", b =>
                 {
                     b.Property<int>("AnimalId")
@@ -339,6 +366,72 @@ namespace ANIMAL.DAL.Migrations
                     b.ToTable("Birds");
                 });
 
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Contact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AdopterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Contact");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.ContageusAnimals", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DesisseName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContageusAnimals");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Euthanasia", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameOfDesissse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Euthanasia");
+                });
+
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Fish", b =>
                 {
                     b.Property<int>("AnimalId")
@@ -365,6 +458,60 @@ namespace ANIMAL.DAL.Migrations
                     b.HasIndex("AnimalId");
 
                     b.ToTable("Fish");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Food", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AgeGroup")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AnimalType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BrandName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("CaloriesPerServing")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("ExporationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("FatContent")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("FiberContent")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("FoodType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MeasurementPerServing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("WeightPerServing")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Food");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.FoundRecord", b =>
@@ -413,6 +560,48 @@ namespace ANIMAL.DAL.Migrations
                     b.ToTable("FoundRecord");
                 });
 
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Funds", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AdopterId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("DateTimed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Purpose")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Funds");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Labs", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Labs");
+                });
+
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Mammals", b =>
                 {
                     b.Property<int>("AnimalId")
@@ -433,6 +622,85 @@ namespace ANIMAL.DAL.Migrations
                     b.HasIndex("AnimalId");
 
                     b.ToTable("Mammals");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Medicines", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameOfMedicines")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VetUsername")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnimalId");
+
+                    b.ToTable("Medicines");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.News", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("News");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Parameter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("LabId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LabsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MeasurementUnits")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParameterName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParameterValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LabsId");
+
+                    b.ToTable("Parameter");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Reptiles", b =>
@@ -531,6 +799,72 @@ namespace ANIMAL.DAL.Migrations
                         .HasName("PK__SystemRecord");
 
                     b.ToTable("SystemRecord");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Toys", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AgeGroup")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AnimalType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BrandName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Hight")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ToyType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Width")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Toys");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.VetVisits", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TypeOfVisit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VetVisits");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -745,6 +1079,22 @@ namespace ANIMAL.DAL.Migrations
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__Mammals__AnimalI__5535A963")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Medicines", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
+                        .WithMany()
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Parameter", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.Labs", null)
+                        .WithMany("Parameters")
+                        .HasForeignKey("LabsId");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Reptiles", b =>

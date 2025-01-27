@@ -109,6 +109,7 @@ namespace ANIMAL.WebApi.Controllers
                 Id = user.Id,
                 Username = user.UserName,
                
+               
             };
 
             return Ok(userDto);

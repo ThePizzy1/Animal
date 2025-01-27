@@ -12,5 +12,6 @@ namespace ANIMAL.DAL.DataModel
         public string DesisseName { get; set; }
         public string Description { get; set; }
 
+        public Animals Animals { get; set; }
     }
 }

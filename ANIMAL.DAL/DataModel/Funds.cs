@@ -12,6 +12,6 @@ namespace ANIMAL.DAL.DataModel
         public string Purpose { get; set; }
         public DateTime DateTimed { get; set; }
         
-
+        public Adopted  Adopted { get; set; }
     }
 }

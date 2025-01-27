@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    [Migration("20250127135335_Migracija_27_01_2025_06")]
-    partial class Migracija_27_01_2025_06
+    [Migration("20250127141518_Migracija_27_01_2025_07")]
+    partial class Migracija_27_01_2025_07
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -400,6 +400,9 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("AnimalsIdAnimal")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -407,6 +410,8 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnimalsIdAnimal");
 
                     b.ToTable("ContageusAnimals");
                 });
@@ -567,6 +572,9 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("AdoptedCode")
+                        .HasColumnType("int");
+
                     b.Property<int>("AdopterId")
                         .HasColumnType("int");
 
@@ -581,6 +589,8 @@ namespace ANIMAL.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AdoptedCode");
+
                     b.ToTable("Funds");
                 });
 
@@ -594,10 +604,15 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("AnimalsIdAnimal")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnimalsIdAnimal");
 
                     b.ToTable("Labs");
                 });
@@ -850,6 +865,9 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("AnimalsIdAnimal")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -863,6 +881,8 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnimalsIdAnimal");
 
                     b.ToTable("VetVisits");
                 });
@@ -1050,6 +1070,13 @@ namespace ANIMAL.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.ContageusAnimals", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animals")
+                        .WithMany()
+                        .HasForeignKey("AnimalsIdAnimal");
+                });
+
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Fish", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
@@ -1070,6 +1097,20 @@ namespace ANIMAL.DAL.Migrations
                     b.HasOne("ANIMAL.DAL.DataModel.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Funds", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.Adopted", "Adopted")
+                        .WithMany()
+                        .HasForeignKey("AdoptedCode");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Labs", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animals")
+                        .WithMany()
+                        .HasForeignKey("AnimalsIdAnimal");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Mammals", b =>
@@ -1125,6 +1166,13 @@ namespace ANIMAL.DAL.Migrations
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__ReturnedA__Anima__52593CB8")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.VetVisits", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animals")
+                        .WithMany()
+                        .HasForeignKey("AnimalsIdAnimal");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

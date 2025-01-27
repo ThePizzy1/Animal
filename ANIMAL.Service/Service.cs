@@ -116,68 +116,34 @@ namespace ANIMAL.Service
             return animalDomains;
         }
 
-        void IService.DeleteAnimal(int idAnimal)
+        public async Task DeleteAnimal(int idAnimal)
         {
-            _repository.DeleteAnimal(idAnimal);
+            try
+            {
+                // Ensure that the idAnimal is valid (Optional)
+                if (idAnimal <= 0)
+                {
+                    throw new ArgumentException("Invalid animal ID.");
+                }
+
+                // Delegate to the repository's DeleteAnimal method
+                await _repository.DeleteAnimal(idAnimal);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (replace Console.WriteLine with proper logging)
+                Console.WriteLine($"Error deleting animal with ID {idAnimal}: {ex.Message}");
+
+                // Optionally, rethrow the exception if it needs to be handled at a higher level
+                throw;
+            }
         }
+
 
         AdopterDomain IService.GetAdopterByUsername(string username)
         {
             AdopterDomain adoptedDomains = _repository.GetAdopterByUsername(username);
             return adoptedDomains;
-        }
-        public async Task<bool> AddAnimalAsync2(
-     string name,
-     string family,
-     string species,
-     string subspecies,
-     int age,
-     string gender,
-     decimal weight,
-     decimal height,
-     decimal length,
-     bool neutered,
-     bool vaccinated,
-     bool microchipped,
-     bool trained,
-     bool socialized,
-     string healthIssues,
-     string pisture2,
-       byte[] picture,
-     string personalityDescription,
-     bool adopted)
-        {
-            try
-            {
-                var isSuccess = await _repository.AddAnimalAsync(
-                    name,
-                    family,
-                    species,
-                    subspecies,
-                    age,
-                    gender,
-                    weight,
-                    height,
-                    length,
-                    neutered,
-                    vaccinated,
-                    microchipped,
-                    trained,
-                    socialized,
-                    healthIssues,
-
-                      picture,
-                    personalityDescription,
-                    adopted
-                );
-
-                return isSuccess;
-            }
-            catch (Exception ex)
-            {
-                // Handle exception as needed
-                throw new Exception($"Failed to add animal: {ex.Message}");
-            }
         }
         public Task IncrementNumberOfAdoptedAnimalsAsync(string registerId)
         {
@@ -199,9 +165,9 @@ namespace ANIMAL.Service
             Task<AnimalDomain> aniimal = _repository.UpdateAnimalAsync( idAnimal,  age,  weight,  height,  length,  neutered,  vaccinated,  microchipped,  trained,  socialized,  healthIssues,  personalityDescription);
             return aniimal;
         }
-        public Task UpdateBird(int id, string cageSize, string recommendedToys, string sociability)
+        public async Task<BirdDomain> UpdateBird(BirdDomain bird)
         {
-            Task aniimal = _repository.UpdateBird(id, cageSize, recommendedToys, sociability);
+           BirdDomain aniimal = await _repository.UpdateBird(bird);
             return aniimal;
         }
 
@@ -224,38 +190,7 @@ namespace ANIMAL.Service
             return true;
 
         }
-        public async Task<bool> AddAnimalAsync(
-    string name,
-    string family,
-    string species,
-    string subspecies,
-    int age,
-    string gender,
-    decimal weight,
-    decimal height,
-    decimal length,
-    bool neutered,
-    bool vaccinated,
-    bool microchipped,
-    bool trained,
-    bool socialized,
-    string healthIssues,
-    byte[] picture,
-    string personalityDescription,
-    bool adopted)
-        {
-            try
-            {
-                return await _repository.AddAnimalAsync(
-                    name, family, species, subspecies, age, gender, weight,
-                    height, length, neutered, vaccinated, microchipped, trained,
-                    socialized, healthIssues, picture, personalityDescription, adopted);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Failed to add animal: {ex.Message}");
-            }
-        }
+       
 
 
         async Task<bool> IService.UpdateAdopterFlag(int adopterId)
@@ -356,6 +291,41 @@ namespace ANIMAL.Service
         {
             IEnumerable<ReturnedAnimalDomain> animalDomains = _repository.GetAllReturnedAnimalsForAdopter(adopterId);
             return animalDomains;
+        }
+
+        public async Task<bool> AddAnimalAsync(string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, byte[] picture, string personalityDescription, bool adopted)
+        {
+            try
+            {
+                var isSuccess = await _repository.AddAnimalAsync(
+                    name,
+                    family,
+                    species,
+                    subspecies,
+                    age,
+                    gender,
+                    weight,
+                    height,
+                    length,
+                    neutered,
+                    vaccinated,
+                    microchipped,
+                    trained,
+                    socialized,
+                    healthIssues,
+
+                      picture,
+                    personalityDescription,
+                    adopted
+                );
+
+                return isSuccess;
+            }
+            catch (Exception ex)
+            {
+                // Handle exception as needed
+                throw new Exception($"Failed to add animal: {ex.Message}");
+            }
         }
     }
 }

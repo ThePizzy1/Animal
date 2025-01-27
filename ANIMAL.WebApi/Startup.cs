@@ -67,7 +67,7 @@ namespace ANIMAL.WebApi
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:5174") // Dozvoljava pristup s odreðenog URL-a
+                    builder => builder.WithOrigins("http://localhost:5173") // Dozvoljava pristup s odreðenog URL-a
                                       .AllowAnyHeader() // Dozvoljava sve zaglavlja
                                       .AllowAnyMethod()); // Dozvoljava sve HTTP metode
             });
@@ -103,7 +103,7 @@ namespace ANIMAL.WebApi
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = { "Admin", "Korisnik" };
+            string[] roleNames = { "Admin", "User","Vet","HeadVet","Surenderer", "AnimalWelffereOfficer","Association","Worker","Menager","HeadAdmin" };
             IdentityResult roleResult;
 
             foreach (var roleName in roleNames)

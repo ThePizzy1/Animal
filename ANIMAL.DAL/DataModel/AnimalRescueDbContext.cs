@@ -26,6 +26,9 @@ namespace ANIMAL.DAL.DataModel
         public virtual DbSet<Mammals> Mammals { get; set; }
         public virtual DbSet<Reptiles> Reptiles { get; set; }
         public virtual DbSet<ReturnedAnimal> ReturnedAnimal { get; set; }
+        //public virtual DbSet<FoundRecord> FoundRecord { get; set; }
+        public virtual DbSet<SystemRecord> SystemRecord { get; set; }
+       public virtual DbSet<AnimalRecord> AnimalRecord { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,6 +46,15 @@ namespace ANIMAL.DAL.DataModel
             modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("AspNetUserLogins");
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("AspNetRoleClaims");
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("AspNetUserTokens");
+
+
+    
+
+
+
+
+
+
 
             // Adopted entity configuration
             modelBuilder.Entity<Adopted>(entity =>
@@ -308,6 +320,64 @@ namespace ANIMAL.DAL.DataModel
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ReturnedA__Anima__52593CB8");
             });
+
+            modelBuilder.Entity<AnimalRecord>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__AnimalRecord");
+
+
+                entity.HasOne(d => d.Animal)
+                    .WithMany()
+                    .HasForeignKey(d => d.AnimalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__AnimalRecord__Animal");
+                entity.HasOne(d => d.Record)
+                   .WithMany()
+                   .HasForeignKey(d => d.RecordId)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("FK__AnimalRecord__Record");
+
+
+
+            });
+
+
+
+
+
+
+
+
+
+
+         modelBuilder.Entity<SystemRecord>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                .HasName("PK__SystemRecord");
+
+
+                entity.Property(e => e.RecordName)
+             .IsRequired()
+             .HasMaxLength(255)
+             .IsUnicode(false);
+
+
+                entity.Property(e => e.RecordDescription)
+           .IsRequired()
+           .HasMaxLength(255)
+           .IsUnicode(false);
+
+                entity.Property(e => e.RecordNumber)
+                .HasColumnType("integer");
+
+            });
+         
+
+
+
+
+
 
             OnModelCreatingPartial(modelBuilder);
         }

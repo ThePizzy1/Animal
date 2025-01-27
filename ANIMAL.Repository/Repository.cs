@@ -311,13 +311,17 @@ namespace ANIMAL.Repository
         }
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId)
         {
+            var returnedAnimals = _appDbContext.ReturnedAnimal
+       .Select(r => r.AnimalId) // Pretpostavljamo da 'Code' identificira vraćene životinje
+       .ToList();
             var adoptedEntities = _appDbContext.Adopted
-                                               .Where(a => a.AdopterId == adopterId)
+                                               .Where(a => a.AdopterId == adopterId && a.Animal.Adopted == true)
                                                .Include(a => a.Animal) // Uključi podatke o životinji
                                                .Include(a => a.Adopter) // Uključi podatke o usvojitelju
                                                .ToList();
 
-            var adoptedDomains = adoptedEntities.Select(e => new AdoptedDomain
+            var adoptedDomains = adoptedEntities.Where(e => !returnedAnimals.Contains(e.Code)) // Filtriraj životinje koje nisu vraćene
+    .Select(e => new AdoptedDomain
             {
                 Code = e.Code,
                 Animal = new AnimalDomain(
@@ -428,117 +432,131 @@ namespace ANIMAL.Repository
 
             return _mappingService.Map<AdopterDomain>(adopter);
         }
-        public void DeleteAnimal(int idAnimal)
+        public async Task DeleteAnimal(int idAnimal)
         {
-            var animal = _appDbContext.Animals.FirstOrDefault(a => a.IdAnimal == idAnimal);
+            using var transaction = await _appDbContext.Database.BeginTransactionAsync();
+
             try
             {
+                var animal = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == idAnimal);
+
                 if (animal == null)
                 {
-                    throw new Exception($"Životinja s IdAnimal {idAnimal} nije pronađena.");
+                    throw new Exception($"Animal with IdAnimal {idAnimal} not found.");
                 }
 
-                // Provjeravamo je li životinja posvojena
+                // Log animal details
+                Console.WriteLine($"Deleting animal: {animal.IdAnimal}, Family: {animal.Family}");
+
                 if (animal.Adopted)
                 {
-                    throw new Exception($"Nije moguće obrisati posvojenu životinju (IdAnimal: {idAnimal}).");
+                    throw new Exception($"Cannot delete an adopted animal (IdAnimal: {idAnimal}).");
                 }
 
-                // Delete from Adopted table
-                var adoptedRecord = _appDbContext.Set<Adopted>().FirstOrDefault(ad => ad.AnimalId == idAnimal);
+                var adoptedRecord = await _appDbContext.Set<Adopted>().FirstOrDefaultAsync(ad => ad.AnimalId == idAnimal);
                 if (adoptedRecord != null)
                 {
                     _appDbContext.Set<Adopted>().Remove(adoptedRecord);
                 }
 
-                // Delete from ReturnedAnimal table
-                var returnedAnimalRecord = _appDbContext.Set<ReturnedAnimal>().FirstOrDefault(ra => ra.AnimalId == idAnimal);
+                var returnedAnimalRecord = await _appDbContext.Set<ReturnedAnimal>().FirstOrDefaultAsync(ra => ra.AnimalId == idAnimal);
                 if (returnedAnimalRecord != null)
                 {
                     _appDbContext.Set<ReturnedAnimal>().Remove(returnedAnimalRecord);
                 }
 
-                // Delete from specific animal family table
                 switch (animal.Family)
                 {
                     case "Reptile":
-                        var reptile = _appDbContext.Set<Reptiles>().FirstOrDefault(r => r.AnimalId == idAnimal);
+                        var reptile = await _appDbContext.Set<Reptiles>().FirstOrDefaultAsync(r => r.AnimalId == idAnimal);
                         if (reptile != null)
                         {
                             _appDbContext.Set<Reptiles>().Remove(reptile);
                         }
                         break;
+
                     case "Mammal":
-                        _appDbContext.Database.ExecuteSqlRaw($"DELETE FROM Mammals WHERE AnimalId = {idAnimal}");
+                        await _appDbContext.Database.ExecuteSqlRawAsync($"DELETE FROM Mammals WHERE AnimalId = {idAnimal}");
                         break;
+
                     case "Fish":
-                        var fish = _appDbContext.Set<Fish>().FirstOrDefault(f => f.AnimalId == idAnimal);
+                        var fish = await _appDbContext.Set<Fish>().FirstOrDefaultAsync(f => f.AnimalId == idAnimal);
                         if (fish != null)
                         {
                             _appDbContext.Set<Fish>().Remove(fish);
                         }
                         break;
+
                     case "Bird":
-                        var bird = _appDbContext.Set<Birds>().FirstOrDefault(b => b.AnimalId == idAnimal);
+                        var bird = await _appDbContext.Set<Birds>().FirstOrDefaultAsync(b => b.AnimalId == idAnimal);
                         if (bird != null)
                         {
                             _appDbContext.Set<Birds>().Remove(bird);
                         }
                         break;
+
                     case "Amphibian":
-                        var amphibian = _appDbContext.Set<Amphibians>().FirstOrDefault(a => a.AnimalId == idAnimal);
+                        var amphibian = await _appDbContext.Set<Amphibians>().FirstOrDefaultAsync(a => a.AnimalId == idAnimal);
                         if (amphibian != null)
                         {
                             _appDbContext.Set<Amphibians>().Remove(amphibian);
                         }
                         break;
+
                     default:
-                        throw new Exception($"Nepoznata family: {animal.Family}");
+                        throw new Exception($"Unknown animal family: {animal.Family}");
                 }
 
-                // Delete from main Animals table
                 _appDbContext.Animals.Remove(animal);
-
-                // Save changes to the database
-                _appDbContext.SaveChanges();
+                await _appDbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
             }
             catch (DbUpdateException ex)
             {
-                // Catch DbUpdateException that contains details about the inner error
+                await transaction.RollbackAsync();
                 var innerException = ex.InnerException;
                 while (innerException != null)
                 {
-                    Console.WriteLine(innerException.Message);
+                    Console.WriteLine($"DbUpdateException Inner Exception: {innerException.Message}");
                     innerException = innerException.InnerException;
                 }
-                throw; // Re-throw the exception to be handled at a higher level
+                throw;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                Console.WriteLine($"General Exception: {ex.Message}");
+                throw new Exception($"Error occurred while deleting the animal: {ex.Message}");
             }
         }
-      
+
+
+
         AdopterDomain IRepository.GetAdopterByUsername(string username)
         {
             throw new NotImplementedException();
         }
 
         public async Task<bool> AddAnimalAsync(
-         string name,
-         string family,
-         string species,
-         string subspecies,
-         int age,
-         string gender,
-         decimal weight,
-         decimal height,
-         decimal length,
-         bool neutered,
-         bool vaccinated,
-         bool microchipped,
-         bool trained,
-         bool socialized,
-         string healthIssues,
-         byte[] picture,
-         string personalityDescription,
-         bool adopted)
+        string name,
+        string family,
+        string species,
+        string subspecies,
+        int age,
+        string gender,
+        decimal weight,
+        decimal height,
+        decimal length,
+        bool neutered,
+        bool vaccinated,
+        bool microchipped,
+        bool trained,
+        bool socialized,
+        string healthIssues,
+        byte[] picture,
+        string personalityDescription,
+        bool adopted
+        )
         {
             try
             {
@@ -561,19 +579,20 @@ namespace ANIMAL.Repository
                     HealthIssues = healthIssues,
                     Picture = picture,
                     PersonalityDescription = personalityDescription,
-                    Adopted = adopted,
+                    Adopted = adopted
                 };
 
-                await _appDbContext.Animals.AddAsync(newAnimal);
+                _appDbContext.Animals.Add(newAnimal);
                 await _appDbContext.SaveChangesAsync();
-
-                return true; 
+                return true;
             }
             catch (Exception ex)
             {
                 throw new Exception($"Failed to add animal: {ex.Message}");
             }
         }
+
+
 
         public async Task IncrementNumberOfAdoptedAnimalsAsync(string registerId)
         {
@@ -698,22 +717,24 @@ namespace ANIMAL.Repository
 
             _appDbContext.ReturnedAnimal.Add(returnedAnimal);
             await _appDbContext.SaveChangesAsync();
-           
-            
+         
             return true;
         }
-        public  void  DeleteAdoptedReturn(int adoptedId)
-        {
-            var adoptedRecord =  _appDbContext.Set<Adopted>().FirstOrDefault(ad => ad.Code == adoptedId);
-            if (adoptedRecord != null)
+        
+            public async void DeleteAdoptedReturn(int adoptedId)
             {
-                _appDbContext.Set<Adopted>().Remove(adoptedRecord);
+               
+            var adoptedRecord = await _appDbContext.Adopted.FirstOrDefaultAsync(a => a.Code == adoptedId);
+
+            if (adoptedRecord != null)
+                {
+                    adoptedRecord.AdopterId = 0;
+                _appDbContext.Adopted.Update(adoptedRecord);
+                await _appDbContext.SaveChangesAsync();
             }
+            }
+        
 
-
-             _appDbContext.SaveChangesAsync();
-         
-        }
         public async Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate)
         {
             try
@@ -847,18 +868,35 @@ namespace ANIMAL.Repository
         {
             return await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == id);
         }
-        public async Task UpdateBird(int id, string cageSize, string recommendedToys, string sociability)
+        public async Task<BirdDomain> UpdateBird(BirdDomain birdDomain)
         {
-            var bird = await _appDbContext.Birds.FirstOrDefaultAsync(a => a.AnimalId == id);
-            if (bird != null)
+            if (birdDomain == null)
             {
-                bird.AnimalId = id;
-                bird.CageSize = cageSize;
-                bird.RecommendedToys = recommendedToys;
-                bird.Sociability = sociability;
-                 _appDbContext.Update(bird);
-                await _appDbContext.SaveChangesAsync();
+                throw new ArgumentException("Bird not found");
             }
+
+            // Mapiraj BirdDomain u Bird entitet
+            var bird = _mappingService.Map<Birds>(birdDomain);
+
+            // Preuzmi postojeći entitet iz baze
+            var existingBird = await _appDbContext.Birds.FirstOrDefaultAsync(b => b.AnimalId == bird.AnimalId);
+
+            if (existingBird == null)
+            {
+                throw new Exception("Bird not found in the database");
+            }
+
+            // Ažuriraj postojeći entitet s novim podacima
+            existingBird.CageSize = bird.CageSize;
+            existingBird.RecommendedToys = bird.RecommendedToys;
+            existingBird.Sociability = bird.Sociability;
+
+            // Spremi promjene u bazu podataka
+            _appDbContext.Birds.Update(existingBird);
+            await _appDbContext.SaveChangesAsync();
+
+            // Mapiraj ažurirani entitet natrag u BirdDomain
+            return _mappingService.Map<BirdDomain>(existingBird);
         }
 
     }

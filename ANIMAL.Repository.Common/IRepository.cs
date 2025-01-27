@@ -28,32 +28,31 @@ namespace ANIMAL.Repository.Common
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId);
         public  Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);
 
-        Task<bool> AddAnimalAsync(string name,
-        string family,
-        string species,
-        string subspecies,
-        int age,
-        string gender,
-        decimal weight,
-        decimal height,
-        decimal length,
-        bool neutered,
-        bool vaccinated,
-        bool microchipped,
-        bool trained,
-        bool socialized,
-        string healthIssues,
-  
+        Task<bool> AddAnimalAsync(
+          string name,
+          string family,
+          string species,
+          string subspecies,
+          int age,
+          string gender,
+          decimal weight,
+          decimal height,
+          decimal length,
+          bool neutered,
+          bool vaccinated,
+          bool microchipped,
+          bool trained,
+          bool socialized,
+          string healthIssues, 
           byte[] picture,
-        string personalityDescription,
-        bool adopted);
-      
-
+          string personalityDescription,
+          bool adopted
+         );
         public  Task IncrementNumberOfAdoptedAnimalsAsync(string registerId);
         public  Task IncrementNumberOfReturnedAnimalsAsync(string registerId);
         public  Task<AdopterDomain> UpdateAdopterAsync(string registerId, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password);
         public  Task<AnimalDomain> UpdateAnimalAsync(int idAnimal, int age, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, string personalityDescription);
-        public Task UpdateBird(int id, string cageSize, string recommendedToys, string sociability);
+        public  Task<BirdDomain> UpdateBird(BirdDomain bird);
 
 
         public Task<bool> UpdateAdopterFlag(int adopterId);
@@ -74,7 +73,7 @@ namespace ANIMAL.Repository.Common
 
         public  Task<bool> DeleteAdoptedAsync(int adoptedId);
         public void DeleteAdoptedReturn(int adoptedId);
-        public void DeleteAnimal(int idAnimal);
+        public  Task DeleteAnimal(int idAnimal);
 
     }
 }

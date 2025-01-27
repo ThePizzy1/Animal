@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    [Migration("20240605143834_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250123101110_Migracija23012025")]
+    partial class Migracija23012025
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -63,6 +63,9 @@ namespace ANIMAL.DAL.Migrations
                         .HasMaxLength(255)
                         .IsUnicode(false);
 
+                    b.Property<bool>("Flag")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("varchar(255)")
@@ -70,16 +73,23 @@ namespace ANIMAL.DAL.Migrations
                         .IsUnicode(false);
 
                     b.Property<int>("NumAdoptedAnimals")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
 
                     b.Property<int>("NumReturnedAnimals")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("varchar(255)")
                         .HasMaxLength(255)
                         .IsUnicode(false);
+
+                    b.Property<string>("RegisterId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Residence")
                         .IsRequired()
@@ -112,6 +122,34 @@ namespace ANIMAL.DAL.Migrations
                     b.HasIndex("AnimalId");
 
                     b.ToTable("Amphibians");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.AnimalRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AnimalsIdAnimal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecordId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id")
+                        .HasName("PK__AnimalRecord");
+
+                    b.HasIndex("AnimalId");
+
+                    b.HasIndex("AnimalsIdAnimal");
+
+                    b.HasIndex("RecordId");
+
+                    b.ToTable("AnimalRecord");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Animals", b =>
@@ -167,6 +205,11 @@ namespace ANIMAL.DAL.Migrations
                         .HasMaxLength(1000)
                         .IsUnicode(false);
 
+                    b.Property<byte[]>("Picture")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .IsUnicode(false);
+
                     b.Property<bool>("Socialized")
                         .HasColumnType("bit");
 
@@ -194,6 +237,77 @@ namespace ANIMAL.DAL.Migrations
                         .HasName("PK__Animals__951092F0A1868E05");
 
                     b.ToTable("Animals");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Birds", b =>
@@ -251,6 +365,52 @@ namespace ANIMAL.DAL.Migrations
                     b.HasIndex("AnimalId");
 
                     b.ToTable("Fish");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.FoundRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Adress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerOIB")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerSurname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RegisterId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnimalId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FoundRecord");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Mammals", b =>
@@ -345,6 +505,165 @@ namespace ANIMAL.DAL.Migrations
                     b.ToTable("ReturnedAnimal");
                 });
 
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.SystemRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("RecordDescription")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
+
+                    b.Property<string>("RecordName")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
+
+                    b.Property<int>("RecordNumber")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id")
+                        .HasName("PK__SystemRecord");
+
+                    b.ToTable("SystemRecord");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
+                });
+
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Adopted", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Adopter", "Adopter")
@@ -369,6 +688,25 @@ namespace ANIMAL.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.AnimalRecord", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
+                        .WithMany()
+                        .HasForeignKey("AnimalId")
+                        .HasConstraintName("FK__AnimalRecord__Animal")
+                        .IsRequired();
+
+                    b.HasOne("ANIMAL.DAL.DataModel.Animals", null)
+                        .WithMany("AnimalRecord")
+                        .HasForeignKey("AnimalsIdAnimal");
+
+                    b.HasOne("ANIMAL.DAL.DataModel.SystemRecord", "Record")
+                        .WithMany()
+                        .HasForeignKey("RecordId")
+                        .HasConstraintName("FK__AnimalRecord__Record")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Birds", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
@@ -385,6 +723,19 @@ namespace ANIMAL.DAL.Migrations
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__Fish__AnimalId__5EBF139D")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.FoundRecord", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
+                        .WithMany("FoundRecord")
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ANIMAL.DAL.DataModel.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Mammals", b =>
@@ -423,6 +774,57 @@ namespace ANIMAL.DAL.Migrations
                         .WithMany("ReturnedAnimal")
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__ReturnedA__Anima__52593CB8")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ANIMAL.DAL.DataModel.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

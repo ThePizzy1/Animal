@@ -11,5 +11,6 @@ namespace ANIMAL.DAL.DataModel
         public string Email { get; set; }
         public string Password { get; set; }
         public int AccesLevel { get; set; }
+        public string Role { get; set; }
     }
 }

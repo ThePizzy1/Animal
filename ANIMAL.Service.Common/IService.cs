@@ -26,8 +26,9 @@ namespace ANIMAL.Service.Common
         public AdopterDomain GetAdopterById(string id);
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId);
         public Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);
-                public void DeleteAnimal(int idAnimal);
-        Task<bool> AddAnimalAsync(string name,
+        public  Task DeleteAnimal(int idAnimal);
+        Task<bool> AddAnimalAsync(
+        string name,
         string family,
         string species,
         string subspecies,
@@ -44,13 +45,13 @@ namespace ANIMAL.Service.Common
         string healthIssues,
         byte[] picture,
         string personalityDescription,
-        bool adopted);
-
+        bool adopted)
+        ;
         public Task IncrementNumberOfAdoptedAnimalsAsync(string registerId);
         public Task IncrementNumberOfReturnedAnimalsAsync(string registerId);
         public Task<AdopterDomain> UpdateAdopterAsync(string registerId, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password);
         public Task<AnimalDomain> UpdateAnimalAsync(int idAnimal, int age, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, string personalityDescription);
-        public Task UpdateBird(int id, string cageSize, string recommendedToys, string sociability);
+        public Task<BirdDomain> UpdateBird(BirdDomain bird);
         public  Task<bool> AdoptionStatus(int animalId);
         public Task<bool> UpdateAdopterFlag(int adopterId);
         public  Task<bool> AdoptionStatusFalse(int animalId);

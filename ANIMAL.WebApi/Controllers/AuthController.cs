@@ -47,12 +47,52 @@ namespace ANIMAL.WebApi.Controllers
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "Korisnik");
+                await _userManager.AddToRoleAsync(user, "User");
                 return Ok(new { message = "User registered successfully" });
             }
 
             return BadRequest(result.Errors);
         }
+        [HttpPost("registerAdmin")]
+        public async Task<IActionResult> RegisterWorker([FromBody] RgisterModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
+            var user = new ApplicationUser { UserName = model.Username };
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, model.Role);
+                return Ok(new { message = "User registered successfully" });
+            }
+
+            return BadRequest(result.Errors);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpGet("getUserByUsername/{username}")]
         public async Task<IActionResult> GetUserByUsername(string username)

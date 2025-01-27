@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -244,77 +245,84 @@ namespace ANIMAL.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal: {ex.Message}");
             }
         }
-        [HttpPut("bird/{idAnimal}")]
+        [HttpPut("bird/{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateBird([FromBody] BirdDomain request)
+        public async Task<IActionResult> UpdateBird(int id, [FromBody] BirdDomain birdUpdateDto)
         {
-            if (request == null )
-            {
-                return BadRequest("Invalid data. Animal information is missing.");
-            }
-
             try
             {
-                await _service.UpdateBird(request.IdAnimal, request.CageSize, request.RecommendedToys, request.Sociability);
-                return NoContent();
+                var bird =  _service.GetAllBirdDomain(id);
+                if (bird == null)
+                {
+                    return NotFound("Bird not found");
+                }
 
-                
+                // Ažuriraj bird entitet s podacima iz birdUpdateDto
+                bird.CageSize = birdUpdateDto.CageSize;
+                bird.RecommendedToys = birdUpdateDto.RecommendedToys;
+                bird.Sociability = birdUpdateDto.Sociability;
+
+                await _service.UpdateBird(bird);
+              
+                return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal: {ex.Message}");
+                // Zabilježi grešku
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
             }
         }
 
         [HttpPost("addAnimal")]
         [AllowAnonymous]
-        public async Task<IActionResult> AddAnimalAsync(string name,
-   string family,
-    string species,
-    string subspecies,
-    int age,
-     string gender,
-     decimal weight,
-     decimal height,
-    decimal length,
-    bool neutered,
-     bool vaccinated,
-    bool microchipped,
-     bool trained,
-   bool socialized,
-     string healthIssues,
-    string picture,
-     string personalityDescription,
-  bool adopted)
+        public async Task<IActionResult> AddAnimalAsync(
+     [FromForm] string name,
+     [FromForm] string family,
+     [FromForm] string species,
+     [FromForm] string subspecies,
+     [FromForm] int age,
+     [FromForm] string gender,
+     [FromForm] decimal weight,
+     [FromForm] decimal height,
+     [FromForm] decimal length,
+     [FromForm] bool neutered,
+     [FromForm] bool vaccinated,
+     [FromForm] bool microchipped,
+     [FromForm] bool trained,
+     [FromForm] bool socialized,
+     [FromForm] string healthIssues,
+     [FromForm] string personalityDescription,
+     [FromForm] bool adopted,
+     [FromForm] IFormFile image)
         {
+            if (image == null || image.Length == 0)
+            {
+                return BadRequest("No image file provided.");
+            }
+
             try
             {
-                byte[] pictureBytes = null;
-                if (!string.IsNullOrEmpty(picture))
+
+                byte[] pictureBytes;
+                using (var memoryStream = new MemoryStream())
                 {
-                    pictureBytes = Convert.FromBase64String(picture);
+                    await image.CopyToAsync(memoryStream);
+                    pictureBytes = memoryStream.ToArray();
                 }
 
+                var success = await _service.AddAnimalAsync(
+                    name, family, species, subspecies, age, gender, weight, height, length,
+                    neutered, vaccinated, microchipped, trained, socialized, healthIssues,pictureBytes,
+                    personalityDescription, adopted );
 
-    var createdAnimalId = await _service.AddAnimalAsync(
-name, family, species, subspecies, age, gender,
-weight, height, length, neutered, vaccinated, microchipped,
-trained, socialized, healthIssues, pictureBytes, personalityDescription, adopted);
-
-                if (createdAnimalId == null)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Animal could not be added.");
-                }
-
-                return CreatedAtAction(nameof(GetAnimalById), new { id = createdAnimalId }, null);
-            }
-            catch (FormatException ex)
-            {
-                return BadRequest("Invalid picture format. Please provide a valid Base64 encoded string.");
+                if (success)
+                    return Ok("Animal successfully added.");
+                else
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to add animal.");
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add animal: {ex.Message}");
             }
         }
 
@@ -323,19 +331,36 @@ trained, socialized, healthIssues, pictureBytes, personalityDescription, adopted
 
         [HttpDelete("{idAnimal}")]
         [AllowAnonymous]
-        public IActionResult Delete(int idAnimal)
+        public async Task<IActionResult> Delete(int idAnimal)
         {
             try
             {
-                _service.DeleteAnimal(idAnimal);
-                return Ok("Životinja uspješno obrisana.");
+               
+                // Call the service layer asynchronously
+                await _service.DeleteAnimal(idAnimal);
+
+                // Return success message if the operation completes
+                return Ok("Animal successfully deleted.");
+            }
+            catch (KeyNotFoundException)
+            {
+                // If the animal was not found, return a 404 Not Found
+                return NotFound($"Animal with ID {idAnimal} not found.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Return a BadRequest if the operation was invalid (e.g., animal was adopted)
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Došlo je do greške: {ex.Message}");
+                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+                // Catch other exceptions and return a generic server error message
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
         }
-        [HttpDelete("code/{code}")]
+
+        [HttpPut("code/{code}")]
         [AllowAnonymous]
         public IActionResult DeleteAdoptedReturn(int code)
         {
@@ -512,7 +537,7 @@ trained, socialized, healthIssues, pictureBytes, personalityDescription, adopted
             }
         }
 
-        [HttpPost("areptile")]
+        [HttpPost("addreptile")]
         public async Task<IActionResult> AddReptileAsync([FromBody] ReptileDomain reptileDomain)
         {
             if (reptileDomain == null)

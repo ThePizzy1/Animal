@@ -211,7 +211,61 @@ namespace ANIMAL.Service
             return adoptedDomains;
         }
 
+        //get by id novo
+        ToysDomain IService.GetOneToysDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
 
+        NewsDomain IService.GetOneNewsDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        MedicinesDomain IService.GetOneMedicinesDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        LabsDomain IService.GetOneLabsDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        FundsDomain IService.GetOneFundsDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        FoundRecordDomain IService.GetOneFoundRecordDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        FoodDomain IService.GetOneFoodDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        EuthanasiaDomain IService.GetOneEuthanasiaDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        ContageusAnimalsDomain IService.GetOneContageusAnimalsDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        ContactDomain IService.GetOneContactDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        BalansDomain IService.GetOneBalansDomain(int id)
+        {
+            throw new NotImplementedException();
+        }
 
 
 
@@ -441,6 +495,5 @@ namespace ANIMAL.Service
             }
         }
 
- 
     }
 }

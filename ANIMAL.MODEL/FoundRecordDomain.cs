@@ -6,7 +6,7 @@ using System.Text;
 namespace ANIMAL.DAL.DataModel
 {
     public class FoundRecordDomain
-    {
+    {//kad je igdje životija pronađena
         public FoundRecordDomain() { }
         public FoundRecordDomain(int id, int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId, AnimalDomain animal)
         {

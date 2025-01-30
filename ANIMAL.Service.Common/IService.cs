@@ -50,8 +50,21 @@ namespace ANIMAL.Service.Common
         public AdopterDomain GetAdopterByUsername(string username);
         public AdopterDomain GetAdopterById(string id);
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId);
-         public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId);  
+         public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId);
 
+        //get by id novo
+
+        public ToysDomain GetOneToysDomain(int id);
+        public NewsDomain GetOneNewsDomain(int id);
+        public MedicinesDomain GetOneMedicinesDomain(int id);
+        public LabsDomain GetOneLabsDomain(int id);
+        public FundsDomain GetOneFundsDomain(int id);
+        public FoundRecordDomain GetOneFoundRecordDomain(int id);
+        public FoodDomain GetOneFoodDomain(int id);
+        public EuthanasiaDomain GetOneEuthanasiaDomain(int id);
+        public ContageusAnimalsDomain GetOneContageusAnimalsDomain(int id);
+        public ContactDomain GetOneContactDomain(int id);
+        public BalansDomain GetOneBalansDomain(int id);
 
         //ADD
         public Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);

@@ -642,6 +642,195 @@ namespace ANIMAL.Repository
             throw new NotImplementedException();
         }
 
+        //get by id novo
+        //---------------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------------
+
+        ToysDomain IRepository.GetOneToysDomain(int id)
+        {
+            var toyDb = _appDbContext.Toys.FirstOrDefault(a => a.Id == id);
+
+            if (toyDb == null)
+            {
+                return null; 
+            }
+
+            var toyDomain = new ToysDomain(
+                toyDb.Id,
+                toyDb.BrandName,
+                toyDb.Name,
+                toyDb.AnimalType,
+                toyDb.ToyType,
+                toyDb.AgeGroup,
+                toyDb.Hight,
+                toyDb.Width,
+                toyDb.Quantity,
+                toyDb.Notes
+               );
+
+            return toyDomain;
+
+        }
+
+        NewsDomain IRepository.GetOneNewsDomain(int id)
+        {
+            var newsDb = _appDbContext.News.FirstOrDefault(a => a.Id == id);
+
+            if (newsDb == null)
+            {
+                return null;
+            }
+
+            var newsDomain = new NewsDomain(
+                newsDb.Id,
+                newsDb.Name,
+                newsDb.Description,
+                newsDb.DateTime
+              
+               );
+
+            return newsDomain;
+        }
+        FoodDomain IRepository.GetOneFoodDomain(int id)
+        {
+            var foodDb = _appDbContext.Food.FirstOrDefault(a => a.Id == id);
+
+            if (foodDb == null)
+            {
+                return null;
+            }
+
+            var foodDomain = new FoodDomain(
+                foodDb.Id,
+                foodDb.BrandName,
+                foodDb.Name,
+                foodDb.FoodType,
+                foodDb.AnimalType,
+                foodDb.AgeGroup,
+                foodDb.Weight,
+                foodDb.CaloriesPerServing,
+                foodDb.WeightPerServing,
+                foodDb.MeasurementPerServing,
+                foodDb.FatContent,
+                foodDb.FiberContent,
+                foodDb.ExporationDate,
+                foodDb.Quantity,
+                foodDb.Notes
+
+
+               );
+
+            return foodDomain;
+        }
+        BalansDomain IRepository.GetOneBalansDomain(int id)//ništa
+        {
+            var balansDb = _appDbContext.Balans.FirstOrDefault(a => a.Id == id);
+
+            if (balansDb == null)
+            {
+                return null;
+            }
+
+            var balansDomain = new BalansDomain(
+               balansDb.Id,
+               balansDb.Iban,
+               balansDb.Balance,
+               balansDb.LastUpdated,
+               balansDb.Password,
+               balansDb.Type
+
+
+               );
+
+            return balansDomain;
+        }
+        /* var reptile= _appDbContext.Reptiles
+                              .Join(_appDbContext.Animals, r => r.AnimalId, a => a.IdAnimal,
+                                    (r, a) => new { Reptile = r, Animal = a })
+                                .Where(x => x.Animal.IdAnimal == id )
+                              .Select(x => new ReptileDomain(
+                                  x.Animal.IdAnimal,
+                                
+                                  x.Reptile.TankSize,
+                                  x.Reptile.Sociability,
+                                  x.Reptile.CompatibleSpecies,
+                                  x.Reptile.RecommendedItems
+                              ))
+                                  .FirstOrDefault();
+            return reptile;*/
+        //kako složit da includa i podatke iz druge klase
+        public   MedicinesDomain GetOneMedicinesDomain(int id)//Animals
+        {
+            var medicinesdb = _appDbContext.Medicines.FirstOrDefault(a => a.Id == id);
+            if (medicinesdb == null)
+            {
+                return null;
+            }
+            var medicinesDomain = new MedicinesDomain(
+              medicinesdb.Id,
+              medicinesdb.AnimalId,
+              medicinesdb.NameOfMedicines,
+               medicinesdb.Description,
+               medicinesdb.VetUsername
+              );
+
+            return medicinesDomain;
+
+        }
+
+        LabsDomain IRepository.GetOneLabsDomain(int id)//Animals
+        {
+            throw new NotImplementedException();
+        }
+
+        FundsDomain IRepository.GetOneFundsDomain(int id)//Adopter
+        {
+            throw new NotImplementedException();
+        }
+
+        FoundRecordDomain IRepository.GetOneFoundRecordDomain(int id)//Animals
+        {
+            throw new NotImplementedException();
+        }
+
+      
+
+        EuthanasiaDomain IRepository.GetOneEuthanasiaDomain(int id)//Animals
+        {
+            throw new NotImplementedException();
+        }
+
+        ContageusAnimalsDomain IRepository.GetOneContageusAnimalsDomain(int id)//Animals
+        {
+            throw new NotImplementedException();
+        }
+
+        ContactDomain IRepository.GetOneContactDomain(int id)//Aadopter
+        {
+            throw new NotImplementedException();
+        }
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //ADD
         public async Task<bool> AddAnimalAsync(
         string name,
         string family,
@@ -696,6 +885,37 @@ namespace ANIMAL.Repository
                 throw new Exception($"Failed to add animal: {ex.Message}");
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -839,7 +1059,82 @@ namespace ANIMAL.Repository
         }
 
 
+        //update novo
 
+        Task<AnimalRecordDomain> IRepository.UpdateAnimalRecordDomain(AnimalRecordDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<BalansDomain> IRepository.UpdateAnimalBalansDomain(BalansDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ContactDomain> IRepository.UpdateContactDomain(ContactDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ContageusAnimalsDomain> IRepository.UpdateContageusAnimalsDomain(ContageusAnimalsDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<EuthanasiaDomain> IRepository.UpdateEuthanasiaDomain(EuthanasiaDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<FoodDomain> IRepository.UpdateFoodDomain(FoodDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<FoundRecordDomain> IRepository.UpdateFoundRecordDomain(FoundRecordDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<FundsDomain> IRepository.UpdateFundsDomain(FundsDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<LabsDomain> IRepository.UpdateLabsDomain(LabsDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<MedicinesDomain> IRepository.UpdateMedicinesDomain(MedicinesDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<NewsDomain> IRepository.UpdateNewsDomain(NewsDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ParameterDomain> IRepository.UpdateParameterDomain(ParameterDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<SystemRecordDomain> IRepository.UpdateSystemRecordDomain(SystemRecordDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ToysDomain> IRepository.UpdateToysDomain(ToysDomain update)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<VetVisitsDomain> IRepository.UpdateVetVisitsDomain(VetVisitsDomain update)
+        {
+            throw new NotImplementedException();
+        }
 
 
 
@@ -965,19 +1260,7 @@ namespace ANIMAL.Repository
             return true;
         }
         
-            public async void DeleteAdoptedReturn(int adoptedId)
-            {
-               
-            var adoptedRecord = await _appDbContext.Adopted.FirstOrDefaultAsync(a => a.Code == adoptedId);
-
-            if (adoptedRecord != null)
-                {
-                    adoptedRecord.AdopterId = 0;
-                _appDbContext.Adopted.Update(adoptedRecord);
-                await _appDbContext.SaveChangesAsync();
-            }
-            }
-        
+          
 
         public async Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate)
         {
@@ -1033,6 +1316,19 @@ namespace ANIMAL.Repository
 
         //DELETE
         //----------------------------------------------------------------------------------------------------------------------------------------------
+        public async void DeleteAdoptedReturn(int adoptedId)
+        {
+
+            var adoptedRecord = await _appDbContext.Adopted.FirstOrDefaultAsync(a => a.Code == adoptedId);
+
+            if (adoptedRecord != null)
+            {
+                adoptedRecord.AdopterId = 0;
+                _appDbContext.Adopted.Update(adoptedRecord);
+                await _appDbContext.SaveChangesAsync();
+            }
+        }
+
         public async Task DeleteAnimal(int idAnimal)
         {
             using var transaction = await _appDbContext.Database.BeginTransactionAsync();
@@ -1145,5 +1441,20 @@ namespace ANIMAL.Repository
         }
 
       
+
+        Task IRepository.DeleteNews(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task IRepository.DeleteContageusAnimals(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task IRepository.DeleteEuthanasia(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

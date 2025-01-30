@@ -1,5 +1,7 @@
-﻿using ANIMAL.MODEL;
+﻿using ANIMAL.DAL.DataModel;
+using ANIMAL.MODEL;
 using ANIMAL.Service.Common;
+using AutoMapper.Execution;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,38 +51,7 @@ namespace ANIMAL.WebApi.Controllers
             IEnumerable<AnimalDomain> animalDb = _service.GetAllAnimalDomainAdopt();
             return animalDb;
         }
-        [HttpGet]
-        [Route("animal/{animalId}")]
-        [AllowAnonymous]
-        public AnimalDomain GetAnimalById(int animalId)
-        {
-           AnimalDomain animalDb = _service.GetAnimalById(animalId);
-            return animalDb;
-        }
-        [HttpGet]
-        [Route("allanimal/{animalId}")]
-        [AllowAnonymous]
-        public AnimalDomain GetAllAnimalById(int animalId)
-        {
-            AnimalDomain animalDb = _service.GetAllAnimalById(animalId);
-            return animalDb;
-        }
-        [HttpGet]
-        [Route("adopter/{id}")]
-        [AllowAnonymous]
-        public AdopterDomain GetAdopterById(string id)
-        {
-            AdopterDomain animalDb = _service.GetAdopterById(id);
-            return animalDb;
-        }
-        [HttpGet]
-        [Route("adopted/{adopterId}")]
-        [AllowAnonymous]
-        public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId)
-        {
-            IEnumerable<AdoptedDomain> adoptedDomains = _service.GetAllAdoptedDomainForAdopter(adopterId);
-            return adoptedDomains;
-        }
+     
         [HttpGet]
         [Route("adopter_db")]
         [AllowAnonymous]
@@ -89,6 +60,168 @@ namespace ANIMAL.WebApi.Controllers
             IEnumerable<AdopterDomain> adopterDb =_service.GetAllAdopterDomain();
             return adopterDb;
         }
+
+        [HttpGet]
+        [Route("adopted_db")]
+        [AllowAnonymous]
+        public IEnumerable<AdoptedDomain> GetAdoptedDomains()
+        {
+            IEnumerable<AdoptedDomain> adoptedDb = _service.GetAllAdoptedDomain();
+            return adoptedDb;
+        }
+        [HttpGet]
+        [Route("reaturned_db")]
+        [AllowAnonymous]
+        public IEnumerable<ReturnedAnimalDomain> GetReaturnedDomains()
+        {
+            IEnumerable<ReturnedAnimalDomain> returnedDb = _service.GetAllReturnedAnimalDomain();
+            return returnedDb;
+        }
+
+
+        //NOVO GET
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+
+        [HttpGet]
+        [Route("animalrecord_db")]
+        [AllowAnonymous]
+        public IEnumerable<AnimalRecordDomain> GetAllAnimalRecordDomain()
+        {
+            IEnumerable<AnimalRecordDomain> animalDb = _service.GetAllAnimalRecordDomain();
+            return animalDb;
+        }
+        [HttpGet]
+        [Route("balans_db")]
+        [AllowAnonymous]
+        public IEnumerable<BalansDomain> GetAllBlansDomain()
+        {
+            IEnumerable<BalansDomain> animalDb = _service.GetAllBlansDomain();
+            return animalDb;
+        }
+        [HttpGet]
+        [Route("contact_db")]
+        [AllowAnonymous]
+        public IEnumerable<ContactDomain> GetaAllContactDomain()
+        {
+            IEnumerable<ContactDomain> animalDb = _service.GetaAllContactDomain();
+            return animalDb;
+        }
+
+        [HttpGet]
+        [Route("contageusanimals_db")]
+        [AllowAnonymous]
+        public IEnumerable<ContageusAnimalsDomain> GetAllContageusAnimalsDomain()
+        {
+            IEnumerable<ContageusAnimalsDomain> animalDb = _service.GetAllContageusAnimalsDomain();
+            return animalDb;
+        }
+        [HttpGet]
+        [Route("euthanasia_db")]
+        [AllowAnonymous]
+        public IEnumerable<EuthanasiaDomain> GetAllEuthanasiaDomain()
+        {
+            IEnumerable<EuthanasiaDomain> animalDb = _service.GetAllEuthanasiaDomain();
+            return animalDb;
+        }
+
+
+
+        [HttpGet]
+        [Route("food_db")]
+        [AllowAnonymous]
+        public IEnumerable<FoodDomain> GetAllFoodDomain()
+        {
+            IEnumerable<FoodDomain> animalDb = _service.GetAllFoodDomain();
+            return animalDb;
+        }
+
+        [HttpGet]
+        [Route("foundrecord_db")]
+        [AllowAnonymous]
+        public IEnumerable<FoundRecordDomain> GetAllFoundRecord()
+        {
+            IEnumerable<FoundRecordDomain> animalDb = _service.GetAllFoundRecord();
+            return animalDb;
+        }
+
+
+        [HttpGet]
+        [Route("funds_db")]
+        [AllowAnonymous]
+        public IEnumerable<FundsDomain> GetAllFundsDomain()
+        {
+            IEnumerable<FundsDomain> animalDb = _service.GetAllFundsDomain();
+            return animalDb;
+        }
+
+        [HttpGet]
+        [Route("labs_db")]
+        [AllowAnonymous]
+        public IEnumerable<LabsDomain> GetAllLabsDomain()
+        {
+            IEnumerable<LabsDomain> animalDb = _service.GetAllLabsDomain();
+            return animalDb;
+        }
+
+        [HttpGet]
+        [Route("medicines_db")]
+        [AllowAnonymous]
+        public IEnumerable<MedicinesDomain> GetAllMedicinesDomain()
+        {
+            IEnumerable<MedicinesDomain> animalDb = _service.GetAllMedicinesDomain();
+            return animalDb;
+        }
+
+
+        [HttpGet]
+        [Route("news_db")]
+        [AllowAnonymous]
+        public IEnumerable<NewsDomain> GetAllNewsDomain()
+        {
+            IEnumerable<NewsDomain> animalDb = _service.GetAllNewsDomain();
+            return animalDb;
+        }
+
+        [HttpGet]
+        [Route("parameter_db")]
+        [AllowAnonymous]
+        public IEnumerable<ParameterDomain> GetAllParameterDomain()
+        {
+            IEnumerable<ParameterDomain> animalDb = _service.GetAllParameterDomain();
+            return animalDb;
+        }
+
+        [HttpGet]
+        [Route("systemrecord_db")]
+        [AllowAnonymous]
+        public IEnumerable<SystemRecordDomain> GetAllSystemRecordDomain()
+        {
+            IEnumerable<SystemRecordDomain> animalDb = _service.GetAllSystemRecordDomain();
+            return animalDb;
+        }
+
+        [HttpGet]
+        [Route("toys_db")]
+        [AllowAnonymous]
+        public IEnumerable<ToysDomain> GetAllToysDomain()
+        {
+            IEnumerable<ToysDomain> animalDb = _service.GetAllToysDomain();
+            return animalDb;
+        }
+
+        [HttpGet]
+        [Route("vetvisit_db")]
+        [AllowAnonymous]
+        public IEnumerable<VetVisitsDomain> GetAllVetVisitsDomain()
+        {
+            IEnumerable<VetVisitsDomain> animalDb = _service.GetAllVetVisitsDomain();
+            return animalDb;
+        }
+
+
+        //get with id
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+
         [HttpGet]
         [Route("mammel_db/{id}")]
         [AllowAnonymous]
@@ -118,10 +251,10 @@ namespace ANIMAL.WebApi.Controllers
         [AllowAnonymous]
         public AmphibianDomain GetAmphibianDomains(int id)
         {
-           AmphibianDomain amphibianDb = _service.GetAllAmphibianDomain(id);
+            AmphibianDomain amphibianDb = _service.GetAllAmphibianDomain(id);
             return amphibianDb;
         }
-        [HttpGet] 
+        [HttpGet]
         [Route("reptile_db/{id}")]
         [AllowAnonymous]
         public ReptileDomain GetReptileDomains(int id)
@@ -129,23 +262,60 @@ namespace ANIMAL.WebApi.Controllers
             ReptileDomain reptileDb = _service.GetAllReptileDomain(id);
             return reptileDb;
         }
-        [HttpGet]
-        [Route("adopted_db")]
+
+
+        [HttpGet("returned/{adopterId}")]
         [AllowAnonymous]
-        public IEnumerable<AdoptedDomain> GetAdoptedDomains()
+
+        public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId)
         {
-            IEnumerable<AdoptedDomain> adoptedDb = _service.GetAllAdoptedDomain();
-            return adoptedDb;
+            IEnumerable<ReturnedAnimalDomain> adoptedDomains = _service.GetAllReturnedAnimalsForAdopter(adopterId);
+            return adoptedDomains;
+        }
+
+
+
+        [HttpGet]
+        [Route("animal/{animalId}")]
+        [AllowAnonymous]
+        public AnimalDomain GetAnimalById(int animalId)
+        {
+            AnimalDomain animalDb = _service.GetAnimalById(animalId);
+            return animalDb;
         }
         [HttpGet]
-        [Route("reaturned_db")]
+        [Route("allanimal/{animalId}")]
         [AllowAnonymous]
-        public IEnumerable<ReturnedAnimalDomain> GetReaturnedDomains()
+        public AnimalDomain GetAllAnimalById(int animalId)
         {
-            IEnumerable<ReturnedAnimalDomain> returnedDb = _service.GetAllReturnedAnimalDomain();
-            return returnedDb;
+            AnimalDomain animalDb = _service.GetAllAnimalById(animalId);
+            return animalDb;
         }
-  
+        [HttpGet]
+        [Route("adopter/{id}")]
+        [AllowAnonymous]
+        public AdopterDomain GetAdopterById(string id)
+        {
+            AdopterDomain animalDb = _service.GetAdopterById(id);
+            return animalDb;
+        }
+        [HttpGet]
+        [Route("adopted/{adopterId}")]
+        [AllowAnonymous]
+        public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId)
+        {
+            IEnumerable<AdoptedDomain> adoptedDomains = _service.GetAllAdoptedDomainForAdopter(adopterId);
+            return adoptedDomains;
+        }
+
+
+
+
+
+
+
+        //PUT I POSTE
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
 
         [HttpPost("addAdopter")]
         [AllowAnonymous]
@@ -329,36 +499,7 @@ namespace ANIMAL.WebApi.Controllers
 
 
 
-        [HttpDelete("{idAnimal}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Delete(int idAnimal)
-        {
-            try
-            {
-               
-                // Call the service layer asynchronously
-                await _service.DeleteAnimal(idAnimal);
-
-                // Return success message if the operation completes
-                return Ok("Animal successfully deleted.");
-            }
-            catch (KeyNotFoundException)
-            {
-                // If the animal was not found, return a 404 Not Found
-                return NotFound($"Animal with ID {idAnimal} not found.");
-            }
-            catch (InvalidOperationException ex)
-            {
-                // Return a BadRequest if the operation was invalid (e.g., animal was adopted)
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                var innerMessage = ex.InnerException?.Message ?? ex.Message;
-                // Catch other exceptions and return a generic server error message
-                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
-            }
-        }
+      
 
         [HttpPut("code/{code}")]
         [AllowAnonymous]
@@ -592,14 +733,42 @@ namespace ANIMAL.WebApi.Controllers
         }
 
 
-        [HttpGet("returned/{adopterId}")]
+
+
+        //Delete
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+
+        [HttpDelete("{idAnimal}")]
         [AllowAnonymous]
-     
-        public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId)
+        public async Task<IActionResult> Delete(int idAnimal)
         {
-            IEnumerable<ReturnedAnimalDomain> adoptedDomains = _service.GetAllReturnedAnimalsForAdopter(adopterId);
-            return adoptedDomains;
+            try
+            {
+
+               
+                await _service.DeleteAnimal(idAnimal);
+
+             
+                return Ok("Animal successfully deleted.");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"Animal with ID {idAnimal} not found.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+               
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
+       
 
     }
 }

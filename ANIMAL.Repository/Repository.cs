@@ -24,7 +24,7 @@ namespace ANIMAL.Repository
             _appDbContext = appDbContext;
             _mappingService = mapper;
         }
-
+        //GET ALL
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomain()
         {
             var adoptedEntities = _appDbContext.Adopted.ToList();
@@ -158,7 +158,229 @@ namespace ANIMAL.Repository
 
             return animalDomain;
         }
+        //Get all novo
 
+
+        IEnumerable<AnimalRecordDomain> IRepository.GetAllAnimalRecordDomain()
+        {
+           var animalDb=_appDbContext.AnimalRecord.ToList();
+            var animalDmain = animalDb.Select(e => new AnimalRecordDomain(
+                e.Id,
+                e.AnimalId,
+                e.RecordId
+                ));
+            return animalDmain;
+        }
+
+        IEnumerable<BalansDomain> IRepository.GetAllBlansDomain()
+        {
+          var balansDb=_appDbContext.Balans.ToList();
+            var balansDomain = balansDb.Select(e => new BalansDomain(
+                e.Id,
+                e.Iban,
+                e.Balance,
+                e.LastUpdated,
+                e.Password,
+                e.Type
+                ));
+            return balansDomain;
+        }
+
+        IEnumerable<ContactDomain> IRepository.GetaAllContactDomain()
+        {
+           var contentDb=_appDbContext.Contact.ToList();
+            var contentDomain = contentDb.Select(e => new ContactDomain(
+                e.Id,
+                e.Name,
+                e.Email,
+                e.Description,
+                e.AdopterId
+                ));
+            return contentDomain;
+        }
+
+        IEnumerable<ContageusAnimalsDomain> IRepository.GetAllContageusAnimalsDomain()
+        {
+           var contageusAnimalsDb=_appDbContext.ContageusAnimals.ToList();
+            var contageusAnimalsDomain = contageusAnimalsDb.Select(
+                e=>new ContageusAnimalsDomain(
+                    e.Id,
+                    e.AnimalId,
+                    e.DesisseName,
+                    e.Description
+                    ));
+            return contageusAnimalsDomain;
+        }
+
+        IEnumerable<EuthanasiaDomain> IRepository.GetAllEuthanasiaDomain()
+        {
+            var euthanasiaDb=_appDbContext.Euthanasia.ToList();
+            var euthanasiaDomain = euthanasiaDb.Select(e=>new EuthanasiaDomain(
+                e.Id,
+                e.AnimalId,
+                e.Date,
+                e.NameOfDesissse
+                ));
+
+            return euthanasiaDomain;
+        }
+
+        IEnumerable<FoodDomain> IRepository.GetAllFoodDomain()
+        {
+          var foodDb= _appDbContext.Food.ToList();
+            var foodDomain = foodDb.Select(e=> new FoodDomain(
+                e.Id,
+                e.BrandName,
+                e.Name,
+                e.FoodType,
+                e.AnimalType,
+                e.AgeGroup,
+                e.Weight,
+                e.CaloriesPerServing,
+                e.WeightPerServing,
+                e.MeasurementPerServing,
+                e.FatContent,
+                e.FiberContent,
+                e.ExporationDate,
+                e.Quantity,
+                e.Notes
+                ));
+
+            return foodDomain;
+        }
+
+        IEnumerable<FoundRecordDomain> IRepository.GetAllFoundRecord()
+        {
+          var foundDb=_appDbContext.FoundRecord.ToList();
+            var foundDomain = foundDb.Select(e => new FoundRecordDomain(
+                e.Id,
+                e.AnimalId,
+                e.Date,
+                e.Adress,
+                e.Description,
+                e.OwnerName,
+                e.OwnerSurname,
+                e.OwnerPhoneNumber,
+                e.OwnerOIB,
+                e.RegisterId
+                ));
+            return foundDomain;
+        }
+
+        IEnumerable<FundsDomain> IRepository.GetAllFundsDomain()
+        {
+            var fundDb=_appDbContext.Funds.ToList();
+            var fundsDomain = fundDb.Select(
+                e=> new FundsDomain(
+                    e.Id,
+                    e.AdopterId,
+                    e.Amount,
+                    e.Purpose,
+                    e.DateTimed
+                ));
+            return fundsDomain;
+        }
+
+        IEnumerable<LabsDomain> IRepository.GetAllLabsDomain()
+        {
+            var labDb= _appDbContext.Labs.ToList();
+            var labDomain = labDb.Select(e => new LabsDomain(
+                e.Id,
+                e.AnimalId,
+                e.Parameters,
+                e.DateTime
+                
+                ));
+            return labDomain;
+        }
+
+        IEnumerable<MedicinesDomain> IRepository.GetAllMedicinesDomain()
+        {
+          var medicinesDb= _appDbContext.Medicines.ToList();
+            var medicinesDomain = medicinesDb.Select(e=> new MedicinesDomain(
+                e.Id,
+                e.AnimalId,
+                e.NameOfMedicines,
+                e.Description,
+                e.VetUsername
+                ));
+            return medicinesDomain;
+        }
+
+        IEnumerable<NewsDomain> IRepository.GetAllNewsDomain()
+        {
+           var newsDb= _appDbContext.News.ToList();
+            var newsDomain = newsDb.Select(e=> new NewsDomain(
+                e.Id,
+                e.Name,
+                e.Description,
+                e.DateTime
+                ));
+            return newsDomain;
+        }
+
+        IEnumerable<ParameterDomain> IRepository.GetAllParameterDomain()
+        {
+            var parameterDb= _appDbContext.Parameter.ToList();
+            var parameterDomain = parameterDb.Select(e=> new ParameterDomain(
+                e.Id,
+                e.LabId,
+                e.ParameterName,
+                e.ParameterValue,
+                e.Remarks,
+                e.MeasurementUnits
+                ));
+            return parameterDomain;
+        }
+
+        IEnumerable<SystemRecordDomain> IRepository.GetAllSystemRecordDomain()
+        {
+            var systemDb=_appDbContext.SystemRecord.ToList();
+            var systemDomain = systemDb.Select(e => new SystemRecordDomain(
+                e.Id,
+                e.RecordNumber,
+                e.RecordName,
+                e.RecordDescription
+                ));
+            return systemDomain;    
+        }
+
+        IEnumerable<ToysDomain> IRepository.GetAllToysDomain()
+        {
+            var toysDb=_appDbContext.Toys.ToList();
+            var toysDomain = toysDb.Select(e => new ToysDomain(
+                e.Id,
+                e.BrandName,
+                e.Name,
+                e.AnimalType,
+                e.ToyType,
+                e.AgeGroup,
+                e.Hight,
+                e.Width,
+                e.Quantity,
+                e.Notes
+                ));
+            return toysDomain;
+        }
+
+        IEnumerable<VetVisitsDomain> IRepository.GetAllVetVisitsDomain()
+        {
+            var vetVisitDb=_appDbContext.VetVisits.ToList();
+            var vetVisitDomain = vetVisitDb.Select(
+                e=>new VetVisitsDomain(
+                    e.Id,
+                    e.AnimalId,
+                    e.StartTime,
+                    e.EndTime,
+                    e.TypeOfVisit,
+                    e.Notes
+                    ));
+            return vetVisitDomain;
+        }
+
+
+        //GET BY ID
+        //----------------------------------------------------------------------------------------------------------------------------------------------
         public BirdDomain GetAllBirdDomain(int id)
         {
             var bird = _appDbContext.Birds
@@ -361,6 +583,10 @@ namespace ANIMAL.Repository
             }).ToList();
 
             return adoptedDomains;
+        } 
+        public async Task<Animals> GetByIdAsync(int id)
+        {
+            return await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == id);
         }
         public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId)
         {
@@ -407,129 +633,8 @@ namespace ANIMAL.Repository
             return returnedAnimalDomains;
         }
 
-        public async Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId)
-        {
-            var adopterDomain = new AdopterDomain
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                Residence = residence,
-                Username = username,
-                Password = password,
-                NumberOfAdoptedAnimals = 0,
-                NumberOfReturnedAnimals = 0,
-                Flag=false,
-                RegisterId=registerId,
-                Adopted = new List<AdoptedDomain>(),
-                ReturnedAnimal = new List<ReturnedAnimalDomain>()
-            };
-
-            var adopter = _mappingService.Map<Adopter>(adopterDomain);
-
-            _appDbContext.Adopter.Add(adopter);
-            await _appDbContext.SaveChangesAsync();
-
-            return _mappingService.Map<AdopterDomain>(adopter);
-        }
-        public async Task DeleteAnimal(int idAnimal)
-        {
-            using var transaction = await _appDbContext.Database.BeginTransactionAsync();
-
-            try
-            {
-                var animal = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == idAnimal);
-
-                if (animal == null)
-                {
-                    throw new Exception($"Animal with IdAnimal {idAnimal} not found.");
-                }
-
-                // Log animal details
-                Console.WriteLine($"Deleting animal: {animal.IdAnimal}, Family: {animal.Family}");
-
-                if (animal.Adopted)
-                {
-                    throw new Exception($"Cannot delete an adopted animal (IdAnimal: {idAnimal}).");
-                }
-
-                var adoptedRecord = await _appDbContext.Set<Adopted>().FirstOrDefaultAsync(ad => ad.AnimalId == idAnimal);
-                if (adoptedRecord != null)
-                {
-                    _appDbContext.Set<Adopted>().Remove(adoptedRecord);
-                }
-
-                var returnedAnimalRecord = await _appDbContext.Set<ReturnedAnimal>().FirstOrDefaultAsync(ra => ra.AnimalId == idAnimal);
-                if (returnedAnimalRecord != null)
-                {
-                    _appDbContext.Set<ReturnedAnimal>().Remove(returnedAnimalRecord);
-                }
-
-                switch (animal.Family)
-                {
-                    case "Reptile":
-                        var reptile = await _appDbContext.Set<Reptiles>().FirstOrDefaultAsync(r => r.AnimalId == idAnimal);
-                        if (reptile != null)
-                        {
-                            _appDbContext.Set<Reptiles>().Remove(reptile);
-                        }
-                        break;
-
-                    case "Mammal":
-                        await _appDbContext.Database.ExecuteSqlRawAsync($"DELETE FROM Mammals WHERE AnimalId = {idAnimal}");
-                        break;
-
-                    case "Fish":
-                        var fish = await _appDbContext.Set<Fish>().FirstOrDefaultAsync(f => f.AnimalId == idAnimal);
-                        if (fish != null)
-                        {
-                            _appDbContext.Set<Fish>().Remove(fish);
-                        }
-                        break;
-
-                    case "Bird":
-                        var bird = await _appDbContext.Set<Birds>().FirstOrDefaultAsync(b => b.AnimalId == idAnimal);
-                        if (bird != null)
-                        {
-                            _appDbContext.Set<Birds>().Remove(bird);
-                        }
-                        break;
-
-                    case "Amphibian":
-                        var amphibian = await _appDbContext.Set<Amphibians>().FirstOrDefaultAsync(a => a.AnimalId == idAnimal);
-                        if (amphibian != null)
-                        {
-                            _appDbContext.Set<Amphibians>().Remove(amphibian);
-                        }
-                        break;
-
-                    default:
-                        throw new Exception($"Unknown animal family: {animal.Family}");
-                }
-
-                _appDbContext.Animals.Remove(animal);
-                await _appDbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch (DbUpdateException ex)
-            {
-                await transaction.RollbackAsync();
-                var innerException = ex.InnerException;
-                while (innerException != null)
-                {
-                    Console.WriteLine($"DbUpdateException Inner Exception: {innerException.Message}");
-                    innerException = innerException.InnerException;
-                }
-                throw;
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                Console.WriteLine($"General Exception: {ex.Message}");
-                throw new Exception($"Error occurred while deleting the animal: {ex.Message}");
-            }
-        }
-
+    
+      
 
 
         AdopterDomain IRepository.GetAdopterByUsername(string username)
@@ -593,6 +698,9 @@ namespace ANIMAL.Repository
         }
 
 
+
+        //UPDATE
+        //----------------------------------------------------------------------------------------------------------------------------------------------
 
         public async Task IncrementNumberOfAdoptedAnimalsAsync(string registerId)
         {
@@ -699,7 +807,143 @@ namespace ANIMAL.Repository
 
             return true;
         }
+        public async Task<BirdDomain> UpdateBird(BirdDomain birdDomain)
+        {
+            if (birdDomain == null)
+            {
+                throw new ArgumentException("Bird not found");
+            }
 
+            // Mapiraj BirdDomain u Bird entitet
+            var bird = _mappingService.Map<Birds>(birdDomain);
+
+            // Preuzmi postojeći entitet iz baze
+            var existingBird = await _appDbContext.Birds.FirstOrDefaultAsync(b => b.AnimalId == bird.AnimalId);
+
+            if (existingBird == null)
+            {
+                throw new Exception("Bird not found in the database");
+            }
+
+            // Ažuriraj postojeći entitet s novim podacima
+            existingBird.CageSize = bird.CageSize;
+            existingBird.RecommendedToys = bird.RecommendedToys;
+            existingBird.Sociability = bird.Sociability;
+
+            // Spremi promjene u bazu podataka
+            _appDbContext.Birds.Update(existingBird);
+            await _appDbContext.SaveChangesAsync();
+
+            // Mapiraj ažurirani entitet natrag u BirdDomain
+            return _mappingService.Map<BirdDomain>(existingBird);
+        }
+
+
+
+
+
+
+
+
+
+        //ADD
+        //----------------------------------------------------------------------------------------------------------------------------------------------
+
+        public async Task<bool> AddBirdAsync(BirdDomain birdDomain)
+        {
+            var bird = new Birds
+            {
+                AnimalId = birdDomain.AnimalId,
+                CageSize = birdDomain.CageSize,
+                RecommendedToys = birdDomain.RecommendedToys,
+                Sociability = birdDomain.Sociability
+            };
+
+            await _appDbContext.Birds.AddAsync(bird);
+            return await _appDbContext.SaveChangesAsync() > 0;
+        }
+        public async Task<bool> AddMammalAsync(MammalDomain mammalDomain)
+        {
+            var mammal = new Mammals
+            {
+                AnimalId = mammalDomain.AnimalId,
+                CoatType = mammalDomain.CoatType,
+                GroomingProducts = mammalDomain.GroomingProducts
+            };
+
+            await _appDbContext.Mammals.AddAsync(mammal);
+            return await _appDbContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> AddFishAsync(FishDomain fishDomain)
+        {
+            var fish = new Fish
+            {
+                AnimalId = fishDomain.AnimalId,
+                TankSize = fishDomain.TankSize,
+                CompatibleSpecies = fishDomain.CompatibleSpecies,
+                RecommendedItems = fishDomain.RecommendedItems
+            };
+
+            await _appDbContext.Fish.AddAsync(fish);
+            return await _appDbContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> AddReptileAsync(ReptileDomain reptileDomain)
+        {
+            var reptile = new Reptiles
+            {
+                AnimalId = reptileDomain.AnimalId,
+                TankSize = reptileDomain.TankSize,
+                Sociability = reptileDomain.Sociability,
+                CompatibleSpecies = reptileDomain.CompatibleSpecies,
+                RecommendedItems = reptileDomain.RecommendedItems
+            };
+
+            await _appDbContext.Reptiles.AddAsync(reptile);
+            return await _appDbContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain)
+        {
+            var amphibian = new Amphibians
+            {
+                AnimalId = amphibianDomain.AnimalId,
+                Humidity = amphibianDomain.Humidity,
+                Temperature = amphibianDomain.Temperature
+            };
+
+            await _appDbContext.Amphibians.AddAsync(amphibian);
+            return await _appDbContext.SaveChangesAsync() > 0;
+        }
+
+
+    
+        public async Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId)
+        {
+            var adopterDomain = new AdopterDomain
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                DateOfBirth = dateOfBirth,
+                Residence = residence,
+                Username = username,
+                Password = password,
+                NumberOfAdoptedAnimals = 0,
+                NumberOfReturnedAnimals = 0,
+                Flag=false,
+                RegisterId=registerId,
+                Adopted = new List<AdoptedDomain>(),
+                ReturnedAnimal = new List<ReturnedAnimalDomain>()
+            };
+
+            var adopter = _mappingService.Map<Adopter>(adopterDomain);
+
+            _appDbContext.Adopter.Add(adopter);
+            await _appDbContext.SaveChangesAsync();
+
+            return _mappingService.Map<AdopterDomain>(adopter);
+        }
         public async Task<bool> CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
         {
          
@@ -784,6 +1028,109 @@ namespace ANIMAL.Repository
 
             return true;
         }
+
+
+
+        //DELETE
+        //----------------------------------------------------------------------------------------------------------------------------------------------
+        public async Task DeleteAnimal(int idAnimal)
+        {
+            using var transaction = await _appDbContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                var animal = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == idAnimal);
+
+                if (animal == null)
+                {
+                    throw new Exception($"Animal with IdAnimal {idAnimal} not found.");
+                }
+
+                // Log animal details
+                Console.WriteLine($"Deleting animal: {animal.IdAnimal}, Family: {animal.Family}");
+
+                if (animal.Adopted)
+                {
+                    throw new Exception($"Cannot delete an adopted animal (IdAnimal: {idAnimal}).");
+                }
+
+                var adoptedRecord = await _appDbContext.Set<Adopted>().FirstOrDefaultAsync(ad => ad.AnimalId == idAnimal);
+                if (adoptedRecord != null)
+                {
+                    _appDbContext.Set<Adopted>().Remove(adoptedRecord);
+                }
+
+                var returnedAnimalRecord = await _appDbContext.Set<ReturnedAnimal>().FirstOrDefaultAsync(ra => ra.AnimalId == idAnimal);
+                if (returnedAnimalRecord != null)
+                {
+                    _appDbContext.Set<ReturnedAnimal>().Remove(returnedAnimalRecord);
+                }
+
+                switch (animal.Family)
+                {
+                    case "Reptile":
+                        var reptile = await _appDbContext.Set<Reptiles>().FirstOrDefaultAsync(r => r.AnimalId == idAnimal);
+                        if (reptile != null)
+                        {
+                            _appDbContext.Set<Reptiles>().Remove(reptile);
+                        }
+                        break;
+
+                    case "Mammal":
+                        await _appDbContext.Database.ExecuteSqlRawAsync($"DELETE FROM Mammals WHERE AnimalId = {idAnimal}");
+                        break;
+
+                    case "Fish":
+                        var fish = await _appDbContext.Set<Fish>().FirstOrDefaultAsync(f => f.AnimalId == idAnimal);
+                        if (fish != null)
+                        {
+                            _appDbContext.Set<Fish>().Remove(fish);
+                        }
+                        break;
+
+                    case "Bird":
+                        var bird = await _appDbContext.Set<Birds>().FirstOrDefaultAsync(b => b.AnimalId == idAnimal);
+                        if (bird != null)
+                        {
+                            _appDbContext.Set<Birds>().Remove(bird);
+                        }
+                        break;
+
+                    case "Amphibian":
+                        var amphibian = await _appDbContext.Set<Amphibians>().FirstOrDefaultAsync(a => a.AnimalId == idAnimal);
+                        if (amphibian != null)
+                        {
+                            _appDbContext.Set<Amphibians>().Remove(amphibian);
+                        }
+                        break;
+
+                    default:
+                        throw new Exception($"Unknown animal family: {animal.Family}");
+                }
+
+                _appDbContext.Animals.Remove(animal);
+                await _appDbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                await transaction.RollbackAsync();
+                var innerException = ex.InnerException;
+                while (innerException != null)
+                {
+                    Console.WriteLine($"DbUpdateException Inner Exception: {innerException.Message}");
+                    innerException = innerException.InnerException;
+                }
+                throw;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                Console.WriteLine($"General Exception: {ex.Message}");
+                throw new Exception($"Error occurred while deleting the animal: {ex.Message}");
+            }
+        }
+
         public async Task<bool> DeleteAdoptedAsync(int adoptedId)
         {
             var adopted = await _appDbContext.Adopted.FirstOrDefaultAsync(a => a.AnimalId == adoptedId);
@@ -796,108 +1143,7 @@ namespace ANIMAL.Repository
             _appDbContext.SaveChanges();
             return true;
         }
-        public async Task<bool> AddBirdAsync(BirdDomain birdDomain)
-        {
-            var bird = new Birds
-            {
-                AnimalId = birdDomain.AnimalId,
-                CageSize = birdDomain.CageSize,
-                RecommendedToys = birdDomain.RecommendedToys,
-                Sociability = birdDomain.Sociability
-            };
 
-            await _appDbContext.Birds.AddAsync(bird);
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-        public async Task<bool> AddMammalAsync(MammalDomain mammalDomain)
-        {
-            var mammal = new Mammals
-            {
-                AnimalId = mammalDomain.AnimalId,
-                CoatType = mammalDomain.CoatType,
-                GroomingProducts = mammalDomain.GroomingProducts
-            };
-
-            await _appDbContext.Mammals.AddAsync(mammal);
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-
-        public async Task<bool> AddFishAsync(FishDomain fishDomain)
-        {
-            var fish = new Fish
-            {
-                AnimalId = fishDomain.AnimalId,
-                TankSize = fishDomain.TankSize,
-                CompatibleSpecies = fishDomain.CompatibleSpecies,
-                RecommendedItems = fishDomain.RecommendedItems
-            };
-
-            await _appDbContext.Fish.AddAsync(fish);
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-
-        public async Task<bool> AddReptileAsync(ReptileDomain reptileDomain)
-        {
-            var reptile = new Reptiles
-            {
-                AnimalId = reptileDomain.AnimalId,
-                TankSize = reptileDomain.TankSize,
-                Sociability = reptileDomain.Sociability,
-                CompatibleSpecies = reptileDomain.CompatibleSpecies,
-                RecommendedItems = reptileDomain.RecommendedItems
-            };
-
-            await _appDbContext.Reptiles.AddAsync(reptile);
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-
-        public async Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain)
-        {
-            var amphibian = new Amphibians
-            {
-                AnimalId= amphibianDomain.AnimalId,
-                Humidity = amphibianDomain.Humidity,
-                Temperature = amphibianDomain.Temperature
-            };
-
-            await _appDbContext.Amphibians.AddAsync(amphibian);
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-
-        public async Task<Animals> GetByIdAsync(int id)
-        {
-            return await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == id);
-        }
-        public async Task<BirdDomain> UpdateBird(BirdDomain birdDomain)
-        {
-            if (birdDomain == null)
-            {
-                throw new ArgumentException("Bird not found");
-            }
-
-            // Mapiraj BirdDomain u Bird entitet
-            var bird = _mappingService.Map<Birds>(birdDomain);
-
-            // Preuzmi postojeći entitet iz baze
-            var existingBird = await _appDbContext.Birds.FirstOrDefaultAsync(b => b.AnimalId == bird.AnimalId);
-
-            if (existingBird == null)
-            {
-                throw new Exception("Bird not found in the database");
-            }
-
-            // Ažuriraj postojeći entitet s novim podacima
-            existingBird.CageSize = bird.CageSize;
-            existingBird.RecommendedToys = bird.RecommendedToys;
-            existingBird.Sociability = bird.Sociability;
-
-            // Spremi promjene u bazu podataka
-            _appDbContext.Birds.Update(existingBird);
-            await _appDbContext.SaveChangesAsync();
-
-            // Mapiraj ažurirani entitet natrag u BirdDomain
-            return _mappingService.Map<BirdDomain>(existingBird);
-        }
-
+      
     }
 }

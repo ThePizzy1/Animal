@@ -4,14 +4,16 @@ using ANIMAL.DAL.DataModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    partial class AnimalRescueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250130120715_Migracija_30-01-2025-02")]
+    partial class Migracija_3001202502
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -9,24 +9,53 @@ namespace ANIMAL.Service.Common
     public  interface IService
     {
     
+        //GET ALL
         IEnumerable<AnimalDomain> GetAllAnimalDomain();
         IEnumerable<AnimalDomain> GetAllAnimalDomainAdopt();
-        IEnumerable<AdopterDomain> GetAllAdopterDomain();
+        IEnumerable<AdopterDomain> GetAllAdopterDomain(); 
+        IEnumerable<AdoptedDomain> GetAllAdoptedDomain();
+        IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain();
+        public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture();
+
+
+        //novo
+        public IEnumerable<AnimalRecordDomain> GetAllAnimalRecordDomain();
+        public IEnumerable<BalansDomain> GetAllBlansDomain();
+        public IEnumerable<ContactDomain> GetaAllContactDomain();
+        public IEnumerable<ContageusAnimalsDomain> GetAllContageusAnimalsDomain();
+        public IEnumerable<EuthanasiaDomain> GetAllEuthanasiaDomain();
+        public IEnumerable<FoodDomain> GetAllFoodDomain();
+        public IEnumerable<FoundRecordDomain> GetAllFoundRecord();
+        public IEnumerable<FundsDomain> GetAllFundsDomain();
+        public IEnumerable<LabsDomain> GetAllLabsDomain();
+        public IEnumerable<MedicinesDomain> GetAllMedicinesDomain();
+        public IEnumerable<NewsDomain> GetAllNewsDomain();
+        public IEnumerable<ParameterDomain> GetAllParameterDomain();
+        public IEnumerable<SystemRecordDomain> GetAllSystemRecordDomain();
+        public IEnumerable<ToysDomain> GetAllToysDomain();
+        public IEnumerable<VetVisitsDomain> GetAllVetVisitsDomain();
+
+
+
+
+
+        //GET BY ID
         public MammalDomain GetAllMammalDomain(int id);
         public BirdDomain GetAllBirdDomain(int id);
         public AmphibianDomain GetAllAmphibianDomain(int id);
         public ReptileDomain GetAllReptileDomain(int id);
-        public FishDomain GetAllFishDomain(int id);
-        IEnumerable<AdoptedDomain> GetAllAdoptedDomain();
-        IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain();
-        public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture();
+        public FishDomain GetAllFishDomain(int id);      
         public AnimalDomain GetAnimalById(int animalId);
         public AnimalDomain GetAllAnimalById(int animalId);
         public AdopterDomain GetAdopterByUsername(string username);
         public AdopterDomain GetAdopterById(string id);
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId);
+         public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId);  
+
+
+        //ADD
         public Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);
-        public  Task DeleteAnimal(int idAnimal);
+     
         Task<bool> AddAnimalAsync(
         string name,
         string family,
@@ -47,6 +76,16 @@ namespace ANIMAL.Service.Common
         string personalityDescription,
         bool adopted)
         ;
+         public Task<bool> CreateReturnedAnimalAsync( int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason);
+         public  Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate);
+         public Task<bool> AddBirdAsync(BirdDomain birdDomain);
+         public Task<bool> AddMammalAsync(MammalDomain mammalDomain);
+         public Task<bool> AddFishAsync(FishDomain fishDomain);
+         public Task<bool> AddReptileAsync(ReptileDomain reptileDomain);
+         public Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain);
+     
+
+        //UPDATE
         public Task IncrementNumberOfAdoptedAnimalsAsync(string registerId);
         public Task IncrementNumberOfReturnedAnimalsAsync(string registerId);
         public Task<AdopterDomain> UpdateAdopterAsync(string registerId, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password);
@@ -55,19 +94,14 @@ namespace ANIMAL.Service.Common
         public  Task<bool> AdoptionStatus(int animalId);
         public Task<bool> UpdateAdopterFlag(int adopterId);
         public  Task<bool> AdoptionStatusFalse(int animalId);
+      
+
+     
 
 
-
-        public Task<bool> CreateReturnedAnimalAsync( int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason);
-        public  Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate);
-        public Task<bool> AddBirdAsync(BirdDomain birdDomain);
-        public Task<bool> AddMammalAsync(MammalDomain mammalDomain);
-        public Task<bool> AddFishAsync(FishDomain fishDomain);
-        public Task<bool> AddReptileAsync(ReptileDomain reptileDomain);
-        public Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain);
-        public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId);  
-
+        //DELETE
         public  Task<bool> DeleteAdoptedAsync(int adoptedId);
-        public  void DeleteAdoptedReturn(int adoptedId);
+        public  void DeleteAdoptedReturn(int adoptedId); 
+        public  Task DeleteAnimal(int idAnimal);
     }
 }

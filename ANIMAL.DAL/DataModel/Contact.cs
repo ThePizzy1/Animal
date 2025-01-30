@@ -11,6 +11,6 @@ namespace ANIMAL.DAL.DataModel
         public string Email { get; set; }
         public string Description { get; set; }
         public int AdopterId { get; set; }
-
+        public virtual Adopter Adopter { get; set; }//fali ti za tablicu
     }
 }

@@ -37,7 +37,7 @@ namespace ANIMAL.DAL.DataModel
         public string FoodType { get; set; }
         public string AnimalType { get; set; }
         public string AgeGroup { get; set; }
-        public decimal Weight { get; set; }
+        public decimal Weight { get; set; }//fali mjerna jedinica za to
         public decimal CaloriesPerServing { get; set; }
         public decimal WeightPerServing { get; set; }
         public string MeasurementPerServing { get; set; }

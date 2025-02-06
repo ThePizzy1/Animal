@@ -6,9 +6,11 @@ using ANIMAL.Service.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,9 +40,11 @@ namespace ANIMAL.WebApi
             services.AddDbContext<AnimalRescueDbContext>(options => 
         options.UseSqlServer(Configuration.GetConnectionString("ANIMAL_DBConnection")));
     services.AddScoped<IService, Service.Service>();
-    services.AddScoped<IRepository, Repository.Repository>();
-    
-    services.AddScoped<IRepositoryMappingService, RepositoryMappingService>();
+
+            //services.AddScoped<IRepository, Repository.Repository>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddScoped<IRepositoryMappingService, RepositoryMappingService>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                         .AddEntityFrameworkStores<AnimalRescueDbContext>()

@@ -12,7 +12,8 @@ namespace ANIMAL.DAL.DataModel
         public string NameOfMedicines { get; set; }
         public string Description { get; set; }
         public string VetUsername { get; set; }
-
+        //treba nešto što će označit dali ta životinja to još koristi
+        public bool Usage { get; set; }
         public virtual Animals Animal { get; set; }
 
     }

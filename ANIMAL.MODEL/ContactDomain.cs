@@ -6,7 +6,7 @@ using System.Text;
 namespace ANIMAL.MODEL
 {
     public class ContactDomain
-    {  //dodaj pročitano
+    {  
         public ContactDomain() { }
         public ContactDomain(int id, string name, string email, string description, int adopterId, AdopterDomain adopter)
         {

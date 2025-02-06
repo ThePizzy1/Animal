@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Identity;
 namespace ANIMAL.DAL.DataModel
 {
     public partial class AnimalRescueDbContext : IdentityDbContext<ApplicationUser>
-    {
-        public AnimalRescueDbContext()
-        {
-        }
-
+    {  
         public AnimalRescueDbContext(DbContextOptions<AnimalRescueDbContext> options)
             : base(options)
         {
         }
 
+        public AnimalRescueDbContext()
+        {
+        }
+
+      
         public virtual DbSet<Adopted> Adopted { get; set; }
         public virtual DbSet<Adopter> Adopter { get; set; }
         public virtual DbSet<Amphibians> Amphibians { get; set; }
@@ -336,7 +337,6 @@ namespace ANIMAL.DAL.DataModel
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ReturnedA__Anima__52593CB8");
             });
-
             modelBuilder.Entity<AnimalRecord>(entity =>
             {
                 entity.HasKey(e => e.Id)
@@ -354,20 +354,13 @@ namespace ANIMAL.DAL.DataModel
                    .OnDelete(DeleteBehavior.ClientSetNull)
                    .HasConstraintName("FK__AnimalRecord__Record");
 
-
-
             });
 
 
 
 
 
-
-
-
-
-
-         modelBuilder.Entity<SystemRecord>(entity =>
+            modelBuilder.Entity<SystemRecord>(entity =>
             {
                 entity.HasKey(e => e.Id)
                 .HasName("PK__SystemRecord");
@@ -388,7 +381,154 @@ namespace ANIMAL.DAL.DataModel
                 .HasColumnType("integer");
 
             });
-         
+
+
+
+            modelBuilder.Entity<Balans>(entity =>
+            {
+                entity.HasKey(b => b.Id);
+                entity.Property(b => b.Balance)
+               .HasColumnType("decimal(18,2)");
+            });
+
+
+
+            modelBuilder.Entity<Funds>(entity => {
+                entity.HasKey(f => f.Id);
+
+                entity.Property(f => f.Amount)
+                .HasColumnType("decimal(18,2)");
+
+                entity.HasOne(f => f.Adopter)
+                   .WithMany()
+                   .HasForeignKey(f => f.AdopterId);
+            });
+
+
+            modelBuilder.Entity<Food>(entity => {
+                entity.HasKey(f => f.Id);
+
+                entity.Property(f => f.FatContent)
+                .HasColumnType("decimal(5,2)");
+
+                entity.Property(f => f.FiberContent)
+                  .HasColumnType("decimal(5,2)");
+
+                entity.Property(f => f.CaloriesPerServing)
+                 .HasColumnType("decimal(6,2)");
+            });
+
+
+            modelBuilder.Entity<FoundRecord>(entity => {
+                entity.HasKey(fr => fr.Id);
+
+                entity.Property(fr => fr.OwnerOIB)
+                  .HasMaxLength(11)
+                  .IsFixedLength();
+
+                entity.HasOne(fr => fr.Animal)
+                   .WithMany()
+                   .HasForeignKey(fr => fr.AnimalId);
+            });
+
+
+            modelBuilder.Entity<Toys>(entity => {
+                entity.HasKey(t => t.Id);
+
+                entity.Property(t => t.Hight)
+                 .HasColumnType("decimal(5,2)");
+
+                entity.Property(t => t.Width)
+                 .HasColumnType("decimal(5,2)");
+
+            });
+
+
+            modelBuilder.Entity<VetVisits>(entity =>
+            {
+                entity.HasKey(vv => vv.Id);
+
+                entity.HasOne(d => d.Animals)
+                     .WithMany()
+                     .HasForeignKey(d => d.AnimalId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK__VetVisits__AnimalI");
+
+
+
+            });
+
+            modelBuilder.Entity<Contact>(entity => {
+                entity.HasKey(c => c.Id);
+
+                entity.HasOne(c => c.Adopter)
+                    .WithMany()
+                    .HasForeignKey(c => c.AdopterId);
+
+            });
+
+            modelBuilder.Entity<ContageusAnimals>(entity => {
+                entity.HasKey(ca => ca.Id);
+
+                entity.HasOne(d => d.Animals)
+                        .WithMany()
+                        .HasForeignKey(d => d.AnimalId)
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__ContageusAnimals__AnimalI");
+
+            });
+
+
+            modelBuilder.Entity<Euthanasia>(entity => {
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(d => d.Animals)
+                     .WithMany()
+                     .HasForeignKey(d => d.AnimalId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK__Euthanasia__AnimalI");
+
+            });
+
+
+            modelBuilder.Entity<Labs>(entity => {
+                entity.HasKey(l => l.Id);
+
+                entity.HasOne(d => d.Animals)
+                     .WithMany()
+                     .HasForeignKey(d => d.AnimalId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK__Labs__AnimalI");
+
+            });
+
+
+            modelBuilder.Entity<Medicines>(entity => {
+                entity.HasKey(m => m.Id);
+
+                entity.HasOne(d => d.Animal)
+                       .WithMany()
+                       .HasForeignKey(d => d.AnimalId)
+                       .OnDelete(DeleteBehavior.ClientSetNull)
+                       .HasConstraintName("FK__Medicines__AnimalI");
+            });
+
+
+            modelBuilder.Entity<Parameter>(entity => {
+                entity.HasKey(p => p.Id);
+
+                entity.HasOne<Labs>()
+                  .WithMany(l => l.Parameters)
+                  .HasForeignKey(p => p.LabId);
+            });
+
+
+
+
+
+
+
+
 
 
 

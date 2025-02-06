@@ -13,6 +13,7 @@ namespace ANIMAL.DAL.DataModel
         public string AnimalType { get; set; }
         public string AgeGroup { get; set; }
         public decimal Weight { get; set; }
+        public string MeasurementWeight { get; set; }
         public decimal CaloriesPerServing {  get; set; }
         public decimal WeightPerServing { get;set; }
         public string MeasurementPerServing { get; set; }

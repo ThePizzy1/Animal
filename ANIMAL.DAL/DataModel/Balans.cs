@@ -13,6 +13,6 @@ namespace ANIMAL.DAL.DataModel
         public string Password { get; set;}
         public string Type { get; set;}
 
-        public virtual Funds Funds { get; set; }
+     
     }
 }

@@ -309,6 +309,117 @@ namespace ANIMAL.WebApi.Controllers
         }
 
 
+        //novo get by id
+
+        [HttpGet]
+        [Route("toy/{id}")]
+        [AllowAnonymous]
+        public ToysDomain GetOneToysDomain(int id)
+        {
+            ToysDomain parametar = _service.GetOneToysDomain(id);
+            return parametar;
+        }
+
+        [HttpGet]
+        [Route("news/{id}")]
+        [AllowAnonymous]
+        public NewsDomain GetOneNewsDomain(int id)
+        {
+            NewsDomain parametar = _service.GetOneNewsDomain(id);
+            return parametar;
+        }
+
+
+        [HttpGet]
+        [Route("meds/{id}")]
+        [AllowAnonymous]
+        public MedicinesDomain GetOneMedicinesDomain(int id)
+        {
+            MedicinesDomain parametar = _service.GetOneMedicinesDomain(id);
+            return parametar;
+        }
+
+        [HttpGet]
+        [Route("labs/{id}")]
+        [AllowAnonymous]
+        public LabsDomain GetOneLabsDomain(int id)
+        {
+            LabsDomain parametar = _service.GetOneLabsDomain(id);
+            return parametar;
+        }
+
+
+        [HttpGet]
+        [Route("funds/{id}")]
+        [AllowAnonymous]
+        public FundsDomain GetOneFundsDomain(int id)
+        {
+            FundsDomain parametar = _service.GetOneFundsDomain(id);
+            return parametar;
+        }
+
+
+        [HttpGet]
+        [Route("found/{id}")]
+        [AllowAnonymous]
+        public FoundRecordDomain GetOneFoundRecordDomain(int id)
+        {
+            FoundRecordDomain parametar = _service.GetOneFoundRecordDomain(id);
+            return parametar;
+        }
+
+        [HttpGet]
+        [Route("food/{id}")]
+        [AllowAnonymous]
+        public FoodDomain GetOneFoodDomain(int id)
+        {
+            FoodDomain parametar = _service.GetOneFoodDomain(id);
+            return parametar;
+        }
+
+
+        [HttpGet]
+        [Route("euthanasia/{id}")]
+        [AllowAnonymous]
+        public EuthanasiaDomain GetOneEuthanasiaDomain(int id)
+        {
+            EuthanasiaDomain parametar = _service.GetOneEuthanasiaDomain(id);
+            return parametar;
+        }
+
+
+        [HttpGet]
+        [Route("contageus/{id}")]
+        [AllowAnonymous]
+        public ContageusAnimalsDomain GetOneContageusAnimalsDomain(int id)
+        {
+            ContageusAnimalsDomain parametar = _service.GetOneContageusAnimalsDomain(id);
+            return parametar;
+        }
+
+
+        [HttpGet]
+        [Route("contact/{id}")]
+        [AllowAnonymous]
+        public ContactDomain GetOneContactDomain(int id)
+        {
+            ContactDomain parametar = _service.GetOneContactDomain(id);
+            return parametar;
+        }
+
+
+        [HttpGet]
+        [Route("balans/{id}")]
+        [AllowAnonymous]
+        public BalansDomain GetOneBalansDomain(int id)
+        {
+            BalansDomain parametar = _service.GetOneBalansDomain(id);
+            return parametar;
+        }
+
+
+
+
 
 
 

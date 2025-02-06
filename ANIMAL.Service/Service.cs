@@ -214,57 +214,68 @@ namespace ANIMAL.Service
         //get by id novo
         ToysDomain IService.GetOneToysDomain(int id)
         {
-            throw new NotImplementedException();
+            ToysDomain toysDomain = _repository.GetOneToysDomain(id);
+            return toysDomain;
         }
 
         NewsDomain IService.GetOneNewsDomain(int id)
         {
-            throw new NotImplementedException();
+            NewsDomain newsDomain = _repository.GetOneNewsDomain(id);
+            return newsDomain;
         }
 
         MedicinesDomain IService.GetOneMedicinesDomain(int id)
         {
-            throw new NotImplementedException();
+            MedicinesDomain MedicinesDomain = _repository.GetOneMedicinesDomain(id);
+            return MedicinesDomain;
         }
 
         LabsDomain IService.GetOneLabsDomain(int id)
         {
-            throw new NotImplementedException();
+            LabsDomain labsDomain = _repository.GetOneLabsDomain(id);
+            return labsDomain;
         }
 
         FundsDomain IService.GetOneFundsDomain(int id)
         {
-            throw new NotImplementedException();
+            FundsDomain fundsDomain = _repository.GetOneFundsDomain(id);
+            return fundsDomain;
         }
 
         FoundRecordDomain IService.GetOneFoundRecordDomain(int id)
         {
-            throw new NotImplementedException();
+            FoundRecordDomain foundRecordDomain = _repository.GetOneFoundRecordDomain(id);
+            return foundRecordDomain;
         }
 
         FoodDomain IService.GetOneFoodDomain(int id)
         {
-            throw new NotImplementedException();
+            FoodDomain foodDomain = _repository.GetOneFoodDomain(id);
+            return foodDomain;
         }
 
         EuthanasiaDomain IService.GetOneEuthanasiaDomain(int id)
         {
-            throw new NotImplementedException();
+            EuthanasiaDomain euthanasiaDomain = _repository.GetOneEuthanasiaDomain(id);
+            return euthanasiaDomain;
         }
 
         ContageusAnimalsDomain IService.GetOneContageusAnimalsDomain(int id)
         {
-            throw new NotImplementedException();
+            ContageusAnimalsDomain contageusAnimalsDomain = _repository.GetOneContageusAnimalsDomain(id);
+            return contageusAnimalsDomain;
         }
 
         ContactDomain IService.GetOneContactDomain(int id)
         {
-            throw new NotImplementedException();
+            ContactDomain contactDomain = _repository.GetOneContactDomain(id);
+            return contactDomain;
         }
 
         BalansDomain IService.GetOneBalansDomain(int id)
         {
-            throw new NotImplementedException();
+            BalansDomain balansDomain = _repository.GetOneBalansDomain(id);
+            return balansDomain;
         }
 
 

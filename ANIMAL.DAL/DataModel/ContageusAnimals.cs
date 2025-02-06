@@ -11,6 +11,8 @@ namespace ANIMAL.DAL.DataModel
 
         public string DesisseName { get; set; }
         public string Description { get; set; }
+        public DateTime StartTime { get; set; }
+        public bool Contageus { get; set; }
 
         public virtual Animals Animals { get; set; }
     }

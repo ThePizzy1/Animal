@@ -64,7 +64,7 @@ namespace ANIMAL.DAL.DataModel
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("AspNetUserTokens");
 
 
-    
+
 
 
 
@@ -89,7 +89,7 @@ namespace ANIMAL.DAL.DataModel
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Adopted__AnimalI__4D94879B");
             });
-      
+
 
             // Adopter entity configuration
             modelBuilder.Entity<Adopter>(entity =>
@@ -336,6 +336,7 @@ namespace ANIMAL.DAL.DataModel
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ReturnedA__Anima__52593CB8");
             });
+            //novo
 
             modelBuilder.Entity<AnimalRecord>(entity =>
             {
@@ -358,37 +359,415 @@ namespace ANIMAL.DAL.DataModel
 
             });
 
+            modelBuilder.Entity<SystemRecord>(entity =>
+               {
+                   entity.HasKey(e => e.Id)
+                   .HasName("PK__SystemRecord");
 
 
+                   entity.Property(e => e.RecordName)
+                .IsRequired()
+                .HasMaxLength(255)
+                .IsUnicode(false);
 
 
+                   entity.Property(e => e.RecordDescription)
+              .IsRequired()
+              .HasMaxLength(255)
+              .IsUnicode(false);
 
+                   entity.Property(e => e.RecordNumber)
+                   .HasColumnType("integer");
 
+               });
 
-
-
-         modelBuilder.Entity<SystemRecord>(entity =>
+            modelBuilder.Entity<Balans>(entity =>
             {
                 entity.HasKey(e => e.Id)
-                .HasName("PK__SystemRecord");
+                 .HasName("PK__Balans");
+                entity.Property(e => e.Iban)
+            .IsRequired()
+            .HasMaxLength(21)
+            .IsUnicode(false);
+                entity.Property(e => e.Balance).HasColumnType("decimal(20, 2)");
+            });
+
+            modelBuilder.Entity<Contact>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__Contact");
 
 
-                entity.Property(e => e.RecordName)
-             .IsRequired()
-             .HasMaxLength(255)
-             .IsUnicode(false);
+                entity.HasOne(d => d.Adopter)
+                    .WithMany()
+                    .HasForeignKey(d => d.AdopterId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Contact__Adopter");
 
 
-                entity.Property(e => e.RecordDescription)
-           .IsRequired()
-           .HasMaxLength(255)
-           .IsUnicode(false);
-
-                entity.Property(e => e.RecordNumber)
-                .HasColumnType("integer");
+                entity.Property(e => e.Name)
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .IsUnicode(false);
+                entity.Property(e => e.Description)
+                  .IsRequired()
+                  .HasMaxLength(255)
+                  .IsUnicode(false);
+                entity.Property(e => e.Email)
+                  .IsRequired()
+                  .HasMaxLength(50)
+                  .IsUnicode(false);
 
             });
-         
+
+
+            modelBuilder.Entity<ContageusAnimals>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__ContageusAnimals");
+
+
+                entity.HasOne(d => d.Animals)
+                    .WithMany()
+                    .HasForeignKey(d => d.AnimalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ContageusAnimals__Animal");
+
+                entity.Property(e => e.DesisseName)
+                .IsRequired()
+                .HasMaxLength(100)
+                .IsUnicode(false);
+                entity.Property(e => e.Description)
+                  .IsRequired()
+                  .HasMaxLength(255)
+                  .IsUnicode(false);
+
+
+            });
+
+
+            modelBuilder.Entity<Euthanasia>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__Euthanasia");
+
+
+                entity.HasOne(d => d.Animals)
+                    .WithMany()
+                    .HasForeignKey(d => d.AnimalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Euthanasia__Animal");
+
+                entity.Property(e => e.NameOfDesissse)
+                .IsRequired()
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+
+            });
+            modelBuilder.Entity<Food>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__Food");
+
+
+
+                entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+                entity.Property(e => e.BrandName)
+                .IsRequired()
+                .HasMaxLength(100)
+                .IsUnicode(false);
+                entity.Property(e => e.FoodType)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+                entity.Property(e => e.AnimalType)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+                entity.Property(e => e.AgeGroup)
+                .IsRequired()
+                .HasMaxLength(10)
+                .IsUnicode(false);
+
+                entity.Property(e => e.Weight).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.CaloriesPerServing).HasColumnType("decimal(10, 4)");
+
+                entity.Property(e => e.WeightPerServing).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.FatContent).HasColumnType("decimal(10, 4)");
+
+                entity.Property(e => e.FiberContent).HasColumnType("decimal(10, 4)");
+                entity.Property(e => e.MeasurementPerServing)
+                 .IsRequired()
+                 .HasMaxLength(5)
+                 .IsUnicode(false);
+                entity.Property(e => e.MeasurementWeight)
+                .IsRequired()
+                .HasMaxLength(5)
+                .IsUnicode(false);
+                entity.Property(e => e.Notes)
+                .IsRequired()
+                .HasMaxLength(1000)
+                .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<FoundRecord>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__FoundRecord");
+
+
+                entity.HasOne(d => d.Animal)
+                    .WithMany()
+                    .HasForeignKey(d => d.AnimalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__FoundRecord__Animal");
+                entity.HasOne(d => d.User)
+                   .WithMany()
+                   .HasForeignKey(d => d.RegisterId)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("FK__FoundRecord__User");
+
+                entity.Property(e => e.Description)
+                .IsRequired()
+                .HasMaxLength(255)
+                .IsUnicode(false);
+
+
+                entity.Property(e => e.Adress)
+               .IsRequired()
+               .HasMaxLength(150)
+               .IsUnicode(false);
+
+
+                entity.Property(e => e.OwnerName)
+               .IsRequired()
+               .HasMaxLength(50)
+               .IsUnicode(false);
+
+                entity.Property(e => e.OwnerSurname)
+               .IsRequired()
+               .HasMaxLength(50)
+               .IsUnicode(false);
+
+                entity.Property(e => e.OwnerPhoneNumber)
+               .IsRequired()
+               .HasMaxLength(13)
+               .IsUnicode(false);
+
+                entity.Property(e => e.OwnerOIB)
+                .IsRequired()
+                .HasMaxLength(11)
+                .IsUnicode(false);
+
+
+
+            });
+
+
+            modelBuilder.Entity<Funds>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__Funds");
+
+
+                entity.HasOne(d => d.Adopter)
+                    .WithMany()
+                    .HasForeignKey(d => d.AdopterId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Funds__Adopter");
+
+                entity.Property(e => e.Purpose)
+                 .IsRequired()
+                 .HasMaxLength(50)
+                 .IsUnicode(false);
+
+                entity.Property(e => e.Amount).HasColumnType("decimal(20, 2)");
+            });
+
+            modelBuilder.Entity<Labs>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__Labs_1235468");
+
+
+                entity.HasOne(d => d.Animals)
+                    .WithMany()
+                    .HasForeignKey(d => d.AnimalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Labs__Animals");
+
+
+              
+
+            });
+          modelBuilder.Entity<Parameter>()
+               .HasOne(a => a.Labs)
+               .WithMany(a => a.Parameters)
+               .HasForeignKey(a => a.LabId)
+               .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+            modelBuilder.Entity<Medicines>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__Medicines");
+
+
+                entity.HasOne(d => d.Animal)
+                    .WithMany()
+                    .HasForeignKey(d => d.AnimalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Medicines__Animal");
+
+                entity.Property(e => e.NameOfMedicines)
+                 .IsRequired()
+                 .HasMaxLength(50)
+                 .IsUnicode(false);
+                entity.Property(e => e.Description)
+               .IsRequired()
+               .HasMaxLength(255)
+               .IsUnicode(false);
+                entity.Property(e => e.VetUsername)
+               .IsRequired()
+               .HasMaxLength(50)
+               .IsUnicode(false);
+                entity.Property(e => e.MesurmentUnit)
+               .IsRequired()
+               .HasMaxLength(10)
+               .IsUnicode(false);
+                entity.Property(e => e.FrequencyOfMedicationUse)
+               .IsRequired()
+               .HasMaxLength(50)
+               .IsUnicode(false);
+                entity.Property(e => e.AmountOfMedicine).HasColumnType("decimal(20, 6)");
+            });
+
+            modelBuilder.Entity<News>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__News");
+
+                entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+                entity.Property(e => e.Description)
+               .IsRequired()
+               .HasMaxLength(500)
+               .IsUnicode(false);
+
+
+            });
+
+
+            modelBuilder.Entity<Parameter>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__Parameter");
+             
+            
+              
+
+                entity.Property(e => e.ParameterName)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+                entity.Property(e => e.MeasurementUnits)
+               .IsRequired()
+               .HasMaxLength(10)
+               .IsUnicode(false);
+
+                entity.Property(e => e.Remarks)
+               .IsRequired()
+               .HasMaxLength(100)
+               .IsUnicode(false);
+
+                entity.Property(e => e.ParameterValue).HasColumnType("decimal(10, 4)");
+            });
+
+
+
+            modelBuilder.Entity<Toys>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__Toys");
+
+                entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+                entity.Property(e => e.BrandName)
+               .IsRequired()
+               .HasMaxLength(50)
+               .IsUnicode(false);
+
+                entity.Property(e => e.AnimalType)
+               .IsRequired()
+               .HasMaxLength(50)
+               .IsUnicode(false);
+
+                entity.Property(e => e.ToyType)
+               .IsRequired()
+               .HasMaxLength(50)
+               .IsUnicode(false);
+
+                entity.Property(e => e.AgeGroup)
+                .IsRequired()
+                .HasMaxLength(10)
+                .IsUnicode(false);
+
+                entity.Property(e => e.Notes)
+                .IsRequired()
+                .HasMaxLength(255)
+                .IsUnicode(false);
+
+
+                entity.Property(e => e.Hight).HasColumnType("decimal(10,2 )");
+                entity.Property(e => e.Width).HasColumnType("decimal(10,2 )");
+            });
+
+
+            modelBuilder.Entity<VetVisits>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PK__VetVisits");
+
+                entity.HasOne(d => d.Animals)
+                    .WithMany()
+                    .HasForeignKey(d => d.AnimalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__VetVisits__Animal");
+
+                entity.Property(e => e.TypeOfVisit)
+                .IsRequired()
+                .HasMaxLength(255)
+                .IsUnicode(false);
+
+                entity.Property(e => e.Notes)
+               .IsRequired()
+               .HasMaxLength(255)
+               .IsUnicode(false);
+
+
+           
+            });
+
+
+
+
+
+
+
+
 
 
 

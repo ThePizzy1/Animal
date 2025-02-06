@@ -23,7 +23,13 @@ namespace ANIMAL.MODEL
             Parameters = parameters;
             DateTime = dateTime;
         }
-
+        public LabsDomain(int id,  List<Parameter> parameters)
+        {
+            Id = id;
+            
+            Parameters = parameters;
+          
+        }
         public int Id { get; set; }
         public int AnimalId { get; set; }
         public List<Parameter> Parameters { get; set; }

@@ -7,7 +7,7 @@ namespace ANIMAL.DAL.DataModel
     public class FoodDomain
     {
         public FoodDomain() { }
-        public FoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes)
+        public FoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight)
         {
             Id = id;
             BrandName = brandName;
@@ -24,6 +24,7 @@ namespace ANIMAL.DAL.DataModel
             ExporationDate = exporationDate;
             Quantity = quantity;
             Notes = notes;
+            MeasurementWeight = measurementWeight;
         }
         public FoodDomain(int id, int quantity)
         {
@@ -37,7 +38,8 @@ namespace ANIMAL.DAL.DataModel
         public string FoodType { get; set; }
         public string AnimalType { get; set; }
         public string AgeGroup { get; set; }
-        public decimal Weight { get; set; }//fali mjerna jedinica za to
+        public decimal Weight { get; set; }
+        public string MeasurementWeight { get; set; }
         public decimal CaloriesPerServing { get; set; }
         public decimal WeightPerServing { get; set; }
         public string MeasurementPerServing { get; set; }

@@ -32,6 +32,16 @@ namespace ANIMAL.MODEL
             TypeOfVisit = typeOfVisit;
             Notes = notes;
         }
+        public VetVisitsDomain(int id,  DateTime startTime, DateTime endTime, string notes)
+        {
+
+            Id = id;
+  
+            StartTime = startTime;
+            EndTime = endTime;
+           
+            Notes = notes;
+        }
 
         public int Id { get; set; }
         public int AnimalId { get; set; }

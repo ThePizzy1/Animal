@@ -17,10 +17,12 @@ namespace ANIMAL.MODEL
             Password = password;
             Type = type;
         }
-        public BalansDomain(int id, decimal balance)
+        public BalansDomain(int id, decimal balance, DateTime lastUpdated, string password)
         {
             Id=id;
             Balance=balance;
+            LastUpdated = lastUpdated;
+            Password = password;
         }
         public int Id { get; set; }
         public string Iban { get; set; }

@@ -81,21 +81,36 @@ namespace ANIMAL.Repository.Common
 
 
         //update novo
-        public Task<AnimalRecordDomain> UpdateAnimalRecordDomain(AnimalRecordDomain update);
-        public Task<BalansDomain> UpdateAnimalBalansDomain(BalansDomain update);
-        public Task<ContactDomain> UpdateContactDomain(ContactDomain update);
-        public Task<ContageusAnimalsDomain> UpdateContageusAnimalsDomain(ContageusAnimalsDomain update);
-        public Task<EuthanasiaDomain> UpdateEuthanasiaDomain(EuthanasiaDomain update);
-        public Task<FoodDomain> UpdateFoodDomain(FoodDomain update);
-        public Task<FoundRecordDomain> UpdateFoundRecordDomain(FoundRecordDomain update);
-        public Task<FundsDomain> UpdateFundsDomain(FundsDomain update);
-        public Task<LabsDomain> UpdateLabsDomain(LabsDomain update);
-        public Task<MedicinesDomain> UpdateMedicinesDomain(MedicinesDomain update);
-        public Task<NewsDomain> UpdateNewsDomain(NewsDomain update);
-        public Task<ParameterDomain> UpdateParameterDomain(ParameterDomain update);
-        public Task<SystemRecordDomain> UpdateSystemRecordDomain(SystemRecordDomain update);
-        public Task<ToysDomain> UpdateToysDomain(ToysDomain update);
-        public Task<VetVisitsDomain> UpdateVetVisitsDomain(VetVisitsDomain update);
+        public Task<AnimalRecordDomain> UpdateAnimalRecordDomain(int id, int recordId);
+        public Task<BalansDomain> UpdateAnimalBalansDomain(int id, decimal balance, DateTime lastUpdated, string password);
+        public Task<ContageusAnimalsDomain> UpdateContageusAnimalsDomain(int id, bool contageus);
+
+        public Task<EuthanasiaDomain> UpdateEuthanasiaDomain(int id, DateTime date, bool complited);
+        public Task<FoodDomain> UpdateFoodDomainIncrement(int id, int quantity);//3
+        public Task<FoodDomain> UpdateFoodDomainDecrement(int id, int quantity);
+        public Task<FoodDomain> UpdateFoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
+
+       public Task<ToysDomain> UpdateToysDomainIncrement(int id, int quantity);
+        public Task<ToysDomain> UpdateToysDomainDecrement(int id, int quantity);
+        public Task<ToysDomain> UpdateToysDomain(int id, string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes);
+
+
+        public Task<FoundRecordDomain> UpdateFoundRecordDomain(int id, int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);
+     
+
+
+        public Task<LabsDomain> UpdateLabsDomain(int id, List<Parameter> parameters);
+
+
+        public Task<MedicinesDomain> UpdateMedicinesDomainUsage(int id, bool usage);
+        public Task<MedicinesDomain> UpdateMedicinesDomain(int id, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse);
+
+
+        public Task<NewsDomain> UpdateNewsDomain(int id, string name, string description, DateTime dateTime);
+
+ 
+    
+        public Task<VetVisitsDomain> UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes);
 
 
 
@@ -140,12 +155,11 @@ namespace ANIMAL.Repository.Common
         //Brisanje
         public  Task<bool> DeleteAdoptedAsync(int adoptedId);
         public void DeleteAdoptedReturn(int adoptedId);
-        public  Task DeleteAnimal(int idAnimal);
+        public  Task DeleteAnimal(int idAnimal);// DA MAKNEM OVO POŠTO NEMA SMISLA VIŠE?
 
         //novo
         public Task DeleteNews(int id);
-        public Task DeleteContageusAnimals(int id);
-        public Task DeleteEuthanasia(int id);
+        //NIŠTA DRGO SE NE SMIJE OBRISAT ZATO ŠT NAM TREBA PPOVIJEST PODATAKA
         //pogledaj  druge klase i napravi da se podatak sakrije ako se to stanje više ne dešava
 
     }

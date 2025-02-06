@@ -21,7 +21,10 @@ namespace ANIMAL.MODEL
             Quantity = quantity;
             Notes = notes;
         }
-
+        public ToysDomain(int id, int quantity) 
+        {  Id = id;
+            Quantity = quantity;
+        }
         public int Id { get; set; }
         public string BrandName { get; set; }
         public string Name { get; set; }

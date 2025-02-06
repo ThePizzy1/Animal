@@ -11,32 +11,64 @@ namespace ANIMAL.MODEL
         //
         public  MedicinesDomain() { }
 
-        public MedicinesDomain(int id, int animalId, string nameOfMedicines, string descriptio, string vetUsername)
+        public MedicinesDomain(int id,  string nameOfMedicines, string descriptio, string vetUsername, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage)
         {
             Id = id;
-            AnimalId = animalId;
+          
             NameOfMedicines = nameOfMedicines;
             Description = descriptio;
             VetUsername = vetUsername;
+            AmountOfMedicine = amountOfMedicine;
+            MesurmentUnit = mesurmentUnit;
+            MedicationIntake = medicationIntake;
+            FrequencyOfMedicationUse = frequencyOfMedicationUse;
+            Usage = usage;
         }
 
-        public MedicinesDomain(int id, int animalId, string nameOfMedicines, string descriptio, string vetUsername,AnimalDomain animal )
+        public MedicinesDomain(int id, string nameOfMedicines, string descriptio, string vetUsername, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage, AnimalDomain animal)
         {
             Id=id;
-            AnimalId = animalId;
+          
             NameOfMedicines=nameOfMedicines;
             Description = descriptio;
             VetUsername = vetUsername;
+           
+            AmountOfMedicine = amountOfMedicine;
+            MesurmentUnit = mesurmentUnit;
+            MedicationIntake = medicationIntake;
+            FrequencyOfMedicationUse = frequencyOfMedicationUse;
+            Usage = usage; 
             Animal = animal;
-        }
 
+        }
+        public MedicinesDomain(int id, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse)
+        {
+            Id = id;
+
+        
+
+            AmountOfMedicine = amountOfMedicine;
+            MesurmentUnit = mesurmentUnit;
+            MedicationIntake = medicationIntake;
+          
+
+        }
+        public MedicinesDomain(int id, bool usage)//Da mogu samo izmjeniti taj parametar kad trebam, dali živtinja još koristi te ljekove
+        {
+            Id = id;
+            Usage = usage;
+        }
 
         public int Id { get; set; }
         public int AnimalId { get; set; }
         public string NameOfMedicines { get; set; }
         public string Description { get; set; }
         public string VetUsername { get; set; }
-
+        public decimal AmountOfMedicine { get; set; }
+        public string MesurmentUnit { get; set; }
+        public int MedicationIntake { get; set; }
+        public string FrequencyOfMedicationUse { get; set; }
+        public bool Usage { get; set; }
         public AnimalDomain Animal { get; set; }
 
     }

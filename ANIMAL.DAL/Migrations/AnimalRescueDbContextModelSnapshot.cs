@@ -316,13 +316,13 @@ namespace ANIMAL.DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("FundsId")
-                        .HasColumnType("int");
+                        .HasColumnType("decimal(20, 2)");
 
                     b.Property<string>("Iban")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(21)")
+                        .HasMaxLength(21)
+                        .IsUnicode(false);
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
@@ -333,9 +333,8 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("FundsId");
+                    b.HasKey("Id")
+                        .HasName("PK__Balans");
 
                     b.ToTable("Balans");
                 });
@@ -380,15 +379,28 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
-                    b.HasKey("Id");
+                    b.Property<bool>("Read")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id")
+                        .HasName("PK__Contact");
 
                     b.HasIndex("AdopterId");
 
@@ -405,18 +417,28 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AnimalsIdAnimal")
-                        .HasColumnType("int");
+                    b.Property<bool>("Contageus")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
 
                     b.Property<string>("DesisseName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("AnimalsIdAnimal");
+                    b.HasKey("Id")
+                        .HasName("PK__ContageusAnimals");
+
+                    b.HasIndex("AnimalId");
 
                     b.ToTable("ContageusAnimals");
                 });
@@ -431,18 +453,22 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AnimalsIdAnimal")
-                        .HasColumnType("int");
+                    b.Property<bool>("Complited")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NameOfDesissse")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__Euthanasia");
 
-                    b.HasIndex("AnimalsIdAnimal");
+                    b.HasIndex("AnimalId");
 
                     b.ToTable("Euthanasia");
                 });
@@ -483,48 +509,76 @@ namespace ANIMAL.DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AgeGroup")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasMaxLength(10)
+                        .IsUnicode(false);
 
                     b.Property<string>("AnimalType")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<string>("BrandName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
 
                     b.Property<decimal>("CaloriesPerServing")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 4)");
 
                     b.Property<DateTime>("ExporationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("FatContent")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 4)");
 
                     b.Property<decimal>("FiberContent")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 4)");
 
                     b.Property<string>("FoodType")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<string>("MeasurementPerServing")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(5)")
+                        .HasMaxLength(5)
+                        .IsUnicode(false);
+
+                    b.Property<string>("MeasurementWeight")
+                        .IsRequired()
+                        .HasColumnType("varchar(5)")
+                        .HasMaxLength(5)
+                        .IsUnicode(false);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(1000)")
+                        .HasMaxLength(1000)
+                        .IsUnicode(false);
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<decimal>("WeightPerServing")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__Food");
 
                     b.ToTable("Food");
                 });
@@ -537,40 +591,61 @@ namespace ANIMAL.DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Adress")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(150)")
+                        .HasMaxLength(150)
+                        .IsUnicode(false);
 
                     b.Property<int>("AnimalId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AnimalsIdAnimal")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
 
                     b.Property<string>("OwnerName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<string>("OwnerOIB")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(11)")
+                        .HasMaxLength(11)
+                        .IsUnicode(false);
 
                     b.Property<string>("OwnerPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(13)")
+                        .HasMaxLength(13)
+                        .IsUnicode(false);
 
                     b.Property<string>("OwnerSurname")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<string>("RegisterId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__FoundRecord");
 
                     b.HasIndex("AnimalId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AnimalsIdAnimal");
+
+                    b.HasIndex("RegisterId");
 
                     b.ToTable("FoundRecord");
                 });
@@ -586,15 +661,19 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(20, 2)");
 
                     b.Property<DateTime>("DateTimed")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Purpose")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__Funds");
 
                     b.HasIndex("AdopterId");
 
@@ -611,15 +690,13 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AnimalsIdAnimal")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__Labs_1235468");
 
-                    b.HasIndex("AnimalsIdAnimal");
+                    b.HasIndex("AnimalId");
 
                     b.ToTable("Labs");
                 });
@@ -653,19 +730,50 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("AmountOfMedicine")
+                        .HasColumnType("decimal(20, 6)");
+
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
+
+                    b.Property<string>("FrequencyOfMedicationUse")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.Property<int>("MedicationIntake")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MesurmentUnit")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasMaxLength(10)
+                        .IsUnicode(false);
 
                     b.Property<string>("NameOfMedicines")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.Property<bool>("Usage")
+                        .HasColumnType("bit");
 
                     b.Property<string>("VetUsername")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__Medicines");
 
                     b.HasIndex("AnimalId");
 
@@ -683,12 +791,19 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(500)")
+                        .HasMaxLength(500)
+                        .IsUnicode(false);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__News");
 
                     b.ToTable("News");
                 });
@@ -703,24 +818,31 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("LabId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LabsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("MeasurementUnits")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasMaxLength(10)
+                        .IsUnicode(false);
 
                     b.Property<string>("ParameterName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
-                    b.Property<string>("ParameterValue")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("ParameterValue")
+                        .HasColumnType("decimal(10, 4)");
 
                     b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__Parameter");
 
-                    b.HasIndex("LabsId");
+                    b.HasIndex("LabId");
 
                     b.ToTable("Parameter");
                 });
@@ -831,33 +953,52 @@ namespace ANIMAL.DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AgeGroup")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasMaxLength(10)
+                        .IsUnicode(false);
 
                     b.Property<string>("AnimalType")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<string>("BrandName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<decimal>("Hight")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2 )");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("ToyType")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<decimal>("Width")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2 )");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__Toys");
 
                     b.ToTable("Toys");
                 });
@@ -872,24 +1013,28 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AnimalsIdAnimal")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TypeOfVisit")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__VetVisits");
 
-                    b.HasIndex("AnimalsIdAnimal");
+                    b.HasIndex("AnimalId");
 
                     b.ToTable("VetVisits");
                 });
@@ -1068,13 +1213,6 @@ namespace ANIMAL.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ANIMAL.DAL.DataModel.Balans", b =>
-                {
-                    b.HasOne("ANIMAL.DAL.DataModel.Funds", "Funds")
-                        .WithMany()
-                        .HasForeignKey("FundsId");
-                });
-
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Birds", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
@@ -1089,7 +1227,7 @@ namespace ANIMAL.DAL.Migrations
                     b.HasOne("ANIMAL.DAL.DataModel.Adopter", "Adopter")
                         .WithMany()
                         .HasForeignKey("AdopterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__Contact__Adopter")
                         .IsRequired();
                 });
 
@@ -1097,14 +1235,18 @@ namespace ANIMAL.DAL.Migrations
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animals")
                         .WithMany()
-                        .HasForeignKey("AnimalsIdAnimal");
+                        .HasForeignKey("AnimalId")
+                        .HasConstraintName("FK__ContageusAnimals__Animal")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Euthanasia", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animals")
                         .WithMany()
-                        .HasForeignKey("AnimalsIdAnimal");
+                        .HasForeignKey("AnimalId")
+                        .HasConstraintName("FK__Euthanasia__Animal")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Fish", b =>
@@ -1119,14 +1261,19 @@ namespace ANIMAL.DAL.Migrations
             modelBuilder.Entity("ANIMAL.DAL.DataModel.FoundRecord", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
-                        .WithMany("FoundRecord")
+                        .WithMany()
                         .HasForeignKey("AnimalId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__FoundRecord__Animal")
                         .IsRequired();
+
+                    b.HasOne("ANIMAL.DAL.DataModel.Animals", null)
+                        .WithMany("FoundRecord")
+                        .HasForeignKey("AnimalsIdAnimal");
 
                     b.HasOne("ANIMAL.DAL.DataModel.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("RegisterId")
+                        .HasConstraintName("FK__FoundRecord__User");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Funds", b =>
@@ -1134,7 +1281,7 @@ namespace ANIMAL.DAL.Migrations
                     b.HasOne("ANIMAL.DAL.DataModel.Adopter", "Adopter")
                         .WithMany()
                         .HasForeignKey("AdopterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__Funds__Adopter")
                         .IsRequired();
                 });
 
@@ -1142,7 +1289,9 @@ namespace ANIMAL.DAL.Migrations
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animals")
                         .WithMany()
-                        .HasForeignKey("AnimalsIdAnimal");
+                        .HasForeignKey("AnimalId")
+                        .HasConstraintName("FK__Labs__Animals")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Mammals", b =>
@@ -1159,15 +1308,16 @@ namespace ANIMAL.DAL.Migrations
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
                         .WithMany()
                         .HasForeignKey("AnimalId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__Medicines__Animal")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Parameter", b =>
                 {
-                    b.HasOne("ANIMAL.DAL.DataModel.Labs", null)
+                    b.HasOne("ANIMAL.DAL.DataModel.Labs", "Labs")
                         .WithMany("Parameters")
-                        .HasForeignKey("LabsId");
+                        .HasForeignKey("LabId")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Reptiles", b =>
@@ -1204,7 +1354,9 @@ namespace ANIMAL.DAL.Migrations
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animals")
                         .WithMany()
-                        .HasForeignKey("AnimalsIdAnimal");
+                        .HasForeignKey("AnimalId")
+                        .HasConstraintName("FK__VetVisits__Animal")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

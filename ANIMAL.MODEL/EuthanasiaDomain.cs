@@ -28,16 +28,18 @@ namespace ANIMAL.DAL.DataModel
             NameOfDesissse = nameOfDesissse;
       
         }
-        public EuthanasiaDomain(int id, DateTime date)
+        public EuthanasiaDomain(int id, DateTime date, bool complited)
         {
             Id = id;
             Date = date;
+            Complited = complited;
         }
 
         public int Id { get; set; }
         public int AnimalId { get; set; }
         public DateTime Date { get; set; }
         public string NameOfDesissse { get; set; }
+        public bool Complited { get; set; }
         public AnimalDomain Animal { get; set; }
 
     }

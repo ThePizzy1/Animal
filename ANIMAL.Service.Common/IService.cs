@@ -116,5 +116,6 @@ namespace ANIMAL.Service.Common
         public  Task<bool> DeleteAdoptedAsync(int adoptedId);
         public  void DeleteAdoptedReturn(int adoptedId); 
         public  Task DeleteAnimal(int idAnimal);
+
     }
 }

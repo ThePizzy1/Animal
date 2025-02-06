@@ -92,6 +92,11 @@ namespace ANIMAL.MODEL
             IdAnimal = idAnimal;
         
         }
+        public AnimalDomain(string name, int age)
+        {
+           Name = name;
+            Age= age;
+        }
         public byte[] Picture { get; set; }
         public int IdAnimal { get; set; }
         public string Name { get; set; }

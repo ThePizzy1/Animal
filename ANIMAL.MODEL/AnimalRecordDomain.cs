@@ -18,6 +18,14 @@ namespace ANIMAL.MODEL
            Record=systemRecord;
 
         }
+        public AnimalRecordDomain(int id, AnimalDomain animal, SystemRecordDomain systemRecord)
+        {
+            Id = id;
+     
+            Animal = animal;
+            Record = systemRecord;
+
+        }
         public AnimalRecordDomain(int id, int recordId, int animalId)
         {
             Id = id;

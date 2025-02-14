@@ -55,7 +55,7 @@ namespace ANIMAL.Repository.Common
         public AdopterDomain GetAdopterById(string id);
 
         //get by id novo
-
+        //ispisuje se kad u tablici sa tim parametrima kliknemo na jedan
         public ToysDomain GetOneToysDomain(int id);
         public NewsDomain GetOneNewsDomain(int id);
         public MedicinesDomain GetOneMedicinesDomain(int id);
@@ -68,9 +68,21 @@ namespace ANIMAL.Repository.Common
         public ContactDomain GetOneContactDomain(int id);
         public BalansDomain GetOneBalansDomain(int id);
 
+        //get by id od životinje
+        //napravi za ljekove, vet visit, animal record, contageus animals, labs
+        //potrebno za ispis podatak povjest bolesti
+        public MedicinesDomain GetOneMedicinesAnimal(int id);
+        public ContageusAnimalsDomain GetOneContageusAnimal(int id);
+        public LabsDomain GetOneLabsAnimal(int id);
+        public VetVisitsDomain GetOneVetVisitAnimal(int id);
+        public IEnumerable<AnimalRecordDomain> GetOneAnimalRecord(int id);//ne radi ništa se ne ispiše
+
+
+
+
 
         //UPDATE ne radi edit za životinje
-        public  Task IncrementNumberOfAdoptedAnimalsAsync(string registerId);
+        public Task IncrementNumberOfAdoptedAnimalsAsync(string registerId);
         public  Task IncrementNumberOfReturnedAnimalsAsync(string registerId);
         public  Task<AdopterDomain> UpdateAdopterAsync(string registerId, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password);
         public  Task<AnimalDomain> UpdateAnimalAsync(int idAnimal, int age, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, string personalityDescription);
@@ -81,36 +93,36 @@ namespace ANIMAL.Repository.Common
 
 
         //update novo
-        public Task<AnimalRecordDomain> UpdateAnimalRecordDomain(int id, int recordId);
-        public Task<BalansDomain> UpdateAnimalBalansDomain(int id, decimal balance, DateTime lastUpdated, string password);
-        public Task<ContageusAnimalsDomain> UpdateContageusAnimalsDomain(int id, bool contageus);
+        public Task<bool> UpdateAnimalRecordDomain(int id, int recordId);
+        public  Task<bool> UpdateAnimalBalansDomain(int id, decimal balance, DateTime lastUpdated, string password);
+        public  Task<bool> UpdateContageusAnimalsDomain(int id, bool contageus);
 
-        public Task<EuthanasiaDomain> UpdateEuthanasiaDomain(int id, DateTime date, bool complited);
-        public Task<FoodDomain> UpdateFoodDomainIncrement(int id, int quantity);//3
-        public Task<FoodDomain> UpdateFoodDomainDecrement(int id, int quantity);
-        public Task<FoodDomain> UpdateFoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
+        public  Task<bool> UpdateEuthanasiaDomain(int id, DateTime date, bool complited);
+        public  Task<bool> UpdateFoodDomainIncrement(int id);//3
+        public  Task<bool> UpdateFoodDomainDecrement(int id );
+        public Task<bool> UpdateFoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
 
-       public Task<ToysDomain> UpdateToysDomainIncrement(int id, int quantity);
-        public Task<ToysDomain> UpdateToysDomainDecrement(int id, int quantity);
-        public Task<ToysDomain> UpdateToysDomain(int id, string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes);
-
-
-        public Task<FoundRecordDomain> UpdateFoundRecordDomain(int id, int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);
-     
+        public Task<bool> UpdateToysDomainIncrement(int id);
+        public Task<bool> UpdateToysDomainDecrement(int id);
+        public Task<bool> UpdateToysDomain(int id, string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes);
 
 
-        public Task<LabsDomain> UpdateLabsDomain(int id, List<Parameter> parameters);
+        public Task<bool> UpdateFoundRecordDomain(int id, int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);
 
 
-        public Task<MedicinesDomain> UpdateMedicinesDomainUsage(int id, bool usage);
-        public Task<MedicinesDomain> UpdateMedicinesDomain(int id, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse);
+
+        public  Task<bool> UpdateLabsDomain(int id, List<Parameter> parameters);
 
 
-        public Task<NewsDomain> UpdateNewsDomain(int id, string name, string description, DateTime dateTime);
+        public  Task<bool> UpdateMedicinesDomainUsage(int id, bool usage);
+        public Task<bool> UpdateMedicinesDomain(int id, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse);
 
- 
-    
-        public Task<VetVisitsDomain> UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes);
+
+        public Task<bool> UpdateNewsDomain(int id, string name, string description, DateTime dateTime);
+
+
+
+        public Task<bool> UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes);
 
 
 
@@ -150,6 +162,28 @@ namespace ANIMAL.Repository.Common
           bool adopted
          );
 
+        //dodavanje novo
+        /*animalrecord- samo za dodavanje prve funkcije koja se pokreće samo kod unosa životinje, sve ostalo je update
+         * Balans-mislim da ne treba add samo update. Stvorila bih jedan račun i na njemu ddavala i uzimala- Ako dodam još neku osobu koja će se bavit sa time dodat ću i add
+         * Contact-potreban add i update za pročitano
+         * contageus animals-potrebno add
+         * euthanasia-potreban add
+         * found record- potreban add
+         * funds-potreban add
+         * labs-potreban add
+         * parametar-potreban add 
+         * medicines-potreban add
+         * news-potreban add
+         * system record- potreban add samo admin
+         * toys-potreban add
+         * vet visit-potreban add
+        */
+
+
+
+
+
+
 
 
         //Brisanje
@@ -159,7 +193,7 @@ namespace ANIMAL.Repository.Common
 
         //novo
         public Task DeleteNews(int id);
-        //NIŠTA DRGO SE NE SMIJE OBRISAT ZATO ŠT NAM TREBA PPOVIJEST PODATAKA
+        //NIŠTA DRUGO SE NE SMIJE OBRISAT ZATO ŠT NAM TREBA PPOVIJEST PODATAKA
         //pogledaj  druge klase i napravi da se podatak sakrije ako se to stanje više ne dešava
 
     }

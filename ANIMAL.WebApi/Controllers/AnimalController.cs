@@ -417,11 +417,51 @@ namespace ANIMAL.WebApi.Controllers
             return parametar;
         }
 
+        //get by id novo novo
 
+        [HttpGet]
+        [Route("medsAnimal/{id}")]
+        [AllowAnonymous]
+        public MedicinesDomain GetOneMedicinesAnimal(int id)
+        {
+            MedicinesDomain parametar = _service.GetOneMedicinesAnimal(id);
+            return parametar;
+        }
+        [HttpGet]
+        [Route("contageusAnimal/{id}")]
+        [AllowAnonymous]
+        public ContageusAnimalsDomain GetOneContageusAnimal(int id)
+        {
+            ContageusAnimalsDomain parametar = _service.GetOneContageusAnimal(id);
+            return parametar;
+        }
+        [HttpGet]
+        [Route("labsAnimal/{id}")]
+        [AllowAnonymous]
+        public LabsDomain GetOneLabsAnimal(int id)
+        {
+            LabsDomain parametar = _service.GetOneLabsAnimal(id);
+            return parametar;
+        }
+        [HttpGet]
+        [Route("vetVisitAnimal/{id}")]
+        [AllowAnonymous]
+        public VetVisitsDomain GetOneVetVisitAnimal(int id)
+        {
+            VetVisitsDomain parametar = _service.GetOneVetVisitAnimal(id);
+            return parametar;
+        }
 
+        [HttpGet]
+        [Route("recordAnimal/{id}")]
+        [AllowAnonymous]
+            public IEnumerable<AnimalRecordDomain> GetOneAnimalRecord(int adopterId)
+            {
+                IEnumerable<AnimalRecordDomain> parametar = _service.GetOneAnimalRecord(adopterId);
+                return parametar;
+            }
 
-
-
+        
 
 
 
@@ -690,14 +730,14 @@ namespace ANIMAL.WebApi.Controllers
 
             return Ok(new { Message = "Adoption status updated successfully" });
         }
-        [HttpPut("deladopted/{adopterId}")]
+       /* [HttpPut("deladopted/{adopterId}")]
         [AllowAnonymous]
         public async Task<IActionResult> DeleteAdoptedAsync(int adopterId)
         {
             await _service.DeleteAdoptedAsync(adopterId);
 
             return Ok(new { Message = "Adoption status updated successfully" });
-        }
+        }*/
         [HttpPut("flag/{adopterId}")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateAdopterFlag(int adopterId)
@@ -842,6 +882,84 @@ namespace ANIMAL.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add amphibian: {ex.Message}");
             }
         }
+        //ubdate novo
+
+
+        [HttpPut("updateAnimalRecord")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateAnimalRecordDomain([FromBody] AnimalRecord request)
+        {
+
+            if (request == null || request.Record == null)
+            {
+                return BadRequest("Invalid data. Animal Record information is missing.");
+            }
+            try
+            {
+                var updated= await _service.UpdateAnimalRecordDomain(
+                   request.Record.Id,
+                   request.RecordId
+
+                    );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating adopter: {ex.Message}");
+            }
+
+           
+
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
+
+
+
+
+
+
+
+
+        /*  if (request == null || request.Adopter == null)
+            {
+                return BadRequest("Invalid data. Adopter information is missing.");
+            }
+
+            try
+            {
+                var updatedAdopter = await _service.UpdateAdopterAsync(
+                    registerId,
+                    request.Adopter.FirstName,
+                    request.Adopter.LastName,
+                    request.Adopter.DateOfBirth,
+                    request.Adopter.Residence,
+                    request.Adopter.Username,
+                    request.Adopter.Password
+                );
+
+                return Ok(updatedAdopter); // Return 200 OK with the updated adopter
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating adopter: {ex.Message}");
+            }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -849,37 +967,42 @@ namespace ANIMAL.WebApi.Controllers
         //Delete
         //-----------------------------------------------------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------------------------------------------------
+        // Napravi u onom record ako je životinja mrtva da umjesto ovoga joj se stavi dead u recordu 
 
-        [HttpDelete("{idAnimal}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Delete(int idAnimal)
-        {
-            try
-            {
 
-               
-                await _service.DeleteAnimal(idAnimal);
 
-             
-                return Ok("Animal successfully deleted.");
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound($"Animal with ID {idAnimal} not found.");
-            }
-            catch (InvalidOperationException ex)
-            {
-                
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                var innerMessage = ex.InnerException?.Message ?? ex.Message;
-               
-                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
-            }
-        }
-       
+
+
+        /* [HttpDelete("{idAnimal}")]
+         [AllowAnonymous]
+         public async Task<IActionResult> Delete(int idAnimal)
+         {
+             try
+             {
+
+
+                 await _service.DeleteAnimal(idAnimal);
+
+
+                 return Ok("Animal successfully deleted.");
+             }
+             catch (KeyNotFoundException)
+             {
+                 return NotFound($"Animal with ID {idAnimal} not found.");
+             }
+             catch (InvalidOperationException ex)
+             {
+
+                 return BadRequest(ex.Message);
+             }
+             catch (Exception ex)
+             {
+                 var innerMessage = ex.InnerException?.Message ?? ex.Message;
+
+                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+             }
+         }*/
+
 
     }
 }

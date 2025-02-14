@@ -278,9 +278,37 @@ namespace ANIMAL.Service
             return balansDomain;
         }
 
+        //get by id novo novo
 
+        MedicinesDomain IService.GetOneMedicinesAnimal(int id)
+        {
+            MedicinesDomain domain = _repository.GetOneMedicinesAnimal(id);
+            return domain;
+        }
 
+        ContageusAnimalsDomain IService.GetOneContageusAnimal(int id)
+        {
+            ContageusAnimalsDomain domain = _repository.GetOneContageusAnimal(id);
+            return domain;
+        }
 
+        LabsDomain IService.GetOneLabsAnimal(int id)
+        {
+            LabsDomain domain = _repository.GetOneLabsAnimal(id);
+            return domain;
+        }
+
+        VetVisitsDomain IService.GetOneVetVisitAnimal(int id)
+        {
+            VetVisitsDomain domain = _repository.GetOneVetVisitAnimal(id);
+            return domain;
+        }
+
+        IEnumerable<AnimalRecordDomain> IService.GetOneAnimalRecord(int id)
+        {
+            IEnumerable<AnimalRecordDomain> domain = _repository.GetOneAnimalRecord(id);
+            return domain;
+        }
 
 
 
@@ -466,6 +494,125 @@ namespace ANIMAL.Service
             await _repository.AdoptionStatusFalse(animalId);
             return true;
         }
+
+
+
+        //update novo
+
+
+        async Task<bool> IService.UpdateAnimalRecordDomain(int id, int recordId)
+        {
+            await _repository.UpdateAnimalRecordDomain( id,  recordId);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateAnimalBalansDomain(int id, decimal balance, DateTime lastUpdated, string password)
+        {
+            await _repository.UpdateAnimalBalansDomain( id,  balance,  lastUpdated,  password);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateContageusAnimalsDomain(int id, bool contageus)
+        {
+            await _repository.UpdateContageusAnimalsDomain( id,  contageus);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateEuthanasiaDomain(int id, DateTime date, bool complited)
+        {
+            await _repository.UpdateEuthanasiaDomain( id,  date,  complited);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateFoodDomainIncrement(int id)
+        {
+            await _repository.UpdateFoodDomainIncrement( id);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateFoodDomainDecrement(int id)
+        {
+            await _repository.UpdateFoodDomainDecrement( id);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateFoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight)
+        {
+            await _repository.UpdateFoodDomain( id,  brandName,  name,  foodType,  animalType,  ageGroup,  weight,  caloriesPerServing,  weightPerServing,  measurementPerServing,  fatContent,  fiberContent,  exporationDate,  quantity,  notes,  measurementWeight)
+       ;
+            return true;
+        }
+
+        async Task<bool> IService.UpdateToysDomainIncrement(int id)
+        {
+            await _repository.UpdateToysDomainIncrement(id);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateToysDomainDecrement(int id)
+        {
+            await _repository.UpdateToysDomainDecrement(id);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateToysDomain(int id, string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes)
+        {
+            await _repository.UpdateToysDomain( id,  brandName,  name,  animalType,  toyType,  ageGroup,  hight,  width,  quantity,  notes);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateFoundRecordDomain(int id, int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId)
+        {
+            await _repository.UpdateFoundRecordDomain( id,  animalId,  date,  adress,  description,  ownerName,  ownerSurname,  ownerPhoneNumber,  ownerOIB,  registerId);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateLabsDomain(int id, List<Parameter> parameters)
+        {
+            await _repository.UpdateLabsDomain( id, parameters);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateMedicinesDomainUsage(int id, bool usage)
+        {
+            await _repository.UpdateMedicinesDomainUsage( id,  usage);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateMedicinesDomain(int id, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse)
+        {
+            await _repository.UpdateMedicinesDomain( id,  amountOfMedicine,  mesurmentUnit,  medicationIntake,  frequencyOfMedicationUse);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateNewsDomain(int id, string name, string description, DateTime dateTime)
+        {
+            await _repository.UpdateNewsDomain( id,  name,  description,  dateTime);
+            return true;
+        }
+
+        async Task<bool> IService.UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes)
+        {
+            await _repository.UpdateVetVisitsDomain( id,  startTime,  endTime,  notes);
+            return true;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

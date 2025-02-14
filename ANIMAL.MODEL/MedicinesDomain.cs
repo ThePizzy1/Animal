@@ -11,10 +11,10 @@ namespace ANIMAL.MODEL
         //
         public  MedicinesDomain() { }
 
-        public MedicinesDomain(int id,  string nameOfMedicines, string descriptio, string vetUsername, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage)
+        public MedicinesDomain(int id, int animalId, string nameOfMedicines, string descriptio, string vetUsername, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage)
         {
             Id = id;
-          
+          AnimalId = animalId;
             NameOfMedicines = nameOfMedicines;
             Description = descriptio;
             VetUsername = vetUsername;

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    [Migration("20250206111620_Migracija_06-02_2025_14")]
-    partial class Migracija_0602_2025_14
+    [Migration("20250219142224_Migration_19_02-2025-03")]
+    partial class Migration_19_02202503
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -134,9 +134,6 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AnimalsIdAnimal")
-                        .HasColumnType("int");
-
                     b.Property<int>("RecordId")
                         .HasColumnType("int");
 
@@ -144,8 +141,6 @@ namespace ANIMAL.DAL.Migrations
                         .HasName("PK__AnimalRecord");
 
                     b.HasIndex("AnimalId");
-
-                    b.HasIndex("AnimalsIdAnimal");
 
                     b.HasIndex("RecordId");
 
@@ -601,9 +596,6 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AnimalsIdAnimal")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -644,8 +636,6 @@ namespace ANIMAL.DAL.Migrations
                         .HasName("PK__FoundRecord");
 
                     b.HasIndex("AnimalId");
-
-                    b.HasIndex("AnimalsIdAnimal");
 
                     b.HasIndex("RegisterId");
 
@@ -1199,14 +1189,10 @@ namespace ANIMAL.DAL.Migrations
             modelBuilder.Entity("ANIMAL.DAL.DataModel.AnimalRecord", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
-                        .WithMany()
+                        .WithMany("AnimalRecord")
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__AnimalRecord__Animal")
                         .IsRequired();
-
-                    b.HasOne("ANIMAL.DAL.DataModel.Animals", null)
-                        .WithMany("AnimalRecord")
-                        .HasForeignKey("AnimalsIdAnimal");
 
                     b.HasOne("ANIMAL.DAL.DataModel.SystemRecord", "Record")
                         .WithMany()
@@ -1263,14 +1249,10 @@ namespace ANIMAL.DAL.Migrations
             modelBuilder.Entity("ANIMAL.DAL.DataModel.FoundRecord", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
-                        .WithMany()
+                        .WithMany("FoundRecord")
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__FoundRecord__Animal")
                         .IsRequired();
-
-                    b.HasOne("ANIMAL.DAL.DataModel.Animals", null)
-                        .WithMany("FoundRecord")
-                        .HasForeignKey("AnimalsIdAnimal");
 
                     b.HasOne("ANIMAL.DAL.DataModel.ApplicationUser", "User")
                         .WithMany()

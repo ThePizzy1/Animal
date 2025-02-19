@@ -90,7 +90,7 @@ namespace ANIMAL.Service.Common
         //ADD
         public Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);
      
-        Task<bool> AddAnimalAsync(
+        Task<AnimalDomain> AddAnimalAsync(
         string name,
         string family,
         string species,
@@ -117,7 +117,16 @@ namespace ANIMAL.Service.Common
          public Task<bool> AddFishAsync(FishDomain fishDomain);
          public Task<bool> AddReptileAsync(ReptileDomain reptileDomain);
          public Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain);
-     
+
+        //novo
+        public Task<AnimalRecordDomain> AddAnimalRecord(int idAnimal, int idRecord);
+
+
+
+
+
+
+
 
         //UPDATE
         public Task IncrementNumberOfAdoptedAnimalsAsync(string registerId);
@@ -129,13 +138,23 @@ namespace ANIMAL.Service.Common
         public Task<bool> UpdateAdopterFlag(int adopterId);
         public  Task<bool> AdoptionStatusFalse(int animalId);
 
+
+
+
+
+
+
+
+
+
+
         //novo
         public Task<bool> UpdateAnimalRecordDomain(int id, int recordId);
         public Task<bool> UpdateAnimalBalansDomain(int id, decimal balance, DateTime lastUpdated, string password);
         public Task<bool> UpdateContageusAnimalsDomain(int id, bool contageus);
 
         public Task<bool> UpdateEuthanasiaDomain(int id, DateTime date, bool complited);
-        public Task<bool> UpdateFoodDomainIncrement(int id);//3
+        public Task<bool> UpdateFoodDomainIncrement(int id);
         public Task<bool> UpdateFoodDomainDecrement(int id);
         public Task<bool> UpdateFoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
 
@@ -167,9 +186,9 @@ namespace ANIMAL.Service.Common
 
 
         //DELETE
-        public Task<bool> DeleteAdoptedAsync(int adoptedId);
-        public  void DeleteAdoptedReturn(int adoptedId); 
-        public  Task DeleteAnimal(int idAnimal);
+        public Task<bool> DeleteAdoptedAsync(int adoptedId);//ovo se ne koristi
+        public  void DeleteAdoptedReturn(int adoptedId); //ovo se ne koristi
+        public  Task DeleteAnimal(int idAnimal);//ovo se ne koristi
 
     }
 }

@@ -167,23 +167,40 @@ namespace ANIMAL.Repository.Automaper
                     .ForMember(dest => dest.Animal, opt => opt.Ignore());
 
 
-                // Mapiranja za ReturnedAnimalDomain i ReturnedAnimal
-cfg.CreateMap<ReturnedAnimal, ReturnedAnimalDomain>()
-     .ForMember(dest => dest.Animal, opt => opt.MapFrom(src => src.Animal))
-    .ForMember(dest => dest.AdoptionCodeNavigation, opt => opt.MapFrom(src => new AdoptedDomain(src.AdoptionCodeNavigation)))
-    .ForMember(dest => dest.Adopter, opt => opt.MapFrom(src => src.Adopter));
+                                // Mapiranja za ReturnedAnimalDomain i ReturnedAnimal
+                cfg.CreateMap<ReturnedAnimal, ReturnedAnimalDomain>()
+                     .ForMember(dest => dest.Animal, opt => opt.MapFrom(src => src.Animal))
+                    .ForMember(dest => dest.AdoptionCodeNavigation, opt => opt.MapFrom(src => new AdoptedDomain(src.AdoptionCodeNavigation)))
+                    .ForMember(dest => dest.Adopter, opt => opt.MapFrom(src => src.Adopter));
 
-cfg.CreateMap<ReturnedAnimalDomain, ReturnedAnimal>()
-    .ForMember(dest => dest.Animal, opt => opt.Ignore())
-    .ForMember(dest => dest.AdoptionCodeNavigation, opt => opt.Ignore())
-    .ForMember(dest => dest.Adopter, opt => opt.Ignore());
+                cfg.CreateMap<ReturnedAnimalDomain, ReturnedAnimal>()
+                    .ForMember(dest => dest.Animal, opt => opt.Ignore())
+                    .ForMember(dest => dest.AdoptionCodeNavigation, opt => opt.Ignore())
+                    .ForMember(dest => dest.Adopter, opt => opt.Ignore());
+
+
+               
+                //animal record
+                cfg.CreateMap<AnimalRecordDomain, AnimalRecord>()
+                  .ForMember(dest => dest.Animal, opt => opt.Ignore())
+                   .ForMember(dest => dest.Record, opt => opt.Ignore());
+                cfg.CreateMap<AnimalRecord, AnimalRecordDomain>()
+                     .ForMember(dest => dest.Animal, opt => opt.Ignore())
+                      .ForMember(dest => dest.Record, opt => opt.Ignore());
 
 
             });
 
-            mapper = new Mapper(config);
-        }
 
+            mapper = new Mapper(config);
+
+
+
+
+
+                        }
+
+     
         public TDestination Map<TDestination>(object source)
         {
             return mapper.Map<TDestination>(source);

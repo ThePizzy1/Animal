@@ -398,11 +398,11 @@ namespace ANIMAL.Service
             return animalDomains;
         }
 
-        public async Task<bool> AddAnimalAsync(string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, byte[] picture, string personalityDescription, bool adopted)
+        public  Task<AnimalDomain> AddAnimalAsync(string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, byte[] picture, string personalityDescription, bool adopted)
         {
             try
             {
-                var isSuccess = await _repository.AddAnimalAsync(
+                Task<AnimalDomain> animal = _repository.AddAnimalAsync(
                     name,
                     family,
                     species,
@@ -424,7 +424,7 @@ namespace ANIMAL.Service
                     adopted
                 );
 
-                return isSuccess;
+                return animal;
             }
             catch (Exception ex)
             {
@@ -432,7 +432,8 @@ namespace ANIMAL.Service
                 throw new Exception($"Failed to add animal: {ex.Message}");
             }
         }
-
+        /*  Task<AdopterDomain> adopter = _repository.CreateAdopterAsync(firstName, lastName, dateOfBirth, residence, username, password, registerId);
+            return adopter;*/
         async Task<bool> IService.CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
         {
             await _repository.CreateReturnedAnimalAsync(adoptionCode, animalId, adopterId, returnDate, returnReason);
@@ -445,7 +446,22 @@ namespace ANIMAL.Service
             return true;
         }
 
-
+        //add novo
+        //-----------------------------------------------------------------------------------------------
+        async Task<AnimalRecordDomain> IService.AddAnimalRecord(int idAnimal, int idRecord)
+        {
+            try
+            {
+                AnimalRecordDomain input = await _repository.AddAnimalRecord(idAnimal, idRecord);
+                return input;
+            }
+            catch (Exception ex)
+            {
+                // Handle exception as needed
+                throw new Exception($"Failed to add animal: {ex.Message}");
+            }
+           
+        }
 
 
 
@@ -653,5 +669,6 @@ namespace ANIMAL.Service
             }
         }
 
+      
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ANIMAL.DAL.Migrations
 {
-    public partial class Migracija_0602_2025_14 : Migration
+    public partial class Migration_19_02202503 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -598,8 +598,7 @@ namespace ANIMAL.DAL.Migrations
                     OwnerSurname = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     OwnerPhoneNumber = table.Column<string>(unicode: false, maxLength: 13, nullable: false),
                     OwnerOIB = table.Column<string>(unicode: false, maxLength: 11, nullable: false),
-                    RegisterId = table.Column<string>(nullable: true),
-                    AnimalsIdAnimal = table.Column<int>(nullable: true)
+                    RegisterId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -607,12 +606,6 @@ namespace ANIMAL.DAL.Migrations
                     table.ForeignKey(
                         name: "FK__FoundRecord__Animal",
                         column: x => x.AnimalId,
-                        principalTable: "Animals",
-                        principalColumn: "IdAnimal",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_FoundRecord_Animals_AnimalsIdAnimal",
-                        column: x => x.AnimalsIdAnimal,
                         principalTable: "Animals",
                         principalColumn: "IdAnimal",
                         onDelete: ReferentialAction.Restrict);
@@ -631,8 +624,7 @@ namespace ANIMAL.DAL.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RecordId = table.Column<int>(nullable: false),
-                    AnimalId = table.Column<int>(nullable: false),
-                    AnimalsIdAnimal = table.Column<int>(nullable: true)
+                    AnimalId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -640,12 +632,6 @@ namespace ANIMAL.DAL.Migrations
                     table.ForeignKey(
                         name: "FK__AnimalRecord__Animal",
                         column: x => x.AnimalId,
-                        principalTable: "Animals",
-                        principalColumn: "IdAnimal",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AnimalRecord_Animals_AnimalsIdAnimal",
-                        column: x => x.AnimalsIdAnimal,
                         principalTable: "Animals",
                         principalColumn: "IdAnimal",
                         onDelete: ReferentialAction.Restrict);
@@ -736,11 +722,6 @@ namespace ANIMAL.DAL.Migrations
                 column: "AnimalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AnimalRecord_AnimalsIdAnimal",
-                table: "AnimalRecord",
-                column: "AnimalsIdAnimal");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AnimalRecord_RecordId",
                 table: "AnimalRecord",
                 column: "RecordId");
@@ -808,11 +789,6 @@ namespace ANIMAL.DAL.Migrations
                 name: "IX_FoundRecord_AnimalId",
                 table: "FoundRecord",
                 column: "AnimalId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FoundRecord_AnimalsIdAnimal",
-                table: "FoundRecord",
-                column: "AnimalsIdAnimal");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FoundRecord_RegisterId",

@@ -461,34 +461,51 @@ namespace ANIMAL.WebApi.Controllers
                 return parametar;
             }
 
-        
+
 
 
 
         //PUT I POSTE
         //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-        [HttpPost("addAdopter")]
+        //NOVO
+
+
+        [HttpPost("addAnimalRecord")]
         [AllowAnonymous]
-        public async Task<IActionResult> CreateAdopter([FromBody] AdoptedDomain request)
+        public async Task<IActionResult> AddAnimalAsync(
+  [FromForm] int animalId,
+  [FromForm] int recordId)
         {
-            if (request == null || request.Adopter == null)
+           
+            try
             {
-                return BadRequest("Invalid data. Adopter information is missing.");
+
+
+                var success = await _service.AddAnimalRecord(animalId, recordId);
+
+                    return Ok(success);
+             
             }
-
-            var createdAdopter = await _service.CreateAdopterAsync(
-                request.Adopter.FirstName,
-                request.Adopter.LastName,
-                request.Adopter.DateOfBirth,
-                request.Adopter.Residence,
-                request.Adopter.Username,
-                request.Adopter.Password,
-                request.Adopter.RegisterId
-            );
-
-            return CreatedAtAction(nameof(GetAdopterById), new { id = createdAdopter.Id }, createdAdopter);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add animal: {ex.Message}");
+            }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+        //STARO
+        //-----------------------------------------------------------------------------------------------------------------------------
         [HttpPut("updateAdopter/{registerId}")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateAdopter(string registerId, [FromBody] AdoptedDomain request)
@@ -517,6 +534,11 @@ namespace ANIMAL.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating adopter: {ex.Message}");
             }
         }
+
+
+
+       
+       
         [HttpPut("incrementAdopted/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> IncrementNumberOfAdoptedAnimals(string id)
@@ -593,35 +615,55 @@ namespace ANIMAL.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
             }
         }
+        [HttpPost("addAdopter")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateAdopter([FromBody] AdoptedDomain request)
+        {
+            if (request == null || request.Adopter == null)
+            {
+                return BadRequest("Invalid data. Adopter information is missing.");
+            }
 
+            var createdAdopter = await _service.CreateAdopterAsync(
+                request.Adopter.FirstName,
+                request.Adopter.LastName,
+                request.Adopter.DateOfBirth,
+                request.Adopter.Residence,
+                request.Adopter.Username,
+                request.Adopter.Password,
+                request.Adopter.RegisterId
+            );
+
+            return CreatedAtAction(nameof(GetAdopterById), new { id = createdAdopter.Id }, createdAdopter);
+        }
         [HttpPost("addAnimal")]
         [AllowAnonymous]
         public async Task<IActionResult> AddAnimalAsync(
-     [FromForm] string name,
-     [FromForm] string family,
-     [FromForm] string species,
-     [FromForm] string subspecies,
-     [FromForm] int age,
-     [FromForm] string gender,
-     [FromForm] decimal weight,
-     [FromForm] decimal height,
-     [FromForm] decimal length,
-     [FromForm] bool neutered,
-     [FromForm] bool vaccinated,
-     [FromForm] bool microchipped,
-     [FromForm] bool trained,
-     [FromForm] bool socialized,
-     [FromForm] string healthIssues,
-     [FromForm] string personalityDescription,
-     [FromForm] bool adopted,
-     [FromForm] IFormFile image)
+   [FromForm] string name,
+   [FromForm] string family,
+   [FromForm] string species,
+   [FromForm] string subspecies,
+   [FromForm] int age,
+   [FromForm] string gender,
+   [FromForm] decimal weight,
+   [FromForm] decimal height,
+   [FromForm] decimal length,
+   [FromForm] bool neutered,
+   [FromForm] bool vaccinated,
+   [FromForm] bool microchipped,
+   [FromForm] bool trained,
+   [FromForm] bool socialized,
+   [FromForm] string healthIssues,
+   [FromForm] string personalityDescription,
+   [FromForm] bool adopted,
+   [FromForm] IFormFile image)
         {
             if (image == null || image.Length == 0)
             {
                 return BadRequest("No image file provided.");
             }
 
-            try
+           try
             {
 
                 byte[] pictureBytes;
@@ -631,16 +673,17 @@ namespace ANIMAL.WebApi.Controllers
                     pictureBytes = memoryStream.ToArray();
                 }
 
-                var success = await _service.AddAnimalAsync(
+                AnimalDomain success = await _service.AddAnimalAsync(
                     name, family, species, subspecies, age, gender, weight, height, length,
-                    neutered, vaccinated, microchipped, trained, socialized, healthIssues,pictureBytes,
-                    personalityDescription, adopted );
+                    neutered, vaccinated, microchipped, trained, socialized, healthIssues, pictureBytes,
+                    personalityDescription, adopted);
 
-                if (success)
-                    return Ok("Animal successfully added.");
-                else
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to add animal.");
+            if (success != null) {
+                return Ok(success);
             }
+            else
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to add animal.");
+          }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add animal: {ex.Message}");
@@ -650,7 +693,8 @@ namespace ANIMAL.WebApi.Controllers
 
 
 
-      
+
+
 
         [HttpPut("code/{code}")]
         [AllowAnonymous]
@@ -887,24 +931,21 @@ namespace ANIMAL.WebApi.Controllers
 
         [HttpPut("updateAnimalRecord")]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateAnimalRecordDomain([FromBody] AnimalRecord request)
+        public async Task<IActionResult> UpdateAnimalRecordDomain( int id, int recordId)
         {
 
-            if (request == null || request.Record == null)
-            {
-                return BadRequest("Invalid data. Animal Record information is missing.");
-            }
+          
             try
             {
-                var updated= await _service.UpdateAnimalRecordDomain(
-                   request.Record.Id,
-                   request.RecordId
+              await _service.UpdateAnimalRecordDomain(
+                   id,
+                  recordId
 
                     );
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating adopter: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
             }
 
            
@@ -920,30 +961,7 @@ namespace ANIMAL.WebApi.Controllers
 
 
 
-        /*  if (request == null || request.Adopter == null)
-            {
-                return BadRequest("Invalid data. Adopter information is missing.");
-            }
-
-            try
-            {
-                var updatedAdopter = await _service.UpdateAdopterAsync(
-                    registerId,
-                    request.Adopter.FirstName,
-                    request.Adopter.LastName,
-                    request.Adopter.DateOfBirth,
-                    request.Adopter.Residence,
-                    request.Adopter.Username,
-                    request.Adopter.Password
-                );
-
-                return Ok(updatedAdopter); // Return 200 OK with the updated adopter
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating adopter: {ex.Message}");
-            }*/
-
+    
 
 
 
@@ -973,7 +991,7 @@ namespace ANIMAL.WebApi.Controllers
 
 
 
-        /* [HttpDelete("{idAnimal}")]
+         [HttpDelete("{idAnimal}")]
          [AllowAnonymous]
          public async Task<IActionResult> Delete(int idAnimal)
          {
@@ -1001,7 +1019,7 @@ namespace ANIMAL.WebApi.Controllers
 
                  return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
              }
-         }*/
+         }
 
 
     }

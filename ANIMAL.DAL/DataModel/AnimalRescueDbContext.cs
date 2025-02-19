@@ -337,20 +337,20 @@ namespace ANIMAL.DAL.DataModel
                     .HasConstraintName("FK__ReturnedA__Anima__52593CB8");
             });
             //novo
-
+            //
             modelBuilder.Entity<AnimalRecord>(entity =>
             {
                 entity.HasKey(e => e.Id)
                  .HasName("PK__AnimalRecord");
 
-
+                //problem je što anmalId  može bit samo jedan u toj tablici, znači jedinstvaen je i samo se updata
                 entity.HasOne(d => d.Animal)
-                    .WithMany()
+                    .WithMany(d => d.AnimalRecord)//vjv ne radi zato što nije one to one
                     .HasForeignKey(d => d.AnimalId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AnimalRecord__Animal");
+                    .HasConstraintName("FK__AnimalRecord__Animal");//baca grešku na ovaj key
                 entity.HasOne(d => d.Record)
-                   .WithMany()
+                  .WithMany()
                    .HasForeignKey(d => d.RecordId)
                    .OnDelete(DeleteBehavior.ClientSetNull)
                    .HasConstraintName("FK__AnimalRecord__Record");
@@ -523,7 +523,7 @@ namespace ANIMAL.DAL.DataModel
 
 
                 entity.HasOne(d => d.Animal)
-                    .WithMany()
+                    .WithMany(d=>d.FoundRecord)//vjv ne radi zato što nije one to one
                     .HasForeignKey(d => d.AnimalId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__FoundRecord__Animal");

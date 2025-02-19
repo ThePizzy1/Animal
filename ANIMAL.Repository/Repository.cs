@@ -1092,71 +1092,7 @@ namespace ANIMAL.Repository
 
 
 
-        //----------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------
-        //ADD
-        public async Task<bool> AddAnimalAsync(
-        string name,
-        string family,
-        string species,
-        string subspecies,
-        int age,
-        string gender,
-        decimal weight,
-        decimal height,
-        decimal length,
-        bool neutered,
-        bool vaccinated,
-        bool microchipped,
-        bool trained,
-        bool socialized,
-        string healthIssues,
-        byte[] picture,
-        string personalityDescription,
-        bool adopted
-        )
-        {
-            try
-            {
-                var newAnimal = new Animals
-                {
-                    Name = name,
-                    Family = family,
-                    Species = species,
-                    Subspecies = subspecies,
-                    Age = age,
-                    Gender = gender,
-                    Weight = weight,
-                    Height = height,
-                    Length = length,
-                    Neutered = neutered,
-                    Vaccinated = vaccinated,
-                    Microchipped = microchipped,
-                    Trained = trained,
-                    Socialized = socialized,
-                    HealthIssues = healthIssues,
-                    Picture = picture,
-                    PersonalityDescription = personalityDescription,
-                    Adopted = adopted
-                };
-
-                _appDbContext.Animals.Add(newAnimal);
-                await _appDbContext.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Failed to add animal: {ex.Message}");
-            }
-        }
-
-
-
-
-
+       
 
 
 
@@ -1331,12 +1267,18 @@ namespace ANIMAL.Repository
        public async Task<bool>  UpdateAnimalRecordDomain(int id, int recordId)//To je ono što je životinja prošla to jest ažurira na kojem je dijelu, ušla u azil, kod veterinara itd
         {
             var animal = await _appDbContext.AnimalRecord.FirstOrDefaultAsync(a => a.Id == id);
-            animal.RecordId = recordId;
+            if (animal == null)
+            {
+                throw new Exception("Animal record not found");
+            }
+            else
+            {
+                animal.RecordId = recordId;
 
-            _appDbContext.AnimalRecord.Update(animal);
-            await _appDbContext.SaveChangesAsync();
+                _appDbContext.AnimalRecord.Update(animal);
+                await _appDbContext.SaveChangesAsync();
 
-
+            }
             return true;
         }
 
@@ -1554,6 +1496,100 @@ namespace ANIMAL.Repository
         //ADD
         //----------------------------------------------------------------------------------------------------------------------------------------------
 
+        //----------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------
+        //ADD
+        public async Task<AnimalDomain> AddAnimalAsync(
+        string name,
+        string family,
+        string species,
+        string subspecies,
+        int age,
+        string gender,
+        decimal weight,
+        decimal height,
+        decimal length,
+        bool neutered,
+        bool vaccinated,
+        bool microchipped,
+        bool trained,
+        bool socialized,
+        string healthIssues,
+        byte[] picture,
+        string personalityDescription,
+        bool adopted
+        )
+        {
+            try
+            {
+                var newAnimal = new Animals
+                {
+                    Name = name,
+                    Family = family,
+                    Species = species,
+                    Subspecies = subspecies,
+                    Age = age,
+                    Gender = gender,
+                    Weight = weight,
+                    Height = height,
+                    Length = length,
+                    Neutered = neutered,
+                    Vaccinated = vaccinated,
+                    Microchipped = microchipped,
+                    Trained = trained,
+                    Socialized = socialized,
+                    HealthIssues = healthIssues,
+                    Picture = picture,
+                    PersonalityDescription = personalityDescription,
+                    Adopted = adopted
+                };
+                var animal = _mappingService.Map<Animals>(newAnimal);
+                _appDbContext.Animals.Add(animal);
+
+                await _appDbContext.SaveChangesAsync();
+                return _mappingService.Map<AnimalDomain>(animal);//Neka mi vrati sve podatke životinje kao bih mogla uzeti id i provjeriti dali su podaci dobro uneseni
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to add animal: {ex.Message}");
+            }
+        }
+        public async Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId)
+        {
+            var adopterDomain = new AdopterDomain
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                DateOfBirth = dateOfBirth,
+                Residence = residence,
+                Username = username,
+                Password = password,
+                NumberOfAdoptedAnimals = 0,
+                NumberOfReturnedAnimals = 0,
+                Flag = false,
+                RegisterId = registerId,
+                Adopted = new List<AdoptedDomain>(),
+                ReturnedAnimal = new List<ReturnedAnimalDomain>()
+            };
+
+            var adopter = _mappingService.Map<Adopter>(adopterDomain);
+
+            _appDbContext.Adopter.Add(adopter);
+            await _appDbContext.SaveChangesAsync();
+
+            return _mappingService.Map<AdopterDomain>(adopter);
+        }
+
+
+
+
+
+
+
+
         public async Task<bool> AddBirdAsync(BirdDomain birdDomain)
         {
             var bird = new Birds
@@ -1624,31 +1660,20 @@ namespace ANIMAL.Repository
 
 
     
-        public async Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId)
-        {
-            var adopterDomain = new AdopterDomain
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                Residence = residence,
-                Username = username,
-                Password = password,
-                NumberOfAdoptedAnimals = 0,
-                NumberOfReturnedAnimals = 0,
-                Flag=false,
-                RegisterId=registerId,
-                Adopted = new List<AdoptedDomain>(),
-                ReturnedAnimal = new List<ReturnedAnimalDomain>()
-            };
+  
 
-            var adopter = _mappingService.Map<Adopter>(adopterDomain);
 
-            _appDbContext.Adopter.Add(adopter);
-            await _appDbContext.SaveChangesAsync();
 
-            return _mappingService.Map<AdopterDomain>(adopter);
-        }
+
+
+
+
+
+
+
+
+
+
         public async Task<bool> CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
         {
          
@@ -1703,6 +1728,63 @@ namespace ANIMAL.Repository
                 return false; // Failed to save
             }
         }
+
+
+        //Add novo
+        //-----------------------------------------------------------------------------------------
+       public async Task<AnimalRecordDomain> AddAnimalRecord(int idAnimal, int idRecord)
+        {
+            try
+            {
+                var animalRecord = new AnimalRecordDomain
+                {    
+                    RecordId = idRecord,
+                  AnimalId=idAnimal,
+                 
+              
+                  
+                    // Don't set Code explicitly if it's an identity column
+                };
+                var animal = _mappingService.Map<AnimalRecord>(animalRecord);
+                _appDbContext.AnimalRecord.Add(animal);
+                var input =  await _appDbContext.SaveChangesAsync();
+
+
+
+
+                return _mappingService.Map<AnimalRecordDomain>(animalRecord);
+
+
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                throw new Exception($"Failed to add animal record: {ex.InnerException.Message}");
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //update
         public async Task<bool> UpdateAdopterFlag(int adopterId)
         {
         

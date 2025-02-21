@@ -188,6 +188,14 @@ namespace ANIMAL.Repository.Automaper
                      .ForMember(dest => dest.Animal, opt => opt.Ignore())
                       .ForMember(dest => dest.Record, opt => opt.Ignore());
 
+                //faund record
+                cfg.CreateMap<FoundRecordDomain, FoundRecord>()
+                      .ForMember(dest => dest.Animal, opt => opt.Ignore());
+                cfg.CreateMap<FoundRecord, FoundRecordDomain>()
+                     .ForMember(dest => dest.Animal, opt => opt.Ignore());
+                    
+
+
 
             });
 

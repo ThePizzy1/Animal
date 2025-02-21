@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ANIMAL.DAL.Migrations
 {
-    public partial class Migration_19_02202503 : Migration
+    public partial class Migration_21_02_2025_03 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -621,22 +621,20 @@ namespace ANIMAL.DAL.Migrations
                 name: "AnimalRecord",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RecordId = table.Column<int>(nullable: false),
-                    AnimalId = table.Column<int>(nullable: false)
+                    AnimalId = table.Column<int>(nullable: false),
+                    RecordId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__AnimalRecord", x => x.Id);
+                    table.PrimaryKey("PK__AnimalRecord", x => x.AnimalId);
                     table.ForeignKey(
-                        name: "FK__AnimalRecord__Animal",
+                        name: "FK__AnimalRecord__Animals__AnimalId",
                         column: x => x.AnimalId,
                         principalTable: "Animals",
                         principalColumn: "IdAnimal",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK__AnimalRecord__Record",
+                        name: "FK__AnimalRecord__SystemRecord__RecordId",
                         column: x => x.RecordId,
                         principalTable: "SystemRecord",
                         principalColumn: "Id",
@@ -714,11 +712,6 @@ namespace ANIMAL.DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Amphibians_AnimalId",
                 table: "Amphibians",
-                column: "AnimalId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AnimalRecord_AnimalId",
-                table: "AnimalRecord",
                 column: "AnimalId");
 
             migrationBuilder.CreateIndex(

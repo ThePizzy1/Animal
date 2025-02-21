@@ -124,21 +124,14 @@ namespace ANIMAL.DAL.Migrations
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.AnimalRecord", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
                     b.Property<int>("RecordId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id")
+                    b.HasKey("AnimalId")
                         .HasName("PK__AnimalRecord");
-
-                    b.HasIndex("AnimalId");
 
                     b.HasIndex("RecordId");
 
@@ -1187,15 +1180,16 @@ namespace ANIMAL.DAL.Migrations
             modelBuilder.Entity("ANIMAL.DAL.DataModel.AnimalRecord", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
-                        .WithMany("AnimalRecord")
-                        .HasForeignKey("AnimalId")
-                        .HasConstraintName("FK__AnimalRecord__Animal")
+                        .WithOne("AnimalRecord")
+                        .HasForeignKey("ANIMAL.DAL.DataModel.AnimalRecord", "AnimalId")
+                        .HasConstraintName("FK__AnimalRecord__Animals__AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ANIMAL.DAL.DataModel.SystemRecord", "Record")
                         .WithMany()
                         .HasForeignKey("RecordId")
-                        .HasConstraintName("FK__AnimalRecord__Record")
+                        .HasConstraintName("FK__AnimalRecord__SystemRecord__RecordId")
                         .IsRequired();
                 });
 

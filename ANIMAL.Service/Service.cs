@@ -304,9 +304,9 @@ namespace ANIMAL.Service
             return domain;
         }
 
-        IEnumerable<AnimalRecordDomain> IService.GetOneAnimalRecord(int id)
+      AnimalRecordDomain IService.GetOneAnimalRecord(int id)
         {
-            IEnumerable<AnimalRecordDomain> domain = _repository.GetOneAnimalRecord(id);
+         AnimalRecordDomain domain = _repository.GetOneAnimalRecord(id);
             return domain;
         }
 
@@ -448,20 +448,43 @@ namespace ANIMAL.Service
 
         //add novo
         //-----------------------------------------------------------------------------------------------
-        async Task<AnimalRecordDomain> IService.AddAnimalRecord(int idAnimal, int idRecord)
+        async Task IService.AddAnimalRecord(int idAnimal, int idRecord)
         {
+           
             try
             {
-                AnimalRecordDomain input = await _repository.AddAnimalRecord(idAnimal, idRecord);
-                return input;
+                await _repository.AddAnimalRecord(idAnimal, idRecord);
+              
             }
             catch (Exception ex)
             {
                 // Handle exception as needed
-                throw new Exception($"Failed to add animal: {ex.Message}");
+                throw new Exception($"Failed to add record service message: {ex.Message}");
             }
            
         }
+
+      async  Task IService.AddFoundRecord(int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId)
+        {
+            try
+            {
+                await _repository.AddFoundRecord( animalId,  date,  adress,  description,  ownerName,  ownerSurname,  ownerPhoneNumber,  ownerOIB,  registerId)
+    ;
+
+            }
+            catch (Exception ex)
+            {
+                // Handle exception as needed
+                throw new Exception($"Failed to add found animal service message: {ex.Message}");
+            }
+        }
+
+
+
+
+
+
+
 
 
 
@@ -669,6 +692,6 @@ namespace ANIMAL.Service
             }
         }
 
-      
+       
     }
 }

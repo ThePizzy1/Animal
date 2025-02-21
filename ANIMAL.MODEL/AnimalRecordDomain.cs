@@ -9,41 +9,33 @@ namespace ANIMAL.MODEL
     {
         public AnimalRecordDomain() { }
 
-        public AnimalRecordDomain(int id, int recordId, int animalId, AnimalDomain animal, SystemRecordDomain systemRecord)
+        public AnimalRecordDomain( int recordId, int animalId, AnimalDomain animal, SystemRecordDomain systemRecord)
         {
-            Id = id;
+         
             RecordId = recordId;
             AnimalId = animalId;
             Animal = animal;
            Record=systemRecord;
 
         }
-        public AnimalRecordDomain(int id, AnimalDomain animal, SystemRecordDomain systemRecord)
+        public AnimalRecordDomain( AnimalDomain animal, SystemRecordDomain systemRecord)
         {
-            Id = id;
+          
      
             Animal = animal;
             Record = systemRecord;
 
         }
-        public AnimalRecordDomain(int id, int recordId, int animalId)
+        public AnimalRecordDomain( int recordId, int animalId)
         {
-            Id = id;
+          
             RecordId = recordId;
             AnimalId = animalId;
        
 
         }
-        public AnimalRecordDomain(int id, int recordId)
-        {
-            Id = id;
-            RecordId = recordId;
-       
 
 
-        }
-
-        public int Id { get; set; }
         public int RecordId { get; set; }
         public int AnimalId { get; set; }
 

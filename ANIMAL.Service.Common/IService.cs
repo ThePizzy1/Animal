@@ -73,7 +73,7 @@ namespace ANIMAL.Service.Common
         public ContageusAnimalsDomain GetOneContageusAnimal(int id);
         public LabsDomain GetOneLabsAnimal(int id);
         public VetVisitsDomain GetOneVetVisitAnimal(int id);
-        public IEnumerable<AnimalRecordDomain> GetOneAnimalRecord(int id);
+        public AnimalRecordDomain GetOneAnimalRecord(int id);
 
 
 
@@ -119,7 +119,9 @@ namespace ANIMAL.Service.Common
          public Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain);
 
         //novo
-        public Task<AnimalRecordDomain> AddAnimalRecord(int idAnimal, int idRecord);
+        public Task AddAnimalRecord(int idAnimal, int idRecord);
+
+        public Task AddFoundRecord(int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);
 
 
 

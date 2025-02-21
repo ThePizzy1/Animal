@@ -167,7 +167,7 @@ namespace ANIMAL.Repository
         {
            var animalDb=_appDbContext.AnimalRecord.ToList();
             var animalDmain = animalDb.Select(e => new AnimalRecordDomain(
-                e.Id,
+              
                 e.AnimalId,
                 e.RecordId
                 ));
@@ -836,7 +836,7 @@ namespace ANIMAL.Repository
             var foundRecord = _appDbContext.FoundRecord
              .Join(_appDbContext.Animals, r => r.AnimalId, a => a.IdAnimal,
                                  (r, a) => new { FoundRecord = r, Animal = a })
-                             .Where(x => x.FoundRecord.Id == id)
+                             .Where(x => x.FoundRecord.AnimalId == id)
                           .Select(x => new FoundRecordDomain(
                                x.FoundRecord.Id,
                                x.FoundRecord.AnimalId,
@@ -1011,70 +1011,68 @@ namespace ANIMAL.Repository
 
 
 
-        public IEnumerable<AnimalRecordDomain> GetOneAnimalRecord(int id)//ne radi
+        public AnimalRecordDomain GetOneAnimalRecord(int id)//ne radi
         {
-            var record = _appDbContext.AnimalRecord
-       .Select(r => r.AnimalId) 
-       .ToList();
+
+            var record = _appDbContext.AnimalRecord.Select(r => r.AnimalId).ToList();
+
+           
             if (record == null)
             {
                 throw new Exception("Record not found");
             }
             else
             {
-                try
-                {
-                    var recordEntities = _appDbContext.AnimalRecord
-                                                       .Where(a => a.AnimalId == id)
-                                                       .Include(a => a.Animal) // Uključi podatke o životinji
-                                                       .Include(a => a.Record) // Uključi podatke o podacima gdijeje životinja
-                                                       .ToList();
-                    var recordDomains = recordEntities.Where(e => record.Contains(id))
-                     .Select(e => new AnimalRecordDomain
-                     {
-                         Id = e.Id,
-                         Animal = new AnimalDomain(
-                            e.Animal.IdAnimal,
-                            e.Animal.Name,
-                            e.Animal.Species,
-                            e.Animal.Family,
-                            e.Animal.Subspecies,
-                            e.Animal.Age,
-                            e.Animal.Gender,
-                            e.Animal.Weight,
-                            e.Animal.Height,
-                            e.Animal.Length,
-                            e.Animal.Neutered,
-                            e.Animal.Vaccinated,
-                            e.Animal.Microchipped,
-                            e.Animal.Trained,
-                            e.Animal.Socialized,
-                            e.Animal.HealthIssues,
-                            e.Animal.Picture,
-                            e.Animal.PersonalityDescription,
-                            e.Animal.Adopted
-                        ),
-                         Record = new SystemRecordDomain(
-                              e.Record.Id,
-                              e.Record.RecordNumber,
-                              e.Record.RecordName,
-                              e.Record.RecordDescription
+
+                var recordEntities = _appDbContext.AnimalRecord
+                                                   .Where(a => a.AnimalId == id)
+                                                   .Include(a => a.Animal) // Uključi podatke o životinji
+                                                   .Include(a => a.Record) // Uključi podatke o podacima gdijeje životinja
+                                                   .ToList();
+                var recordDomains = recordEntities.Where(e => record.Contains(id))
+                 .Select(e => new AnimalRecordDomain
+                 {  
+                    
+                 
+
+                     Animal = new AnimalDomain(
+                        e.Animal.IdAnimal,
+                        e.Animal.Name,
+                        e.Animal.Species,
+                        e.Animal.Family,
+                        e.Animal.Subspecies,
+                        e.Animal.Age,
+                        e.Animal.Gender,
+                        e.Animal.Weight,
+                        e.Animal.Height,
+                        e.Animal.Length,
+                        e.Animal.Neutered,
+                        e.Animal.Vaccinated,
+                        e.Animal.Microchipped,
+                        e.Animal.Trained,
+                        e.Animal.Socialized,
+                        e.Animal.HealthIssues,
+                        e.Animal.Picture,
+                        e.Animal.PersonalityDescription,
+                        e.Animal.Adopted
+                    ),
+                     Record = new SystemRecordDomain(
+                          e.Record.Id,
+                          e.Record.RecordNumber,
+                          e.Record.RecordName,
+                          e.Record.RecordDescription
 
 
-                              ),
-                     })
-                    .ToList();
+                          ),
+                 })
+                .FirstOrDefault();
 
 
-
-                    return recordDomains;
-                }
-                catch(Exception e)
-                {
-                    throw new Exception($"Failed to get parameter: {e.Message}");
-                }
+             
+                return recordDomains;
             }
-        }
+        
+            }
 
 
 
@@ -1092,7 +1090,8 @@ namespace ANIMAL.Repository
 
 
 
-       
+
+
 
 
 
@@ -1124,6 +1123,27 @@ namespace ANIMAL.Repository
 
         //UPDATE
         //----------------------------------------------------------------------------------------------------------------------------------------------
+       
+        public async Task<bool> UpdateAdopterFlag(int adopterId)
+        {
+
+            var adopter = await _appDbContext.Adopter.FirstOrDefaultAsync(a => a.Id == adopterId);
+
+            if (adopter == null)
+            {
+                return false;
+            }
+            adopter.Flag = true;
+
+
+            _appDbContext.Adopter.Update(adopter);
+
+            await _appDbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+
 
         public async Task IncrementNumberOfAdoptedAnimalsAsync(string registerId)
         {
@@ -1230,35 +1250,10 @@ namespace ANIMAL.Repository
 
             return true;
         }
+       //Ovo ne radi svejedno
         public async Task<BirdDomain> UpdateBird(BirdDomain birdDomain)
         {
-            if (birdDomain == null)
-            {
-                throw new ArgumentException("Bird not found");
-            }
-
-            // Mapiraj BirdDomain u Bird entitet
-            var bird = _mappingService.Map<Birds>(birdDomain);
-
-            // Preuzmi postojeći entitet iz baze
-            var existingBird = await _appDbContext.Birds.FirstOrDefaultAsync(b => b.AnimalId == bird.AnimalId);
-
-            if (existingBird == null)
-            {
-                throw new Exception("Bird not found in the database");
-            }
-
-            // Ažuriraj postojeći entitet s novim podacima
-            existingBird.CageSize = bird.CageSize;
-            existingBird.RecommendedToys = bird.RecommendedToys;
-            existingBird.Sociability = bird.Sociability;
-
-            // Spremi promjene u bazu podataka
-            _appDbContext.Birds.Update(existingBird);
-            await _appDbContext.SaveChangesAsync();
-
-            // Mapiraj ažurirani entitet natrag u BirdDomain
-            return _mappingService.Map<BirdDomain>(existingBird);
+            return _mappingService.Map<BirdDomain>(birdDomain);
         }
 
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1266,7 +1261,7 @@ namespace ANIMAL.Repository
 
        public async Task<bool>  UpdateAnimalRecordDomain(int id, int recordId)//To je ono što je životinja prošla to jest ažurira na kojem je dijelu, ušla u azil, kod veterinara itd
         {
-            var animal = await _appDbContext.AnimalRecord.FirstOrDefaultAsync(a => a.Id == id);
+            var animal = await _appDbContext.AnimalRecord.FirstOrDefaultAsync(a => a.AnimalId == id);
             if (animal == null)
             {
                 throw new Exception("Animal record not found");
@@ -1732,77 +1727,84 @@ namespace ANIMAL.Repository
 
         //Add novo
         //-----------------------------------------------------------------------------------------
-       public async Task<AnimalRecordDomain> AddAnimalRecord(int idAnimal, int idRecord)
+
+        //Kad admin ili radnik kreiraju životinj odmas se stvori i rekord kojemu je PK isti kao od životinjekako bi imali samo jedan record po životinj koji se updata
+       public async Task AddAnimalRecord(int idAnimal, int idRecord)
         {
-            try
-            {
-                var animalRecord = new AnimalRecordDomain
+           
+                var animalExists=await _appDbContext.Animals.FirstOrDefaultAsync(a=> a.IdAnimal ==  idAnimal);//vratio mi je null :o// radi bio je krivi request pa je slalo 0
+          
+            if (animalExists !=null)
+                { var animalRecord = new AnimalRecordDomain
                 {    
                     RecordId = idRecord,
-                  AnimalId=idAnimal,
+                          AnimalId=idAnimal,
                  
               
                   
-                    // Don't set Code explicitly if it's an identity column
+                   
                 };
                 var animal = _mappingService.Map<AnimalRecord>(animalRecord);
                 _appDbContext.AnimalRecord.Add(animal);
-                var input =  await _appDbContext.SaveChangesAsync();
+                var input =  await _appDbContext.SaveChangesAsync(); 
+          
+                }
+                else
+                {
+                    throw new Exception($"Životinj {animalExists.IdAnimal} ne postoji!" );
+                  
+                }
 
-
-
-
-                return _mappingService.Map<AnimalRecordDomain>(animalRecord);
-
-
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or handle it appropriately
-                throw new Exception($"Failed to add animal record: {ex.InnerException.Message}");
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //update
-        public async Task<bool> UpdateAdopterFlag(int adopterId)
-        {
-        
-            var adopter = await _appDbContext.Adopter.FirstOrDefaultAsync(a => a.Id == adopterId);
-
-            if (adopter == null)
-            {
-                return false;
-            }
-            adopter.Flag = true;
-
-
-                _appDbContext.Adopter.Update(adopter);
            
-            await _appDbContext.SaveChangesAsync();
-
-            return true;
         }
+
+
+      public async  Task AddFoundRecord( int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId)
+        {
+            var animalExists = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
+            if (animalExists != null)
+            {
+                var faundAnimal = new FoundRecordDomain
+                {
+                    AnimalId = animalId,
+                    Date = date,
+                    Adress = adress,
+                    Description = description,
+                    OwnerName = ownerName,
+                    OwnerSurname = ownerSurname,
+                    OwnerPhoneNumber = ownerPhoneNumber,
+                    OwnerOIB = ownerOIB,
+                    RegisterId = registerId//ovo j euser id
+                };
+
+                var animal = _mappingService.Map<FoundRecord>(faundAnimal);
+                _appDbContext.FoundRecord.Add(animal);
+                 await _appDbContext.SaveChangesAsync();
+
+            }
+            else
+            {
+                throw new Exception($"Životinj {animalExists.IdAnimal} ne postoji!");
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1960,6 +1962,6 @@ namespace ANIMAL.Repository
             throw new NotImplementedException();
         }
 
-     
+       
     }
 }

@@ -20,19 +20,19 @@ namespace ANIMAL.Repository.Common
         IEnumerable<AdoptedDomain> GetAllAdoptedDomain();
    //novo
         public IEnumerable<AnimalRecordDomain> GetAllAnimalRecordDomain();
-        public IEnumerable<BalansDomain> GetAllBlansDomain();//1
-        public IEnumerable<ContactDomain>GetaAllContactDomain();//1
-        public IEnumerable<ContageusAnimalsDomain> GetAllContageusAnimalsDomain();//1
-        public IEnumerable<EuthanasiaDomain> GetAllEuthanasiaDomain();//1
-        public IEnumerable<FoodDomain> GetAllFoodDomain();//1
-        public IEnumerable<FoundRecordDomain> GetAllFoundRecord();//1
-        public IEnumerable<FundsDomain> GetAllFundsDomain();//1
-        public IEnumerable<LabsDomain> GetAllLabsDomain();//1
-        public IEnumerable<MedicinesDomain> GetAllMedicinesDomain();//1
-        public IEnumerable<NewsDomain> GetAllNewsDomain();//1
+        public IEnumerable<BalansDomain> GetAllBlansDomain();
+        public IEnumerable<ContactDomain>GetaAllContactDomain();
+        public IEnumerable<ContageusAnimalsDomain> GetAllContageusAnimalsDomain();
+        public IEnumerable<EuthanasiaDomain> GetAllEuthanasiaDomain();
+        public IEnumerable<FoodDomain> GetAllFoodDomain();
+        public IEnumerable<FoundRecordDomain> GetAllFoundRecord();
+        public IEnumerable<FundsDomain> GetAllFundsDomain();
+        public IEnumerable<LabsDomain> GetAllLabsDomain();
+        public IEnumerable<MedicinesDomain> GetAllMedicinesDomain();
+        public IEnumerable<NewsDomain> GetAllNewsDomain();
         public IEnumerable<ParameterDomain> GetAllParameterDomain();
         public IEnumerable<SystemRecordDomain> GetAllSystemRecordDomain();
-        public IEnumerable<ToysDomain> GetAllToysDomain();//1
+        public IEnumerable<ToysDomain> GetAllToysDomain();
         public IEnumerable<VetVisitsDomain> GetAllVetVisitsDomain();
 
 
@@ -75,7 +75,7 @@ namespace ANIMAL.Repository.Common
         public ContageusAnimalsDomain GetOneContageusAnimal(int id);
         public LabsDomain GetOneLabsAnimal(int id);
         public VetVisitsDomain GetOneVetVisitAnimal(int id);
-        public IEnumerable<AnimalRecordDomain> GetOneAnimalRecord(int id);//ne radi ništa se ne ispiše
+        public AnimalRecordDomain GetOneAnimalRecord(int id);//RADI
 
 
 
@@ -86,7 +86,7 @@ namespace ANIMAL.Repository.Common
         public  Task IncrementNumberOfReturnedAnimalsAsync(string registerId);
         public  Task<AdopterDomain> UpdateAdopterAsync(string registerId, string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password);
         public  Task<AnimalDomain> UpdateAnimalAsync(int idAnimal, int age, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, string personalityDescription);
-        public  Task<BirdDomain> UpdateBird(BirdDomain bird);
+        
         public Task<bool> UpdateAdopterFlag(int adopterId);
         public  Task<bool> AdoptionStatus(int animalId);
         public Task<bool> AdoptionStatusFalse(int animalId);
@@ -121,11 +121,7 @@ namespace ANIMAL.Repository.Common
         //DODAVANJE
         public Task<bool> CreateReturnedAnimalAsync( int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason);
         public  Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate);
-        public Task<bool> AddBirdAsync(BirdDomain birdDomain);
-        public  Task<bool> AddMammalAsync(MammalDomain mammalDomain);
-        public  Task<bool> AddFishAsync(FishDomain fishDomain);
-        public  Task<bool> AddReptileAsync(ReptileDomain reptileDomain);
-        public  Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain);     
+      
         public  Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);
      
         //Mora vratit id 
@@ -136,12 +132,12 @@ namespace ANIMAL.Repository.Common
 
 
         //dodavanje novo
-        /*animalrecord- samo za dodavanje prve funkcije koja se pokreće samo kod unosa životinje, sve ostalo je update
+        /*animalrecord- samo za dodavanje prve funkcije koja se pokreće samo kod unosa životinje, sve ostalo je update//OVO RADI sve
          * Balans-mislim da ne treba add samo update. Stvorila bih jedan račun i na njemu ddavala i uzimala- Ako dodam još neku osobu koja će se bavit sa time dodat ću i add
          * Contact-potreban add i update za pročitano
          * contageus animals-potrebno add
          * euthanasia-potreban add
-         * found record- potreban add
+         * found record- potreban add//SVE RADI
          * funds-potreban add
          * labs-potreban add
          * parametar-potreban add 
@@ -152,8 +148,9 @@ namespace ANIMAL.Repository.Common
          * vet visit-potreban add
         */
 
-        Task<AnimalRecordDomain> AddAnimalRecord(int idAnimal,  int idRecord);
-
+        //Ovo oboje treba kad se životinja dodaje
+       public Task AddAnimalRecord(int idAnimal,  int idRecord);//RADI
+       public Task AddFoundRecord( int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);//RADI
 
 
 
@@ -169,5 +166,12 @@ namespace ANIMAL.Repository.Common
         //NIŠTA DRUGO SE NE SMIJE OBRISAT ZATO ŠTO NAM TREBA PPOVIJEST PODATAKA
         //pogledaj  druge klase i napravi da se podatak sakrije ako se to stanje više ne dešava
 
+        //GLUPOSTI KOJE NE RADE
+        public Task<bool> AddBirdAsync(BirdDomain birdDomain);
+        public Task<bool> AddMammalAsync(MammalDomain mammalDomain);
+        public Task<bool> AddFishAsync(FishDomain fishDomain);
+        public Task<bool> AddReptileAsync(ReptileDomain reptileDomain);
+        public Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain);
+        public Task<BirdDomain> UpdateBird(BirdDomain bird);
     }
 }

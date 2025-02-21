@@ -338,26 +338,40 @@ namespace ANIMAL.DAL.DataModel
             });
             //novo
             //
-            modelBuilder.Entity<AnimalRecord>(entity =>
-            {
-                entity.HasKey(e => e.Id)
+
+           modelBuilder.Entity<AnimalRecord>()
+                  .HasKey(e => e.AnimalId)
                  .HasName("PK__AnimalRecord");
 
-                //problem je što anmalId  može bit samo jedan u toj tablici, znači jedinstvaen je i samo se updata
-                entity.HasOne(d => d.Animal)
-                    .WithMany(d => d.AnimalRecord)//vjv ne radi zato što nije one to one
-                    .HasForeignKey(d => d.AnimalId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AnimalRecord__Animal");//baca grešku na ovaj key
+            modelBuilder.Entity<AnimalRecord>()
+                .HasOne(r => r.Animal)
+                .WithOne(a => a.AnimalRecord)
+                .HasForeignKey<AnimalRecord>(a => a.AnimalId)
+                .HasConstraintName("FK__AnimalRecord__Animals__AnimalId");
+ 
+
+            modelBuilder.Entity<AnimalRecord>()
+                .HasOne(d => d.Record)
+                  .WithMany()
+                   .HasForeignKey(d => d.RecordId)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("FK__AnimalRecord__SystemRecord__RecordId");
+            /*modelBuilder.Entity<AnimalRecord>(entity =>
+            {
+                
                 entity.HasOne(d => d.Record)
                   .WithMany()
                    .HasForeignKey(d => d.RecordId)
                    .OnDelete(DeleteBehavior.ClientSetNull)
                    .HasConstraintName("FK__AnimalRecord__Record");
 
-
-
-            });
+                //problem je što anmalId  može bit samo jedan u toj tablici, znači jedinstvaen je i samo se updata
+               /* entity.HasOne(d => d.Animal)
+                    .WithOne()//vjv ne radi zato što nije one to one
+                    .HasForeignKey(d => d.AnimalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__AnimalRecord__Animal");//baca grešku na ovaj key
+            });*/
 
             modelBuilder.Entity<SystemRecord>(entity =>
                {

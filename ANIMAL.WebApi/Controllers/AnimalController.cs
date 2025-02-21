@@ -455,9 +455,9 @@ namespace ANIMAL.WebApi.Controllers
         [HttpGet]
         [Route("recordAnimal/{id}")]
         [AllowAnonymous]
-            public IEnumerable<AnimalRecordDomain> GetOneAnimalRecord(int adopterId)
+            public AnimalRecordDomain GetOneAnimalRecord(int id)
             {
-                IEnumerable<AnimalRecordDomain> parametar = _service.GetOneAnimalRecord(adopterId);
+                AnimalRecordDomain parametar = _service.GetOneAnimalRecord(id);
                 return parametar;
             }
 
@@ -468,31 +468,23 @@ namespace ANIMAL.WebApi.Controllers
         //PUT I POSTE
         //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-        //NOVO
+        //NOVO add
 
 
         [HttpPost("addAnimalRecord")]
         [AllowAnonymous]
-        public async Task<IActionResult> AddAnimalAsync(
-  [FromForm] int animalId,
-  [FromForm] int recordId)
+        public async Task AddAnimalAsync([FromBody] AnimalRecordDomain record)
         {
-           
-            try
-            {
-
-
-                var success = await _service.AddAnimalRecord(animalId, recordId);
-
-                    return Ok(success);
-             
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add animal: {ex.Message}");
-            }
+            await _service.AddAnimalRecord(record.AnimalId, record.RecordId);
         }
 
+
+        [HttpPost("addAnimalFound")]
+        [AllowAnonymous]
+        public async Task AddFoundRecord([FromBody] FoundRecordDomain record)
+        {
+            await _service.AddFoundRecord(record.AnimalId, record.Date, record.Adress,record.Description, record.OwnerName, record.OwnerSurname,record.OwnerPhoneNumber, record.OwnerOIB,record.RegisterId);
+        }
 
 
 
@@ -506,115 +498,9 @@ namespace ANIMAL.WebApi.Controllers
 
         //STARO
         //-----------------------------------------------------------------------------------------------------------------------------
-        [HttpPut("updateAdopter/{registerId}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> UpdateAdopter(string registerId, [FromBody] AdoptedDomain request)
-        {
-            if (request == null || request.Adopter == null)
-            {
-                return BadRequest("Invalid data. Adopter information is missing.");
-            }
-
-            try
-            {
-                var updatedAdopter = await _service.UpdateAdopterAsync(
-                    registerId,
-                    request.Adopter.FirstName,
-                    request.Adopter.LastName,
-                    request.Adopter.DateOfBirth,
-                    request.Adopter.Residence,
-                    request.Adopter.Username,
-                    request.Adopter.Password
-                );
-
-                return Ok(updatedAdopter); // Return 200 OK with the updated adopter
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating adopter: {ex.Message}");
-            }
-        }
 
 
 
-       
-       
-        [HttpPut("incrementAdopted/{id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> IncrementNumberOfAdoptedAnimals(string id)
-        {
-            await _service.IncrementNumberOfAdoptedAnimalsAsync(id);
-            return NoContent(); // HTTP 204 No Content
-        }
-
-        [HttpPut("incrementReturned/{id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> IncrementNumberOfReturnedAnimals(string id)
-        {
-            await _service.IncrementNumberOfReturnedAnimalsAsync(id);
-            return NoContent(); // HTTP 204 No Content
-        }
-
-        [HttpPut("updateAnimal/{idAnimal}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> UpdateAnimal( [FromBody] AdoptedDomain request)
-        {
-            if (request == null || request.Animal == null) 
-            {
-                return BadRequest("Invalid data. Animal information is missing.");
-            }
-
-            try
-            {
-                var updatedAnimal = await _service.UpdateAnimalAsync(
-                    request.Animal.IdAnimal,
-                    request.Animal.Age,
-                    request.Animal.Weight,
-                    request.Animal.Height,
-                    request.Animal.Length,
-                    request.Animal.Neutered,
-                    request.Animal.Vaccinated,
-                    request.Animal.Microchipped,
-                    request.Animal.Trained,
-                    request.Animal.Socialized,
-                    request.Animal.HealthIssues,
-                    request.Animal.PersonalityDescription
-                );
-
-                return Ok(updatedAnimal); // Return 200 OK with the updated animal
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal: {ex.Message}");
-            }
-        }
-        [HttpPut("bird/{id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> UpdateBird(int id, [FromBody] BirdDomain birdUpdateDto)
-        {
-            try
-            {
-                var bird =  _service.GetAllBirdDomain(id);
-                if (bird == null)
-                {
-                    return NotFound("Bird not found");
-                }
-
-                // Ažuriraj bird entitet s podacima iz birdUpdateDto
-                bird.CageSize = birdUpdateDto.CageSize;
-                bird.RecommendedToys = birdUpdateDto.RecommendedToys;
-                bird.Sociability = birdUpdateDto.Sociability;
-
-                await _service.UpdateBird(bird);
-              
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Zabilježi grešku
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
-            }
-        }
         [HttpPost("addAdopter")]
         [AllowAnonymous]
         public async Task<IActionResult> CreateAdopter([FromBody] AdoptedDomain request)
@@ -636,28 +522,33 @@ namespace ANIMAL.WebApi.Controllers
 
             return CreatedAtAction(nameof(GetAdopterById), new { id = createdAdopter.Id }, createdAdopter);
         }
+
+
+
+
+
         [HttpPost("addAnimal")]
         [AllowAnonymous]
         public async Task<IActionResult> AddAnimalAsync(
-   [FromForm] string name,
-   [FromForm] string family,
-   [FromForm] string species,
-   [FromForm] string subspecies,
-   [FromForm] int age,
-   [FromForm] string gender,
-   [FromForm] decimal weight,
-   [FromForm] decimal height,
-   [FromForm] decimal length,
-   [FromForm] bool neutered,
-   [FromForm] bool vaccinated,
-   [FromForm] bool microchipped,
-   [FromForm] bool trained,
-   [FromForm] bool socialized,
-   [FromForm] string healthIssues,
-   [FromForm] string personalityDescription,
-   [FromForm] bool adopted,
-   [FromForm] IFormFile image)
-        {
+                   [FromForm] string name,
+                   [FromForm] string family,
+                   [FromForm] string species,
+                   [FromForm] string subspecies,
+                   [FromForm] int age,
+                   [FromForm] string gender,
+                   [FromForm] decimal weight,
+                   [FromForm] decimal height,
+                   [FromForm] decimal length,
+                   [FromForm] bool neutered,
+                   [FromForm] bool vaccinated,
+                   [FromForm] bool microchipped,
+                   [FromForm] bool trained,
+                   [FromForm] bool socialized,
+                   [FromForm] string healthIssues,
+                   [FromForm] string personalityDescription,
+                   [FromForm] bool adopted,
+                   [FromForm] IFormFile image)
+            {
             if (image == null || image.Length == 0)
             {
                 return BadRequest("No image file provided.");
@@ -683,12 +574,12 @@ namespace ANIMAL.WebApi.Controllers
             }
             else
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to add animal.");
-          }
+            }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add animal: {ex.Message}");
-            }
-        }
+               }
+           }
 
 
 
@@ -696,23 +587,10 @@ namespace ANIMAL.WebApi.Controllers
 
 
 
-        [HttpPut("code/{code}")]
-        [AllowAnonymous]
-        public IActionResult DeleteAdoptedReturn(int code)
-        {
-            try
-            {
-                _service.DeleteAdoptedReturn(code);
-                return Ok("Životinja uspješno obrisana.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Došlo je do greške: {ex.Message}");
-            }
-        }
+ 
 
 
-        [HttpPost("addAdoptedAnimal")] // Endpoint for adding an adopted animal
+        [HttpPost("addAdoptedAnimal")] 
         [AllowAnonymous]
         public async Task<IActionResult> AddAdoptedAnimal([FromBody] AdoptedDomain model)
         {
@@ -758,6 +636,108 @@ namespace ANIMAL.WebApi.Controllers
             return Ok();
         }
 
+
+
+
+
+
+
+        //UPDATE
+        //---------------------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------------------------
+
+        [HttpPut("updateAdopter/{registerId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateAdopter(string registerId, [FromBody] AdoptedDomain request)
+        {
+            if (request == null || request.Adopter == null)
+            {
+                return BadRequest("Invalid data. Adopter information is missing.");
+            }
+
+            try
+            {
+                var updatedAdopter = await _service.UpdateAdopterAsync(
+                    registerId,
+                    request.Adopter.FirstName,
+                    request.Adopter.LastName,
+                    request.Adopter.DateOfBirth,
+                    request.Adopter.Residence,
+                    request.Adopter.Username,
+                    request.Adopter.Password
+                );
+
+                return Ok(updatedAdopter); // Return 200 OK with the updated adopter
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating adopter: {ex.Message}");
+            }
+        }
+
+
+
+
+
+        [HttpPut("incrementAdopted/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> IncrementNumberOfAdoptedAnimals(string id)
+        {
+            await _service.IncrementNumberOfAdoptedAnimalsAsync(id);
+            return NoContent(); // HTTP 204 No Content
+        }
+
+
+
+        [HttpPut("incrementReturned/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> IncrementNumberOfReturnedAnimals(string id)
+        {
+            await _service.IncrementNumberOfReturnedAnimalsAsync(id);
+            return NoContent(); // HTTP 204 No Content
+        }
+
+
+
+
+        [HttpPut("updateAnimal/{idAnimal}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateAnimal([FromBody] AdoptedDomain request)
+        {
+            if (request == null || request.Animal == null)
+            {
+                return BadRequest("Invalid data. Animal information is missing.");
+            }
+
+            try
+            {
+                var updatedAnimal = await _service.UpdateAnimalAsync(
+                    request.Animal.IdAnimal,
+                    request.Animal.Age,
+                    request.Animal.Weight,
+                    request.Animal.Height,
+                    request.Animal.Length,
+                    request.Animal.Neutered,
+                    request.Animal.Vaccinated,
+                    request.Animal.Microchipped,
+                    request.Animal.Trained,
+                    request.Animal.Socialized,
+                    request.Animal.HealthIssues,
+                    request.Animal.PersonalityDescription
+                );
+
+                return Ok(updatedAnimal); // Return 200 OK with the updated animal
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal: {ex.Message}");
+            }
+        }
+
+
+
+
+
         [HttpPut("adoptionstatus/{animalId}")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateAdoptionStatus(int animalId)
@@ -766,6 +746,11 @@ namespace ANIMAL.WebApi.Controllers
 
             return Ok(new { Message = "Adoption status updated successfully" });
         }
+
+
+
+
+
         [HttpPut("adoptionstatusfalse/{animalId}")]
         [AllowAnonymous]
         public async Task<IActionResult> AdoptionStatusFalse(int animalId)
@@ -774,14 +759,10 @@ namespace ANIMAL.WebApi.Controllers
 
             return Ok(new { Message = "Adoption status updated successfully" });
         }
-       /* [HttpPut("deladopted/{adopterId}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> DeleteAdoptedAsync(int adopterId)
-        {
-            await _service.DeleteAdoptedAsync(adopterId);
+      
 
-            return Ok(new { Message = "Adoption status updated successfully" });
-        }*/
+
+
         [HttpPut("flag/{adopterId}")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateAdopterFlag(int adopterId)
@@ -791,6 +772,130 @@ namespace ANIMAL.WebApi.Controllers
             return Ok(new { Message = "Adoption status updated successfully" });
         }
 
+       
+
+
+
+
+        //ubdate novo
+        //---------------------------------------------------------------------------------------------------------------------------
+
+        [HttpPut("updateAnimalRecord")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateAnimalRecordDomain([FromBody] AnimalRecordDomain record)
+        {
+
+          
+            try
+            {
+              await _service.UpdateAnimalRecordDomain(
+                   record.AnimalId,
+                  record.RecordId
+
+                    );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+
+           
+
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //NEBITNO I NEPOTREBNO :)
+        //Delete
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+        // Napravi u onom record ako je životinja mrtva da umjesto ovoga joj se stavi dead u recordu 
+
+
+        [HttpPut("code/{code}")]
+        [AllowAnonymous]
+        public IActionResult DeleteAdoptedReturn(int code)
+        {
+            try
+            {
+                _service.DeleteAdoptedReturn(code);
+                return Ok("Životinja uspješno obrisana.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Došlo je do greške: {ex.Message}");
+            }
+        }
+
+
+        [HttpDelete("{idAnimal}")]
+         [AllowAnonymous]
+         public async Task<IActionResult> Delete(int idAnimal)
+         {
+             try
+             {
+
+
+                 await _service.DeleteAnimal(idAnimal);
+
+
+                 return Ok("Animal successfully deleted.");
+             }
+             catch (KeyNotFoundException)
+             {
+                 return NotFound($"Animal with ID {idAnimal} not found.");
+             }
+             catch (InvalidOperationException ex)
+             {
+
+                 return BadRequest(ex.Message);
+             }
+             catch (Exception ex)
+             {
+                 var innerMessage = ex.InnerException?.Message ?? ex.Message;
+
+                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+             }
+         }
+        //Bilo potrebno imat, nema smisla da je tu
+        /* [HttpPut("deladopted/{adopterId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> DeleteAdoptedAsync(int adopterId)
+        {
+            await _service.DeleteAdoptedAsync(adopterId);
+
+            return Ok(new { Message = "Adoption status updated successfully" });
+        }*/
+
+        //ovo sve ispod ne radi ali je prikazano bilo da izgleda da radi :)
+        /*
         [HttpPost("bird")]
       
         public async Task<IActionResult> AddBirdAsync([FromBody] BirdDomain birdDomain)
@@ -926,100 +1031,37 @@ namespace ANIMAL.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add amphibian: {ex.Message}");
             }
         }
-        //ubdate novo
 
-
-        [HttpPut("updateAnimalRecord")]
+         //NE RADI
+        [HttpPut("bird/{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateAnimalRecordDomain( int id, int recordId)
+        public async Task<IActionResult> UpdateBird(int id, [FromBody] BirdDomain birdUpdateDto)
         {
-
-          
             try
             {
-              await _service.UpdateAnimalRecordDomain(
-                   id,
-                  recordId
+                var bird =  _service.GetAllBirdDomain(id);
+                if (bird == null)
+                {
+                    return NotFound("Bird not found");
+                }
 
-                    );
+                // Ažuriraj bird entitet s podacima iz birdUpdateDto
+                bird.CageSize = birdUpdateDto.CageSize;
+                bird.RecommendedToys = birdUpdateDto.RecommendedToys;
+                bird.Sociability = birdUpdateDto.Sociability;
+
+                await _service.UpdateBird(bird);
+              
+                return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+                // Zabilježi grešku
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
             }
-
-           
-
-            return Ok(new { Message = "Animal record updated successfully" });
         }
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //Delete
-        //-----------------------------------------------------------------------------------------------------------------------------------------------
-        //-----------------------------------------------------------------------------------------------------------------------------------------------
-        // Napravi u onom record ako je životinja mrtva da umjesto ovoga joj se stavi dead u recordu 
-
-
-
-
-
-         [HttpDelete("{idAnimal}")]
-         [AllowAnonymous]
-         public async Task<IActionResult> Delete(int idAnimal)
-         {
-             try
-             {
-
-
-                 await _service.DeleteAnimal(idAnimal);
-
-
-                 return Ok("Animal successfully deleted.");
-             }
-             catch (KeyNotFoundException)
-             {
-                 return NotFound($"Animal with ID {idAnimal} not found.");
-             }
-             catch (InvalidOperationException ex)
-             {
-
-                 return BadRequest(ex.Message);
-             }
-             catch (Exception ex)
-             {
-                 var innerMessage = ex.InnerException?.Message ?? ex.Message;
-
-                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
-             }
-         }
+        */
 
 
     }

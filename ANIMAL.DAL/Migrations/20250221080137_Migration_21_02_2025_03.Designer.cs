@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    [Migration("20250219142224_Migration_19_02-2025-03")]
-    partial class Migration_19_02202503
+    [Migration("20250221080137_Migration_21_02_2025_03")]
+    partial class Migration_21_02_2025_03
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -126,21 +126,14 @@ namespace ANIMAL.DAL.Migrations
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.AnimalRecord", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
                     b.Property<int>("RecordId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id")
+                    b.HasKey("AnimalId")
                         .HasName("PK__AnimalRecord");
-
-                    b.HasIndex("AnimalId");
 
                     b.HasIndex("RecordId");
 
@@ -1189,15 +1182,16 @@ namespace ANIMAL.DAL.Migrations
             modelBuilder.Entity("ANIMAL.DAL.DataModel.AnimalRecord", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
-                        .WithMany("AnimalRecord")
-                        .HasForeignKey("AnimalId")
-                        .HasConstraintName("FK__AnimalRecord__Animal")
+                        .WithOne("AnimalRecord")
+                        .HasForeignKey("ANIMAL.DAL.DataModel.AnimalRecord", "AnimalId")
+                        .HasConstraintName("FK__AnimalRecord__Animals__AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ANIMAL.DAL.DataModel.SystemRecord", "Record")
                         .WithMany()
                         .HasForeignKey("RecordId")
-                        .HasConstraintName("FK__AnimalRecord__Record")
+                        .HasConstraintName("FK__AnimalRecord__SystemRecord__RecordId")
                         .IsRequired();
                 });
 

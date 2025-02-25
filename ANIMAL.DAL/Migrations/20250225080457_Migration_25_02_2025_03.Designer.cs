@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    [Migration("20250221080137_Migration_21_02_2025_03")]
-    partial class Migration_21_02_2025_03
+    [Migration("20250225080457_Migration_25_02_2025_03")]
+    partial class Migration_25_02_2025_03
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

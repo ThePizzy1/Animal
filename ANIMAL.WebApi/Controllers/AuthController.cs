@@ -13,6 +13,7 @@ using ANIMAL.DAL.DataModel;
 using ANIMAL.Model;
 using Microsoft.AspNetCore.Authorization;
 using ANIMAL.Repository.Automaper;
+using Microsoft.EntityFrameworkCore;
 
 namespace ANIMAL.WebApi.Controllers
 {
@@ -33,6 +34,7 @@ namespace ANIMAL.WebApi.Controllers
             _configuration = configuration;
             _mappingService = mapper;
         }
+        //dodaj tu ime, prezime, meil i broj telefona
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RgisterModel model)
         {
@@ -42,7 +44,8 @@ namespace ANIMAL.WebApi.Controllers
             }
            
 
-            var user = new ApplicationUser { UserName = model.Username };
+            var user = new ApplicationUser { UserName = model.Username};
+
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
@@ -62,7 +65,7 @@ namespace ANIMAL.WebApi.Controllers
             }
 
 
-            var user = new ApplicationUser { UserName = model.Username };
+            var user = new ApplicationUser { UserName = model.Username, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, PhoneNumber = model.PhoneNumber };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
@@ -75,10 +78,39 @@ namespace ANIMAL.WebApi.Controllers
         }
 
 
+        //get all users treba za ispis podataka za veterinare, radnike itd...
 
 
 
+        [HttpGet("getAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var user = await _userManager.Users.ToListAsync();
+            var userList= new List<object>();
 
+            foreach(var u in user)
+            {
+                var role = await _userManager.GetRolesAsync(u);
+                userList.Add(new 
+                {u.FirstName,
+                 u.LastName,
+                 u.UserName,
+                 u.Email,
+                 u.PhoneNumber,
+                Roles = role
+                
+                });
+            }
+
+            if (userList == null)
+            {
+                return NotFound($"Korisnik nije pronađen.");
+            }
+
+           
+
+            return Ok(userList);
+        }
 
 
 

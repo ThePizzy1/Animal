@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ANIMAL.DAL.Migrations
 {
-    public partial class Migration_21_02_2025_03 : Migration
+    public partial class Migration_25_02_2025_03 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

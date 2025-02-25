@@ -193,8 +193,29 @@ namespace ANIMAL.Repository.Automaper
                       .ForMember(dest => dest.Animal, opt => opt.Ignore());
                 cfg.CreateMap<FoundRecord, FoundRecordDomain>()
                      .ForMember(dest => dest.Animal, opt => opt.Ignore());
-                    
 
+                //food record
+                cfg.CreateMap<FoodDomain, Food>();
+                cfg.CreateMap<Food, FoodDomain>();
+
+                //toy record
+                cfg.CreateMap<ToysDomain, Toys>();
+                cfg.CreateMap<Toys, ToysDomain>();
+
+                //toy news
+                cfg.CreateMap<NewsDomain, News>();
+                cfg.CreateMap<News, NewsDomain>();
+
+                //faund record
+                cfg.CreateMap<VetVisits, VetVisitsDomain>()
+                      .ForMember(dest => dest.Animal, opt => opt.Ignore());
+                cfg.CreateMap<VetVisitsDomain, VetVisits>()
+                     .ForMember(dest => dest.Animals, opt => opt.Ignore());
+
+
+                //toy system record
+                cfg.CreateMap<SystemRecordDomain, SystemRecord>();
+                cfg.CreateMap<SystemRecord, SystemRecordDomain>();
 
 
             });

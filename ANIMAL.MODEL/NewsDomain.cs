@@ -17,7 +17,16 @@ namespace ANIMAL.MODEL
             DateTime = dateTime;
         
         }
-    
+
+        public NewsDomain( string name, string description, DateTime dateTime)
+        {
+
+           
+            Name = name;
+            Description = description;
+            DateTime = dateTime;
+
+        }
 
 
 

@@ -14,6 +14,13 @@ namespace ANIMAL.MODEL
             RecordName = recordName;
             RecordDescription = recordDescription;
         }
+        public SystemRecordDomain( int recordNumber, string recordName, string recordDescription)
+        {
+           
+            RecordNumber = recordNumber;
+            RecordName = recordName;
+            RecordDescription = recordDescription;
+        }
 
         public int Id { get; set; }
         public int RecordNumber { get; set; }

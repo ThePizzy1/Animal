@@ -468,24 +468,6 @@ namespace ANIMAL.WebApi.Controllers
         //PUT I POSTE
         //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-        //NOVO add
-
-
-        [HttpPost("addAnimalRecord")]
-        [AllowAnonymous]
-        public async Task AddAnimalAsync([FromBody] AnimalRecordDomain record)
-        {
-            await _service.AddAnimalRecord(record.AnimalId, record.RecordId);
-        }
-
-
-        [HttpPost("addAnimalFound")]
-        [AllowAnonymous]
-        public async Task AddFoundRecord([FromBody] FoundRecordDomain record)
-        {
-            await _service.AddFoundRecord(record.AnimalId, record.Date, record.Adress,record.Description, record.OwnerName, record.OwnerSurname,record.OwnerPhoneNumber, record.OwnerOIB,record.RegisterId);
-        }
-
 
 
 
@@ -635,6 +617,223 @@ namespace ANIMAL.WebApi.Controllers
 
             return Ok();
         }
+
+
+
+
+
+
+
+
+
+        //NOVO add
+
+
+        [HttpPost("addAnimalRecord")]
+        [AllowAnonymous]
+        public async Task AddAnimalAsync([FromBody] AnimalRecordDomain record)
+        {
+            await _service.AddAnimalRecord(record.AnimalId, record.RecordId);
+        }
+
+
+        [HttpPost("addAnimalFound")]
+        [AllowAnonymous]
+        public async Task AddFoundRecord([FromBody] FoundRecordDomain record)
+        {
+            await _service.AddFoundRecord(record.AnimalId, record.Date, record.Adress, record.Description, record.OwnerName, record.OwnerSurname, record.OwnerPhoneNumber, record.OwnerOIB, record.RegisterId);
+        }
+
+
+
+
+        [HttpPost("addFood")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddFood([FromBody] FoodDomain response)
+        {
+           
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _service.AddFood(
+                response.BrandName,
+                response.Name,
+                response.FoodType,
+                response.AnimalType,
+                response.AgeGroup,
+                response.Weight,
+                response.CaloriesPerServing,
+                response.WeightPerServing,
+                response.MeasurementPerServing,
+                response.FatContent,
+                response.FiberContent,
+                response.ExporationDate,
+                response.Quantity,
+                response.Notes,
+                response.MeasurementWeight
+
+            );
+            
+            return Ok();
+        }
+
+
+        [HttpPost("addToy")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddToy([FromBody] ToysDomain response)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _service.AddToys(
+               response.BrandName,
+               response.Name,
+               response.AnimalType,
+               response.ToyType,
+               response.AgeGroup,
+              response.Hight,
+              response.Width,
+              response.Quantity,
+              response.Notes
+
+            );
+
+            return Ok();
+        }
+
+
+        [HttpPost("addNews")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddNews([FromBody] NewsDomain response)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _service.AddNews(
+           response.Name,
+           response.Description,
+           response.DateTime
+
+            );
+
+            return Ok();
+        }
+
+
+
+        [HttpPost("addVetVisit")]
+        [AllowAnonymous]
+        public async Task AddVetVisit([FromBody] VetVisitsDomain record)
+        {
+            await _service.AddVetVsit(
+                record.AnimalId,
+                record.StartTime,
+                record.EndTime,
+                record.TypeOfVisit,
+                record.Notes
+                
+                );
+        }
+
+
+
+        [HttpPost("addSystemRecord")]
+        [AllowAnonymous]
+        public async Task AddSystemRecord([FromBody] SystemRecordDomain record)
+        {
+            await _service.AddSystemRecord(
+                record.RecordNumber,
+                record.RecordName,
+                record.RecordDescription
+                );
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

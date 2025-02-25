@@ -1792,7 +1792,125 @@ namespace ANIMAL.Repository
 
 
 
+     public async Task AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing,
+         decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent,
+         DateTime exporationDate, int quantity, string notes, string measurementWeight)
+        {
+            try
+            {
+                var food = new FoodDomain
+                {
+                    BrandName = brandName,
+                    Name = name,
+                    FoodType = foodType,
+                    AnimalType = animalType,
+                    AgeGroup = ageGroup,
+                    Weight = weight,
+                    CaloriesPerServing = caloriesPerServing,
+                    WeightPerServing = weightPerServing,
+                    MeasurementPerServing = measurementPerServing,
+                    FatContent = fatContent,
+                    FiberContent = fiberContent,
+                    ExporationDate = exporationDate,
+                    Quantity = quantity,
+                    Notes = notes,
+                    MeasurementWeight = measurementWeight
+                };
 
+                var foodResponse = _mappingService.Map<Food>(food);
+                _appDbContext.Food.Add(foodResponse);
+                await _appDbContext.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+
+
+
+
+
+
+       public async Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes)
+        {
+                var toy = new ToysDomain
+                {
+                    BrandName = brandName,
+                    Name = name,
+                    AnimalType = animalType,
+                    ToyType=toyType,
+                    AgeGroup = ageGroup,
+                    Hight=hight,
+                    Width=width,
+                    Quantity=quantity,
+                    Notes=notes
+                };
+
+                var toyResponse = _mappingService.Map<Toys>(toy);
+                _appDbContext.Toys.Add(toyResponse);
+                await _appDbContext.SaveChangesAsync();
+          
+        }
+
+
+     public async   Task AddNews(string name, string description, DateTime dateTime)
+        {
+            var news = new NewsDomain
+            {
+              Name= name,
+              Description = description,
+              DateTime = dateTime
+            };
+
+            var newsResponse = _mappingService.Map<News>(news);
+            _appDbContext.News.Add(newsResponse);
+            await _appDbContext.SaveChangesAsync();
+        }
+
+     async   Task IRepository.AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes)
+        {
+            var animalExists = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
+            if (animalExists != null)
+            {
+                var faundAnimal = new VetVisitsDomain
+                {
+                    AnimalId = animalId,
+                    StartTime=startTime,
+                    EndTime=endTime,
+                    TypeOfVisit = typeOfVisit,
+                    Notes = notes
+          
+                };
+
+                var animal = _mappingService.Map<VetVisits>(faundAnimal);
+                _appDbContext.VetVisits.Add(animal);
+                await _appDbContext.SaveChangesAsync();
+
+            }
+            else
+            {
+                throw new Exception($"Životinj {animalExists.IdAnimal} ne postoji!");
+            }
+        }
+
+
+
+
+   public   async  Task AddSystemRecord(int recordNumber, string recordName, string recordDescription)
+        {
+            var data = new SystemRecordDomain
+            {
+               RecordNumber=recordNumber,
+               RecordName=recordName,
+               RecordDescription=recordDescription
+            };
+
+            var dataResponse = _mappingService.Map<SystemRecord>(data);
+            _appDbContext.SystemRecord.Add(dataResponse);
+            await _appDbContext.SaveChangesAsync();
+        }
 
 
 
@@ -1962,6 +2080,6 @@ namespace ANIMAL.Repository
             throw new NotImplementedException();
         }
 
-       
+      
     }
 }

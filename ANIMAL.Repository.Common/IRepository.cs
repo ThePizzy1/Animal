@@ -124,33 +124,64 @@ namespace ANIMAL.Repository.Common
       
         public  Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);
      
-        //Mora vratit id 
+       
         Task<AnimalDomain> AddAnimalAsync( string name, string family,  string species,  string subspecies,  int age, string gender, decimal weight, decimal height, decimal length,      bool neutered, bool vaccinated,   bool microchipped,   bool trained,  bool socialized,   string healthIssues,   byte[] picture, string personalityDescription, bool adopted
          );
 
 
 
 
-        //dodavanje novo
-        /*animalrecord- samo za dodavanje prve funkcije koja se pokreće samo kod unosa životinje, sve ostalo je update//OVO RADI sve
-         * Balans-mislim da ne treba add samo update. Stvorila bih jedan račun i na njemu ddavala i uzimala- Ako dodam još neku osobu koja će se bavit sa time dodat ću i add
-         * Contact-potreban add i update za pročitano
-         * contageus animals-potrebno add
-         * euthanasia-potreban add
-         * found record- potreban add//SVE RADI
-         * funds-potreban add
-         * labs-potreban add
-         * parametar-potreban add 
-         * medicines-potreban add
-         * news-potreban add
-         * system record- potreban add samo admin
-         * toys-potreban add
-         * vet visit-potreban add
+        //dodavanje novo 15 novih tablica 7/15
+        /*1.animalrecord- samo za dodavanje prve funkcije koja se pokreće samo kod unosa životinje, sve ostalo je update//OVO 
+         *                                                      --RADI 
+         *2. Balans-mislim da ne treba add samo update.
+         * Stvorila bih jedan račun i na njemu ddavala i 
+         * uzimala- Ako dodam još neku osobu koja će se
+         * bavit sa time dodat ću i add
+         * 
+         * 3.Contact-potreban add i update za pročitano
+         * 4.contageus animals-potrebno add
+         * 5 euthanasia-potreban add
+         * 6.found record- potreban add                           --RADI
+         * 7.funds-potreban add
+         * 8.labs-potreban add
+         * 9.parametar-potreban add 
+         * 10.medicines-potreban add
+         * 11.news-potreban add                                    --RADI
+         * 12.system record- potreban add samo admin               --RADI
+         * 13.toys-potreban add                                    --RADI
+         * 14.food-add                                             --RADI
+         * 15.vet visit-potreban add                               --RADI
         */
 
         //Ovo oboje treba kad se životinja dodaje
        public Task AddAnimalRecord(int idAnimal,  int idRecord);//RADI
        public Task AddFoundRecord( int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);//RADI
+       public Task AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
+       public Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes);
+
+        public Task AddNews(string name, string description, DateTime dateTime);
+
+        public Task AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes);
+
+        public Task AddSystemRecord(int recordNumber, string recordName, string recordDescription);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

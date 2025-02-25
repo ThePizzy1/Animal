@@ -480,6 +480,94 @@ namespace ANIMAL.Service
         }
 
 
+        async Task IService.AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight)
+        {
+            await _repository.AddFood(brandName, name, foodType, animalType, ageGroup, weight, caloriesPerServing, weightPerServing, measurementPerServing, fatContent, fiberContent, exporationDate, quantity, notes, measurementWeight);
+        }
+
+
+       async Task IService.AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes)
+       {
+            await _repository.AddToys(brandName, name, animalType, toyType, ageGroup, hight, width, quantity, notes);
+       }
+
+        async Task IService.AddNews(string name, string description, DateTime dateTime)
+        {
+            await _repository.AddNews( name,  description,  dateTime);
+        }
+
+
+
+     async   Task IService.AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes)
+        {
+            try
+            {
+                await _repository.AddVetVsit( animalId,  startTime,  endTime,  typeOfVisit,  notes)
+    ;
+
+            }
+            catch (Exception ex)
+            {
+                // Handle exception as needed
+                throw new Exception($"Failed to add found animal service message: {ex.Message}");
+            }
+        }
+
+
+       async Task IService.AddSystemRecord(int recordNumber, string recordName, string recordDescription)
+        {
+            await _repository.AddSystemRecord( recordNumber,  recordName,  recordDescription);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -692,6 +780,6 @@ namespace ANIMAL.Service
             }
         }
 
-       
+    
     }
 }

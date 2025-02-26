@@ -217,6 +217,59 @@ namespace ANIMAL.Repository.Automaper
                 cfg.CreateMap<SystemRecordDomain, SystemRecord>();
                 cfg.CreateMap<SystemRecord, SystemRecordDomain>();
 
+                //medicines
+                cfg.CreateMap<Medicines, MedicinesDomain>()
+                      .ForMember(dest => dest.Animal, opt => opt.Ignore());
+                cfg.CreateMap<MedicinesDomain, Medicines>()
+                     .ForMember(dest => dest.Animal, opt => opt.Ignore());
+
+
+                //funds
+                cfg.CreateMap<Funds, FundsDomain>()
+                      .ForMember(dest => dest.Adopter, opt => opt.Ignore());
+                cfg.CreateMap<FundsDomain, Funds>()
+                     .ForMember(dest => dest.Adopter, opt => opt.Ignore());
+
+                //Euthanasia
+                cfg.CreateMap<Euthanasia, EuthanasiaDomain>()
+                      .ForMember(dest => dest.Animal, opt => opt.Ignore());
+                cfg.CreateMap<EuthanasiaDomain, Euthanasia>()
+                     .ForMember(dest => dest.Animals, opt => opt.Ignore());
+
+                //ContageusAnimals
+                cfg.CreateMap<ContageusAnimals, ContageusAnimalsDomain>()
+                      .ForMember(dest => dest.Animals, opt => opt.Ignore());
+                cfg.CreateMap<ContageusAnimalsDomain, ContageusAnimals>()
+                     .ForMember(dest => dest.Animals, opt => opt.Ignore());
+
+                //Contact
+                cfg.CreateMap<Contact, ContactDomain>()
+                      .ForMember(dest => dest.Adopter, opt => opt.Ignore());
+                cfg.CreateMap<ContactDomain, Contact>()
+                     .ForMember(dest => dest.Adopter, opt => opt.Ignore());
+
+                //Balans
+                cfg.CreateMap<Balans, BalansDomain>();
+                cfg.CreateMap<BalansDomain, Balans>();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             });
 

@@ -10,6 +10,15 @@ namespace ANIMAL.DAL.DataModel
 
 
         public FundsDomain() { }
+        public FundsDomain( int adopterId, decimal amount, string purpose, DateTime dateTime)
+        {
+          
+            AdopterId = adopterId;
+            Amount = amount;
+            Purpose = purpose;
+            DateTime = dateTime;
+
+        }
         public FundsDomain(int id, int adopterId, decimal amount, string purpose, DateTime dateTime, AdopterDomain adopter)
         {
             Id = id;

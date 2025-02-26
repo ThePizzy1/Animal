@@ -519,18 +519,38 @@ namespace ANIMAL.Service
             await _repository.AddSystemRecord( recordNumber,  recordName,  recordDescription);
         }
 
+       async Task IService.AddMedicines(int animalId, string nameOfMedicines, string descriptio, string vetUsername, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage)
+        {
+            await _repository.AddMedicines( animalId,  nameOfMedicines,  descriptio,  vetUsername,  amountOfMedicine,  mesurmentUnit,  medicationIntake,  frequencyOfMedicationUse,  usage);
+        }
+
+        async Task IService.AddFunds(int adopterId, decimal amount, string purpose, DateTime dateTime)
+        {
+            await _repository.AddFunds( adopterId,  amount,  purpose,  dateTime);
+
+        }
 
 
+      async  Task IService.AddEuthanasia(int animalId, DateTime date, string nameOfDesissse, bool complited)
+        {
+            await _repository.AddEuthanasia( animalId,  date,  nameOfDesissse,  complited);
+        }
 
+      async  Task IService.AddContageus(int animalId, string desisseName, DateTime startTime, string description, bool contageus)
+        {
+            await _repository.AddContageus(animalId, desisseName, startTime, description, contageus);
+        }
 
+        async   Task IService.AddContact(string name, string email, string description, int adopterId)
+        {
+            await _repository.AddContact(name, email, description, adopterId);
+        }
 
-
-
-
-
-
-
-
+        async Task IService.AddBalans(string iban, decimal balance, DateTime lastUpdated, string password, string type)
+        {
+            await _repository.AddBalans(iban, balance, lastUpdated, password, type);
+              
+        }
 
 
 
@@ -725,7 +745,7 @@ namespace ANIMAL.Service
         }
 
 
-
+      
 
 
 
@@ -780,6 +800,6 @@ namespace ANIMAL.Service
             }
         }
 
-    
+       
     }
 }

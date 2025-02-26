@@ -35,6 +35,15 @@ namespace ANIMAL.DAL.DataModel
             Complited = complited;
         }
 
+        public EuthanasiaDomain( int animalId, DateTime date, string nameOfDesissse, bool complited)
+        {
+         
+            AnimalId = animalId;
+            Date = date;
+            NameOfDesissse = nameOfDesissse;
+            Complited = complited;
+        }
+
         public int Id { get; set; }
         public int AnimalId { get; set; }
         public DateTime Date { get; set; }

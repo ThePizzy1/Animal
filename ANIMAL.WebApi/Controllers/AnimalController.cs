@@ -81,6 +81,23 @@ namespace ANIMAL.WebApi.Controllers
 
         //NOVO GET
         //-----------------------------------------------------------------------------------------------------------------------------------------------
+        // 15 novih tablica  15/15
+        /*1.animalrecord-                             --RADI 
+         *2. Balans-                                  --RADI
+         * 3.Contact-                                 --RADI                                         
+         * 4.contageus animals-                       --RADI
+         * 5 euthanasia-                              --RADI
+         * 6.found record-                            --RADI                                     
+         * 7.funds-                                   --RADI                                         
+         * 8.labs-                                    --RADI                                        
+         * 9.parametar-                               --RADI                                       
+         * 10.medicines-                              --RADI
+         * 11.news-                                   --RADI
+         * 12.system record-                          --RADI                                         
+         * 13.toys-                                   --RADI
+         * 14.food-                                   --RADI
+         * 15.vet visit-                              --RADI
+        */
 
         [HttpGet]
         [Route("animalrecord_db")]
@@ -221,6 +238,8 @@ namespace ANIMAL.WebApi.Controllers
 
         //get with id
         //-----------------------------------------------------------------------------------------------------------------------------------------------
+   
+
 
         [HttpGet]
         [Route("mammel_db/{id}")]
@@ -310,7 +329,23 @@ namespace ANIMAL.WebApi.Controllers
 
 
         //novo get by id
-
+        // 15 novih tablica  15/15
+        /*1.animalrecord-                             --RADI 
+         *2. Balans-                                  --RADI
+         * 3.Contact-                                 --RADI                                         
+         * 4.contageus animals-                       --RADI
+         * 5 euthanasia-                              --RADI
+         * 6.found record-                            --RADI                                     
+         * 7.funds-                                   --RADI                                         
+         * 8.labs-                                    --RADI                                        
+         * 9.parametar-                               --RADI                                       
+         * 10.medicines-                              --RADI
+         * 11.news-                                   --RADI
+         * 12.system record-                          --RADI                                         
+         * 13.toys-                                   --RADI
+         * 14.food-                                   --RADI
+         * 15.vet visit-                              --RADI
+        */
         [HttpGet]
         [Route("toy/{id}")]
         [AllowAnonymous]
@@ -360,7 +395,7 @@ namespace ANIMAL.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("found/{id}")]
+        [Route("found/{id}")]//ID ŽIVOTINJE
         [AllowAnonymous]
         public FoundRecordDomain GetOneFoundRecordDomain(int id)
         {
@@ -453,7 +488,7 @@ namespace ANIMAL.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("recordAnimal/{id}")]
+        [Route("recordAnimal/{id}")]//ID ŽVOTINJE
         [AllowAnonymous]
             public AnimalRecordDomain GetOneAnimalRecord(int id)
             {
@@ -467,16 +502,6 @@ namespace ANIMAL.WebApi.Controllers
 
         //PUT I POSTE
         //-----------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
 
         //STARO
         //-----------------------------------------------------------------------------------------------------------------------------
@@ -757,76 +782,89 @@ namespace ANIMAL.WebApi.Controllers
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        [HttpPost("addMedicines")]
+        [AllowAnonymous]
+        public async Task AddMedicines([FromBody] MedicinesDomain record)
+        {
+            await _service.AddMedicines(
+               record.AnimalId,
+               record.NameOfMedicines,
+               record.Description,
+               record.VetUsername,
+               record.AmountOfMedicine,
+               record.MesurmentUnit,
+               record.MedicationIntake,
+               record.FrequencyOfMedicationUse,
+               record.Usage
+                );
+        }
+        
+        [HttpPost("addFunds")]
+        [AllowAnonymous]
+        public async Task AddFunds([FromBody] FundsDomain record)
+        {
+            await _service.AddFunds(
+              record.AdopterId,
+              record.Amount,
+              record.Purpose,
+              record.DateTime
+                );
+        }
+
+
+        [HttpPost("addEuthanasia")]
+        [AllowAnonymous]
+        public async Task AddEuthanasia([FromBody] EuthanasiaDomain record)
+        {
+            await _service.AddEuthanasia(
+                record.AnimalId,
+                record.Date,
+                record.NameOfDesissse,
+                record.Complited
+             
+                );
+        }
+
+        [HttpPost("addContageus")]
+        [AllowAnonymous]
+        public async Task AddContageus([FromBody] ContageusAnimalsDomain record)
+        {
+            await _service.AddContageus(
+              record.AnimalId,
+              record.DesisseName,
+              record.StartTime,
+              record.Description,
+              record.Contageus
+                );
+        }
+
+
+        [HttpPost("addContact")]
+        [AllowAnonymous]
+        public async Task AddContact([FromBody] ContactDomain record)
+        {
+            await _service.AddContact(
+            record.Name,
+            record.Email,
+            record.Description,
+            record.AdopterId
+                );
+        }
+
+
+
+        [HttpPost("addBalans")]
+        [AllowAnonymous]
+        public async Task AddBalans([FromBody] BalansDomain record)
+        {
+            await _service.AddBalans(
+        record.Iban,
+        record.Balance,
+        record.LastUpdated,
+        record.Password,
+        record.Type
+                );
+        }
 
 
 
@@ -971,58 +1009,351 @@ namespace ANIMAL.WebApi.Controllers
             return Ok(new { Message = "Adoption status updated successfully" });
         }
 
-       
+
 
 
 
 
         //ubdate novo
         //---------------------------------------------------------------------------------------------------------------------------
-
+        //update novo
+        // 15 novih tablica  13/15
+        /*1.animalrecord-                             --RADI 
+         *2. Balans-                                  --RADI
+         * 3.Contact-                                                                             --NE TREBA- nemože osoba mjenjat oruku koju je poslala
+         * 4.contageus animals-                       --RADI
+         * 5 euthanasia-                              --RADI
+         * 6.found record-                            --RADI                                      - NE SMIJEŠ POSLAT KRIVI REGISTER ID
+         * 7.funds-                                                                               --NE TREBA- nemože osoba mjenjat količinu nocaca koje je poslala
+         * 8.labs-                                                                                --PRVJERI-NEMA add pa nema ni ovo još
+         * 9.parametar-                                                                           --PRVJERI-NEMAM
+         * 10.medicines-                              --RADI
+         * 11.news-                                   --RADI
+         * 12.system record-                                                                      --NE TREBA
+         * 13.toys-                                   --RADI
+         * 14.food-                                   --RADI
+         * 15.vet visit-                              --RADI
+        */
         [HttpPut("updateAnimalRecord")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateAnimalRecordDomain([FromBody] AnimalRecordDomain record)
         {
-
-          
             try
             {
               await _service.UpdateAnimalRecordDomain(
                    record.AnimalId,
                   record.RecordId
-
                     );
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
             }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
 
-           
+        [HttpPut("updateBalansDomain")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateAnimalBalansDomain([FromBody] BalansDomain record)
+        {
+            try
+            {
+                await _service.UpdateAnimalBalansDomain(
+               record.Id,
+               record.Balance,
+               record.LastUpdated,
+               record.Password
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+        [HttpPut("updateContageusAnimalsDomain")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateContageusAnimalsDomain([FromBody] ContageusAnimalsDomain record)
+        {
+            try
+            {
+                await _service.UpdateContageusAnimalsDomain(
+             record.Id,
+             record.Contageus
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
 
+        [HttpPut("updateEuthanasiaDomain")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateEuthanasiaDomain([FromBody] EuthanasiaDomain record)
+        {
+            try
+            {
+                await _service.UpdateEuthanasiaDomain(
+             record.Id,
+            record.Date,
+            record.Complited
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
             return Ok(new { Message = "Animal record updated successfully" });
         }
 
 
+        [HttpPut("updateFoodDomainIncrement")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateFoodDomainIncrement([FromBody] FoodDomain record)
+        {
+            try
+            {
+                await _service.UpdateFoodDomainIncrement(
+             record.Id
+            
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
 
 
+        [HttpPut("updateFoodDomainDecrement")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateFoodDomainDecrement([FromBody] FoodDomain record)
+        {
+            try
+            {
+                await _service.UpdateFoodDomainDecrement(
+             record.Id
+
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
+        [HttpPut("updateFoodDomain")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateFoodDomain([FromBody] FoodDomain record)
+        {
+            try
+            {
+                await _service.UpdateFoodDomain(
+             record.Id,
+             record.BrandName,
+             record.Name,
+             record.FoodType,
+             record.AnimalType,
+             record.AgeGroup,
+             record.Weight,
+             record.CaloriesPerServing,
+             record.WeightPerServing,
+             record.MeasurementPerServing,
+             record.FatContent,
+             record.FatContent,
+             record.ExporationDate,
+             record.Quantity,
+             record.Notes,
+             record.MeasurementPerServing
+
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }//tu samstala
+
+        [HttpPut("updateToyDomainIncrement")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateToysDomainIncrement([FromBody] ToysDomain record)
+        {
+            try
+            {
+                await _service.UpdateToysDomainIncrement(
+             record.Id
+
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
 
 
+        [HttpPut("updateToysDomainDecrement")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateToysDomainDecrement([FromBody] ToysDomain record)
+        {
+            try
+            {
+                await _service.UpdateToysDomainDecrement(
+             record.Id
+
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
 
 
+        [HttpPut("updateToysDomain")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateToysDomain([FromBody] ToysDomain record)
+        {
+            try
+            {
+                await _service.UpdateToysDomain(
+             record.Id,
+             record.BrandName,
+             record.Name,
+             record.AnimalType,
+             record.ToyType,
+             record.AnimalType,
+             record.Hight,
+             record.Width,
+             record.Quantity,
+             record.Notes
+
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
 
 
+        [HttpPut("updateFoundRecordDomain")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateFoundRecordDomain([FromBody] FoundRecordDomain record)
+        {
+            try
+            {
+                await _service.UpdateFoundRecordDomain(
+                    record.Id,
+                    record.AnimalId,
+                    record.Date,
+                    record.Adress,
+                    record.Description,
+                    record.OwnerName,
+                    record.OwnerSurname,
+                    record.OwnerPhoneNumber,
+                    record.OwnerOIB,
+                    record.RegisterId
+
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
+        [HttpPut("updateMedicinesDomainUsage")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateMedicinesDomainUsage([FromBody] MedicinesDomain record)
+        {
+            try
+            {
+                await _service.UpdateMedicinesDomainUsage(
+                    record.Id,
+                    record.Usage
+
+                   
+
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
+        [HttpPut("updateMedicinesDomain")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateMedicinesDomain([FromBody] MedicinesDomain record)
+        {
+            try
+            {
+                await _service.UpdateMedicinesDomain(
+                    record.Id,
+                    record.AmountOfMedicine,
+                    record.MesurmentUnit,
+                    record.MedicationIntake,
+                    record.FrequencyOfMedicationUse
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
 
 
+        [HttpPut("updateNewsDomain")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateNewsDomain([FromBody] NewsDomain record)
+        {
+            try
+            {
+                await _service.UpdateNewsDomain(
+                    record.Id,
+                    record.Name,
+                    record.Description,
+                    record.DateTime
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
 
-
-
-
-
-
-
-
-
+        [HttpPut("updateVetVisitsDomain")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateVetVisitsDomain([FromBody] VetVisitsDomain record)
+        {
+            try
+            {
+                await _service.UpdateVetVisitsDomain(
+                    record.Id,
+                    record.StartTime,
+                    record.EndTime,
+                    record.Notes
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
 
 
 

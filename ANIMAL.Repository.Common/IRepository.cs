@@ -93,11 +93,28 @@ namespace ANIMAL.Repository.Common
 
 
         //update novo
+        // 15 novih tablica  13/15
+        /*1.animalrecord-                             --RADI 
+         *2. Balans-                                  --RADI
+         * 3.Contact-                                                                             --NE TREBA- nemože osoba mjenjat oruku koju je poslala
+         * 4.contageus animals-                       --RADI
+         * 5 euthanasia-                              --RADI
+         * 6.found record-                            --RADI                                      - NE SMIJEŠ POSLAT KRIVI REGISTER ID
+         * 7.funds-                                                                               --NE TREBA- nemože osoba mjenjat količinu nocaca koje je poslala
+         * 8.labs-                                                                                --PRVJERI-NEMA add pa nema ni ovo još
+         * 9.parametar-                                                                           --PRVJERI-NEMAM
+         * 10.medicines-                              --RADI
+         * 11.news-                                   --RADI
+         * 12.system record-                                                                      --NE TREBA
+         * 13.toys-                                   --RADI
+         * 14.food-                                   --RADI
+         * 15.vet visit-                              --RADI
+        */
         public Task<bool> UpdateAnimalRecordDomain(int id, int recordId);
         public  Task<bool> UpdateAnimalBalansDomain(int id, decimal balance, DateTime lastUpdated, string password);
         public  Task<bool> UpdateContageusAnimalsDomain(int id, bool contageus);
         public  Task<bool> UpdateEuthanasiaDomain(int id, DateTime date, bool complited);
-        public  Task<bool> UpdateFoodDomainIncrement(int id);//3
+        public  Task<bool> UpdateFoodDomainIncrement(int id);
         public  Task<bool> UpdateFoodDomainDecrement(int id );
         public Task<bool> UpdateFoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
         public Task<bool> UpdateToysDomainIncrement(int id);
@@ -131,22 +148,31 @@ namespace ANIMAL.Repository.Common
 
 
 
-        //dodavanje novo 15 novih tablica 7/15
-        /*1.animalrecord- samo za dodavanje prve funkcije koja se pokreće samo kod unosa životinje, sve ostalo je update//OVO 
-         *                                                      --RADI 
-         *2. Balans-mislim da ne treba add samo update.
+        //dodavanje novo 15 novih tablica 13/15
+        /*1.animalrecord- samo za dodavanje prve                   --RADI 
+         * funkcije koja se 
+         * pokreće samo kod unosa životinje,
+         * sve ostalo je update//OVO 
+         *                                                      
+         *2. Balans-mislim da ne treba add samo update.            --RADI SAMO MORAŠ SPOJIT IBAN
          * Stvorila bih jedan račun i na njemu ddavala i 
          * uzimala- Ako dodam još neku osobu koja će se
-         * bavit sa time dodat ću i add
+         * bavit sa time dodat ću i add u frontend
          * 
-         * 3.Contact-potreban add i update za pročitano
-         * 4.contageus animals-potrebno add
-         * 5 euthanasia-potreban add
-         * 6.found record- potreban add                           --RADI
-         * 7.funds-potreban add
-         * 8.labs-potreban add
-         * 9.parametar-potreban add 
-         * 10.medicines-potreban add
+         * 3.Contact-potreban add i update za pročitano            --RADI
+         * 4.contageus animals-potrebno add                        --RADI
+         * 5 euthanasia-potreban add                               --RADI
+         * 6.found record- potreban add                            --RADI
+         * 7.funds-potreban add                                    --RADI
+         * 
+         * 8.labs-potreban add--opcija za parametar i labs,
+         * da labs
+         * napravi listu id i u tablici parametar napravi prazne 
+         * objekte... Opcija dva stavit da Parametar ima id labs,
+         * prvo napravit labs,a zatim parametre sa id od labs....
+         * 
+         * 9.parametar-potreban add                                --NAPRAVI
+         * 10.medicines-potreban add                               --RADI
          * 11.news-potreban add                                    --RADI
          * 12.system record- potreban add samo admin               --RADI
          * 13.toys-potreban add                                    --RADI
@@ -155,7 +181,7 @@ namespace ANIMAL.Repository.Common
         */
 
         //Ovo oboje treba kad se životinja dodaje
-       public Task AddAnimalRecord(int idAnimal,  int idRecord);//RADI
+        public Task AddAnimalRecord(int idAnimal,  int idRecord);
        public Task AddFoundRecord( int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);//RADI
        public Task AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
        public Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes);
@@ -166,17 +192,18 @@ namespace ANIMAL.Repository.Common
 
         public Task AddSystemRecord(int recordNumber, string recordName, string recordDescription);
 
+        public Task AddMedicines(int animalId, string nameOfMedicines, string descriptio, string vetUsername, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage);
 
 
+        public Task AddFunds(int adopterId, decimal amount, string purpose, DateTime dateTime);
 
+        public Task AddEuthanasia(int animalId, DateTime date, string nameOfDesissse, bool complited);
 
+        public Task AddContageus(int animalId, string desisseName, DateTime startTime, string description, bool contageus);
 
+        public Task AddContact(string name, string email, string description, int adopterId);
 
-
-
-
-
-
+        public Task AddBalans(string iban, decimal balance, DateTime lastUpdated, string password, string type);
 
 
 

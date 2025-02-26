@@ -27,6 +27,15 @@ namespace ANIMAL.MODEL
             AdopterId = adopterId;
      
         }
+        public ContactDomain( string name, string email, string description, int adopterId)
+        {
+         
+            Name = name;
+            Email = email;
+            Description = description;
+            AdopterId = adopterId;
+
+        }
 
 
 

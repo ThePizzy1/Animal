@@ -1913,6 +1913,210 @@ namespace ANIMAL.Repository
         }
 
 
+        public async Task AddMedicines(int animalId, string nameOfMedicines, string descriptio, string vetUsername,
+            decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage)
+        {
+            var animalExists = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
+            if (animalExists != null)
+            {
+                var medicinesAnimal = new MedicinesDomain
+                {
+                    AnimalId=animalId,
+                    NameOfMedicines=nameOfMedicines,
+                    Description=descriptio,
+                    VetUsername=vetUsername,
+                    AmountOfMedicine=amountOfMedicine,
+                    MesurmentUnit=mesurmentUnit,
+                    FrequencyOfMedicationUse=frequencyOfMedicationUse,
+                    Usage=usage
+                  
+
+
+                };
+
+                var animal = _mappingService.Map<Medicines>(medicinesAnimal);
+                _appDbContext.Medicines.Add(animal);
+                await _appDbContext.SaveChangesAsync();
+
+            }
+            else
+            {
+                throw new Exception($"Životinj {animalExists.IdAnimal} ne postoji!");
+            }
+        }
+
+
+
+        async Task IRepository.AddFunds(int adopterId, decimal amount, string purpose, DateTime dateTime)
+        {
+            var adopterExists = await _appDbContext.Adopter.FirstOrDefaultAsync(a => a.Id == adopterId);
+            if (adopterExists != null)
+            {
+                var  funds = new FundsDomain
+                {
+                    AdopterId=adopterId,
+                    Amount=amount,
+                    Purpose=purpose,
+                    DateTime=dateTime
+                    
+
+
+                };
+
+                var fundsResponse = _mappingService.Map<Funds>(funds);
+                _appDbContext.Funds.Add(fundsResponse);
+                await _appDbContext.SaveChangesAsync();
+
+            }
+            else
+            {
+                throw new Exception($"Adopter {adopterExists.Id} ne postoji!");
+            }
+        }
+
+
+
+   public   async  Task AddEuthanasia(int animalId, DateTime date, string nameOfDesissse, bool complited)
+        {
+            var animalExists = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
+            if (animalExists != null)
+            {
+                var euthanasiaAnimal = new EuthanasiaDomain
+                {
+                    AnimalId=animalId,
+                    Date=date,
+                    NameOfDesissse=nameOfDesissse,
+                    Complited=complited
+
+                };
+
+                var animal = _mappingService.Map<Euthanasia>(euthanasiaAnimal);
+                _appDbContext.Euthanasia.Add(animal);
+                await _appDbContext.SaveChangesAsync();
+
+            }
+            else
+            {
+                throw new Exception($"Životinj {animalExists.IdAnimal} ne postoji!");
+            }
+        }
+
+
+
+       public async Task AddContageus(int animalId, string desisseName, DateTime startTime, string description, bool contageus)
+        {
+            var animalExists = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
+            if (animalExists != null)
+            {
+                var contageusAnimal = new ContageusAnimalsDomain
+                {
+                   AnimalId = animalId,
+                   DesisseName = desisseName,
+                   StartTime = startTime,
+                   Description = description,
+                   Contageus=contageus
+
+                };
+
+                var animal = _mappingService.Map<ContageusAnimals>(contageusAnimal);
+                _appDbContext.ContageusAnimals.Add(animal);
+                await _appDbContext.SaveChangesAsync();
+
+            }
+            else
+            {
+                throw new Exception($"Životinj {animalExists.IdAnimal} ne postoji!");
+            }
+        }
+
+
+      public async  Task AddContact(string name, string email, string description, int adopterId)
+        {
+            var adopterExists = await _appDbContext.Adopter.FirstOrDefaultAsync(a => a.Id == adopterId);
+            if (adopterExists != null)
+            {
+                var contact = new ContactDomain
+                {
+                  Name= name,
+                  Email= email,
+                  Description= description,
+                  AdopterId= adopterId
+
+
+
+                };
+
+                var contactResponse = _mappingService.Map<Contact>(contact);
+                _appDbContext.Contact.Add(contactResponse);
+                await _appDbContext.SaveChangesAsync();
+
+            }
+            else
+            {
+                throw new Exception($"Adopter {adopterExists.Id} ne postoji!");
+            }
+        }
+
+
+
+
+     public async   Task AddBalans(string iban, decimal balance, DateTime lastUpdated, string password, string type)
+        {
+            var balans = new BalansDomain
+            {
+              Iban = iban,
+              Balance= balance,
+              LastUpdated= lastUpdated,
+              Password= password,
+              Type= type
+
+
+
+            };
+
+            var balansResponse = _mappingService.Map<Balans>(balans);
+            _appDbContext.Balans.Add(balansResponse);
+            await _appDbContext.SaveChangesAsync();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

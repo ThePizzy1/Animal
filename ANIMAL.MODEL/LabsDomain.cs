@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ANIMAL.MODEL
-{
+{       //TREBA MAKNUT LIST PARAMETAR
     public class LabsDomain
     {
         public LabsDomain() { }

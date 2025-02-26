@@ -5,8 +5,9 @@ using System.Text;
 namespace ANIMAL.MODEL
 {
     public class ParameterDomain
-    {//parametri iz labaratorijskih nalaza pošto svaki nalaz ne mora nužno imat iste parametre pa ovako samo dodamo listu željenih, svaki parametar ima id lab nalaza 
-        //planiram napravit da se prvo napravi nalaz spremi te da se parametri ažuriraju te tako znaju koji je id nalaza
+    {    //parametri iz labaratorijskih nalaza pošto svaki nalaz ne mora nužno imat iste parametre pa ovako samo dodamo listu željenih, svaki parametar ima id lab nalaza 
+         //planiram napravit da se prvo napravi nalaz spremi te da se parametri dodaju poslje lap te tako znaju koji je id nalaza
+         //Napravi da je ID PRAMETAR = ID LAB
         public ParameterDomain() { }
         public ParameterDomain(int id, string parameterName, decimal parameterValue, string remarks, string measurementUnits)
         {

@@ -1318,7 +1318,8 @@ namespace ANIMAL.Repository
         public async Task<bool> UpdateFoodDomainIncrement(int id)//ažurira se nakon što dođe narudžba nove hrane
         {
             var food = await _appDbContext.Food.FirstOrDefaultAsync(a => a.Id == id);
-            food.Quantity= food.Quantity++;
+            var quontiy = food.Quantity + 1;
+            food.Quantity= quontiy;
 
             _appDbContext.Food.Update(food);
             await _appDbContext.SaveChangesAsync();
@@ -1330,7 +1331,8 @@ namespace ANIMAL.Repository
         public async Task<bool> UpdateFoodDomainDecrement(int id)//ažurira se kad se određena hrana potroši
         {
             var food = await _appDbContext.Food.FirstOrDefaultAsync(a => a.Id == id);
-            food.Quantity = food.Quantity--;
+            var quontiy = food.Quantity - 1;
+            food.Quantity = quontiy;
 
             _appDbContext.Food.Update(food);
             await _appDbContext.SaveChangesAsync();
@@ -1364,7 +1366,8 @@ namespace ANIMAL.Repository
         public async Task<bool> UpdateToysDomainIncrement(int id)//ažurira se nakon što dođe narudžba nove igračaka za životnje
         {
             var toy = await _appDbContext.Toys.FirstOrDefaultAsync(a => a.Id == id);
-            toy.Quantity = toy.Quantity++;
+            var quontiy = toy.Quantity + 1;
+            toy.Quantity = quontiy;
 
             _appDbContext.Toys.Update(toy);
             await _appDbContext.SaveChangesAsync();
@@ -1374,7 +1377,8 @@ namespace ANIMAL.Repository
         public async Task<bool> UpdateToysDomainDecrement(int id)//ažurira se nakon što dođe se određena  igračaka podjeli
         {
             var toy = await _appDbContext.Toys.FirstOrDefaultAsync(a => a.Id == id);
-            toy.Quantity = toy.Quantity--;
+            var quontiy = toy.Quantity  -1;
+            toy.Quantity = quontiy;
 
             _appDbContext.Toys.Update(toy);
             await _appDbContext.SaveChangesAsync();

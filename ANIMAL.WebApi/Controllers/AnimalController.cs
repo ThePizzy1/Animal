@@ -98,7 +98,7 @@ namespace ANIMAL.WebApi.Controllers
          * 14.food-                                   --RADI
          * 15.vet visit-                              --RADI
         */
-
+        //--------------------------------------------------------------------------------------------------------------
         [HttpGet]
         [Route("animalrecord_db")]
         [AllowAnonymous]
@@ -107,6 +107,7 @@ namespace ANIMAL.WebApi.Controllers
             IEnumerable<AnimalRecordDomain> animalDb = _service.GetAllAnimalRecordDomain();
             return animalDb;
         }
+
         [HttpGet]
         [Route("balans_db")]
         [AllowAnonymous]
@@ -115,6 +116,7 @@ namespace ANIMAL.WebApi.Controllers
             IEnumerable<BalansDomain> animalDb = _service.GetAllBlansDomain();
             return animalDb;
         }
+
         [HttpGet]
         [Route("contact_db")]
         [AllowAnonymous]
@@ -132,6 +134,7 @@ namespace ANIMAL.WebApi.Controllers
             IEnumerable<ContageusAnimalsDomain> animalDb = _service.GetAllContageusAnimalsDomain();
             return animalDb;
         }
+
         [HttpGet]
         [Route("euthanasia_db")]
         [AllowAnonymous]
@@ -140,8 +143,6 @@ namespace ANIMAL.WebApi.Controllers
             IEnumerable<EuthanasiaDomain> animalDb = _service.GetAllEuthanasiaDomain();
             return animalDb;
         }
-
-
 
         [HttpGet]
         [Route("food_db")]
@@ -160,7 +161,6 @@ namespace ANIMAL.WebApi.Controllers
             IEnumerable<FoundRecordDomain> animalDb = _service.GetAllFoundRecord();
             return animalDb;
         }
-
 
         [HttpGet]
         [Route("funds_db")]
@@ -281,19 +281,13 @@ namespace ANIMAL.WebApi.Controllers
             ReptileDomain reptileDb = _service.GetAllReptileDomain(id);
             return reptileDb;
         }
-
-
         [HttpGet("returned/{adopterId}")]
         [AllowAnonymous]
-
         public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId)
         {
             IEnumerable<ReturnedAnimalDomain> adoptedDomains = _service.GetAllReturnedAnimalsForAdopter(adopterId);
             return adoptedDomains;
         }
-
-
-
         [HttpGet]
         [Route("animal/{animalId}")]
         [AllowAnonymous]
@@ -327,7 +321,7 @@ namespace ANIMAL.WebApi.Controllers
             return adoptedDomains;
         }
 
-
+        //--------------------------------------------------------------------------------------------------------------
         //novo get by id
         // 15 novih tablica  15/15
         /*1.animalrecord-                             --RADI 
@@ -346,6 +340,7 @@ namespace ANIMAL.WebApi.Controllers
          * 14.food-                                   --RADI
          * 15.vet visit-                              --RADI
         */
+        //--------------------------------------------------------------------------------------------------------------
         [HttpGet]
         [Route("toy/{id}")]
         [AllowAnonymous]
@@ -363,7 +358,6 @@ namespace ANIMAL.WebApi.Controllers
             NewsDomain parametar = _service.GetOneNewsDomain(id);
             return parametar;
         }
-
 
         [HttpGet]
         [Route("meds/{id}")]
@@ -383,7 +377,6 @@ namespace ANIMAL.WebApi.Controllers
             return parametar;
         }
 
-
         [HttpGet]
         [Route("funds/{id}")]
         [AllowAnonymous]
@@ -392,7 +385,6 @@ namespace ANIMAL.WebApi.Controllers
             FundsDomain parametar = _service.GetOneFundsDomain(id);
             return parametar;
         }
-
 
         [HttpGet]
         [Route("found/{id}")]//ID ŽIVOTINJE
@@ -412,7 +404,6 @@ namespace ANIMAL.WebApi.Controllers
             return parametar;
         }
 
-
         [HttpGet]
         [Route("euthanasia/{id}")]
         [AllowAnonymous]
@@ -421,7 +412,6 @@ namespace ANIMAL.WebApi.Controllers
             EuthanasiaDomain parametar = _service.GetOneEuthanasiaDomain(id);
             return parametar;
         }
-
 
         [HttpGet]
         [Route("contageus/{id}")]
@@ -432,7 +422,6 @@ namespace ANIMAL.WebApi.Controllers
             return parametar;
         }
 
-
         [HttpGet]
         [Route("contact/{id}")]
         [AllowAnonymous]
@@ -441,7 +430,6 @@ namespace ANIMAL.WebApi.Controllers
             ContactDomain parametar = _service.GetOneContactDomain(id);
             return parametar;
         }
-
 
         [HttpGet]
         [Route("balans/{id}")]
@@ -452,8 +440,11 @@ namespace ANIMAL.WebApi.Controllers
             return parametar;
         }
 
-        //get by id novo novo
 
+        //--------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
+        //get by id novo novo
+        //--------------------------------------------------------------------------------------------------------------
         [HttpGet]
         [Route("medsAnimal/{id}")]
         [AllowAnonymous]
@@ -530,10 +521,6 @@ namespace ANIMAL.WebApi.Controllers
             return CreatedAtAction(nameof(GetAdopterById), new { id = createdAdopter.Id }, createdAdopter);
         }
 
-
-
-
-
         [HttpPost("addAnimal")]
         [AllowAnonymous]
         public async Task<IActionResult> AddAnimalAsync(
@@ -588,15 +575,6 @@ namespace ANIMAL.WebApi.Controllers
                }
            }
 
-
-
-
-
-
-
- 
-
-
         [HttpPost("addAdoptedAnimal")] 
         [AllowAnonymous]
         public async Task<IActionResult> AddAdoptedAnimal([FromBody] AdoptedDomain model)
@@ -644,15 +622,40 @@ namespace ANIMAL.WebApi.Controllers
         }
 
 
-
-
-
-
-
-
-
         //NOVO add
+        //dodavanje novo 15 novih tablica 13/15
+        /*1.animalrecord- samo za dodavanje prve                   --RADI 
+         * funkcije koja se 
+         * pokreće samo kod unosa životinje,
+         * sve ostalo je update//OVO 
+         *                                                      
+         *2. Balans-mislim da ne treba add samo update.            --RADI SAMO MORAŠ SPOJIT IBAN
+         * Stvorila bih jedan račun i na njemu ddavala i 
+         * uzimala- Ako dodam još neku osobu koja će se
+         * bavit sa time dodat ću i add u frontend
+         * 
+         * 3.Contact-potreban add i update za pročitano            --RADI
+         * 4.contageus animals-potrebno add                        --RADI
+         * 5 euthanasia-potreban add                               --RADI
+         * 6.found record- potreban add                            --RADI
+         * 7.funds-potreban add                                    --RADI
+         * 
+         * 8.labs-potreban add--opcija za parametar i labs,
+         * da labs
+         * napravi listu id i u tablici parametar napravi prazne 
+         * objekte... Opcija dva stavit da Parametar ima id labs,
+         * prvo napravit labs,a zatim parametre sa id od labs....
+         * 
+         * 9.parametar-potreban add                                --NAPRAVI
+         * 10.medicines-potreban add                               --RADI
+         * 11.news-potreban add                                    --RADI
+         * 12.system record- potreban add samo admin               --RADI
+         * 13.toys-potreban add                                    --RADI
+         * 14.food-add                                             --RADI
+         * 15.vet visit-potreban add                               --RADI
+        */
 
+        //Ovo oboje treba kad se životinja dodaje
 
         [HttpPost("addAnimalRecord")]
         [AllowAnonymous]
@@ -668,8 +671,6 @@ namespace ANIMAL.WebApi.Controllers
         {
             await _service.AddFoundRecord(record.AnimalId, record.Date, record.Adress, record.Description, record.OwnerName, record.OwnerSurname, record.OwnerPhoneNumber, record.OwnerOIB, record.RegisterId);
         }
-
-
 
 
         [HttpPost("addFood")]
@@ -913,9 +914,6 @@ namespace ANIMAL.WebApi.Controllers
         }
 
 
-
-
-
         [HttpPut("incrementAdopted/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> IncrementNumberOfAdoptedAnimals(string id)
@@ -933,8 +931,6 @@ namespace ANIMAL.WebApi.Controllers
             await _service.IncrementNumberOfReturnedAnimalsAsync(id);
             return NoContent(); // HTTP 204 No Content
         }
-
-
 
 
         [HttpPut("updateAnimal/{idAnimal}")]
@@ -972,9 +968,6 @@ namespace ANIMAL.WebApi.Controllers
         }
 
 
-
-
-
         [HttpPut("adoptionstatus/{animalId}")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateAdoptionStatus(int animalId)
@@ -983,9 +976,6 @@ namespace ANIMAL.WebApi.Controllers
 
             return Ok(new { Message = "Adoption status updated successfully" });
         }
-
-
-
 
 
         [HttpPut("adoptionstatusfalse/{animalId}")]
@@ -1108,7 +1098,6 @@ namespace ANIMAL.WebApi.Controllers
             return Ok(new { Message = "Animal record updated successfully" });
         }
 
-
         [HttpPut("updateFoodDomainIncrement")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateFoodDomainIncrement([FromBody] FoodDomain record)
@@ -1126,7 +1115,6 @@ namespace ANIMAL.WebApi.Controllers
             }
             return Ok(new { Message = "Animal record updated successfully" });
         }
-
 
         [HttpPut("updateFoodDomainDecrement")]
         [AllowAnonymous]
@@ -1177,7 +1165,7 @@ namespace ANIMAL.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
             }
             return Ok(new { Message = "Animal record updated successfully" });
-        }//tu samstala
+        }
 
         [HttpPut("updateToyDomainIncrement")]
         [AllowAnonymous]
@@ -1197,7 +1185,6 @@ namespace ANIMAL.WebApi.Controllers
             return Ok(new { Message = "Animal record updated successfully" });
         }
 
-
         [HttpPut("updateToysDomainDecrement")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateToysDomainDecrement([FromBody] ToysDomain record)
@@ -1215,7 +1202,6 @@ namespace ANIMAL.WebApi.Controllers
             }
             return Ok(new { Message = "Animal record updated successfully" });
         }
-
 
         [HttpPut("updateToysDomain")]
         [AllowAnonymous]
@@ -1243,7 +1229,6 @@ namespace ANIMAL.WebApi.Controllers
             }
             return Ok(new { Message = "Animal record updated successfully" });
         }
-
 
         [HttpPut("updateFoundRecordDomain")]
         [AllowAnonymous]
@@ -1314,7 +1299,6 @@ namespace ANIMAL.WebApi.Controllers
             return Ok(new { Message = "Animal record updated successfully" });
         }
 
-
         [HttpPut("updateNewsDomain")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateNewsDomain([FromBody] NewsDomain record)
@@ -1354,9 +1338,6 @@ namespace ANIMAL.WebApi.Controllers
             }
             return Ok(new { Message = "Animal record updated successfully" });
         }
-
-
-
 
 
 

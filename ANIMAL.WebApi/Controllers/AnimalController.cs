@@ -1338,8 +1338,24 @@ namespace ANIMAL.WebApi.Controllers
             }
             return Ok(new { Message = "Animal record updated successfully" });
         }
-
-
+        
+        [HttpPut("updateContactDomain")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateContactDomain([FromBody] ContactDomain record)
+        {
+            try
+            {
+                await _service.UpdateContactDomain(
+                    record.Id
+                  
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
 
 
 

@@ -96,7 +96,7 @@ namespace ANIMAL.Repository.Common
         // 15 novih tablica  13/15
         /*1.animalrecord-                             --RADI 
          *2. Balans-                                  --RADI
-         * 3.Contact-                                                                             --NE TREBA- nemože osoba mjenjat oruku koju je poslala
+         * 3.Contact-                                                                             
          * 4.contageus animals-                       --RADI
          * 5 euthanasia-                              --RADI
          * 6.found record-                            --RADI                                      - NE SMIJEŠ POSLAT KRIVI REGISTER ID
@@ -127,6 +127,7 @@ namespace ANIMAL.Repository.Common
         public Task<bool> UpdateNewsDomain(int id, string name, string description, DateTime dateTime);
         public Task<bool> UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes);
 
+        public Task<bool> UpdateContactDomain(int id);
 
 
 

@@ -18,14 +18,14 @@ namespace ANIMAL.MODEL
             Adopter = adopter;
         }
 
-        public ContactDomain(int id, string name, string email, string description, int adopterId)
+        public ContactDomain(int id, string name, string email, string description, int adopterId, bool read)
         {
             Id = id;
             Name = name;
             Email = email;
             Description = description;
             AdopterId = adopterId;
-     
+            Read = read;
         }
         public ContactDomain( string name, string email, string description, int adopterId)
         {
@@ -36,6 +36,11 @@ namespace ANIMAL.MODEL
             AdopterId = adopterId;
 
         }
+        public ContactDomain(bool read)
+        {
+            Read = read;
+          
+        }
 
 
 
@@ -45,6 +50,7 @@ namespace ANIMAL.MODEL
         public string Name { get; set; }
         public string Email { get; set; }
         public string Description { get; set; }
+        public bool Read {  get; set; }
         public int AdopterId { get; set; }
         public AdopterDomain Adopter { get; set; }
     }

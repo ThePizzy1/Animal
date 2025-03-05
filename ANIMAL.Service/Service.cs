@@ -744,8 +744,12 @@ namespace ANIMAL.Service
             return true;
         }
 
+       async Task<bool> IService.UpdateContactDomain(int id)
+        {
+            await _repository.UpdateContactDomain(id);
+            return true;
+        }
 
-      
 
 
 
@@ -800,6 +804,6 @@ namespace ANIMAL.Service
             }
         }
 
-       
+      
     }
 }

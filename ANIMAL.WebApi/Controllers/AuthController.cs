@@ -53,8 +53,10 @@ namespace ANIMAL.WebApi.Controllers
                 await _userManager.AddToRoleAsync(user, "User");
                 return Ok(new { message = "User registered successfully" });
             }
-
-            return BadRequest(result.Errors);
+            else
+            {
+                return BadRequest(result.Errors);
+            }
         }
         [HttpPost("registerAdmin")]
         public async Task<IActionResult> RegisterWorker([FromBody] RgisterModel model)

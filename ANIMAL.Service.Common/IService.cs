@@ -201,6 +201,7 @@ namespace ANIMAL.Service.Common
         public Task<bool> UpdateNewsDomain(int id, string name, string description, DateTime dateTime);
         public Task<bool> UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes);
 
+        public Task<bool> UpdateContactDomain(int id);
 
 
 

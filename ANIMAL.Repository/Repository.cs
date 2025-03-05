@@ -196,7 +196,8 @@ namespace ANIMAL.Repository
                 e.Name,
                 e.Email,
                 e.Description,
-                e.AdopterId
+                e.AdopterId,
+                e.Read
                 ));
             return contentDomain;
         }
@@ -909,7 +910,8 @@ namespace ANIMAL.Repository
                            x.Contact.Name,
                            x.Contact.Email,
                            x.Contact.Description,
-                           x.Contact.AdopterId
+                           x.Contact.AdopterId,
+                           x.Contact.Read
 
 
 
@@ -1487,7 +1489,17 @@ namespace ANIMAL.Repository
             return true;
         }
 
+      public async  Task<bool> UpdateContactDomain(int id)
+        {
+            var contact = await _appDbContext.Contact.FirstOrDefaultAsync(a => a.Id == id);
 
+            contact.Read = true;
+          
+
+            _appDbContext.Contact.Update(contact);
+            await _appDbContext.SaveChangesAsync();
+            return true;
+        }
 
 
 
@@ -2288,6 +2300,6 @@ namespace ANIMAL.Repository
             throw new NotImplementedException();
         }
 
-      
+       
     }
 }

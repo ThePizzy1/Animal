@@ -68,7 +68,7 @@ namespace ANIMAL.Service.Common
 
         //get by id novo novo
 
-
+        public AdopterDomain GetAdopterByIdInt(int id);
         public MedicinesDomain GetOneMedicinesAnimal(int id);
         public ContageusAnimalsDomain GetOneContageusAnimal(int id);
         public LabsDomain GetOneLabsAnimal(int id);
@@ -211,6 +211,7 @@ namespace ANIMAL.Service.Common
         public Task<bool> DeleteAdoptedAsync(int adoptedId);//ovo se ne koristi
         public  void DeleteAdoptedReturn(int adoptedId); //ovo se ne koristi
         public  Task DeleteAnimal(int idAnimal);//ovo se ne koristi
+        public Task DeleteNews(int id);
 
     }
 }

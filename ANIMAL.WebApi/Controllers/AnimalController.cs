@@ -342,6 +342,16 @@ namespace ANIMAL.WebApi.Controllers
         */
         //--------------------------------------------------------------------------------------------------------------
         [HttpGet]
+        [Route("adopterId/{id}")]
+        [AllowAnonymous]
+        public AdopterDomain GetAdopterByIdInt(int id)
+        {
+            AdopterDomain parametar = _service.GetAdopterByIdInt(id);
+            return parametar;
+        }
+        //-----------------------------------------------------------------------------------------------------------------------------
+
+        [HttpGet]
         [Route("toy/{id}")]
         [AllowAnonymous]
         public ToysDomain GetOneToysDomain(int id)
@@ -1380,7 +1390,31 @@ namespace ANIMAL.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Došlo je do greške: {ex.Message}");
             }
         }
+        [HttpDelete("deleteNews/{idNews}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> DeleteNews(int id) {
+            try
+            {
 
+                await _service.DeleteNews(id);
+                return Ok("News successfully deleted.");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"News with ID {id} not found.");
+            }
+            catch (InvalidOperationException ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
+        }
 
         [HttpDelete("{idAnimal}")]
          [AllowAnonymous]

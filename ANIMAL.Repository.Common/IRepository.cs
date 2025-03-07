@@ -77,7 +77,7 @@ namespace ANIMAL.Repository.Common
         public VetVisitsDomain GetOneVetVisitAnimal(int id);
         public AnimalRecordDomain GetOneAnimalRecord(int id);//RADI
 
-
+        public AdopterDomain GetAdopterByIdInt(int id);
 
 
 

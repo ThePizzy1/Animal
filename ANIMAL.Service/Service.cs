@@ -2,6 +2,7 @@
 using ANIMAL.MODEL;
 using ANIMAL.Repository.Common;
 using ANIMAL.Service.Common;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -279,7 +280,12 @@ namespace ANIMAL.Service
         }
 
         //get by id novo novo
-
+        //-----------------------------------------------------------
+        AdopterDomain IService.GetAdopterByIdInt(int id)
+        {
+            AdopterDomain domain = _repository.GetAdopterByIdInt(id);
+            return domain;
+        }
         MedicinesDomain IService.GetOneMedicinesAnimal(int id)
         {
             MedicinesDomain domain = _repository.GetOneMedicinesAnimal(id);
@@ -330,7 +336,7 @@ namespace ANIMAL.Service
             }
             catch (Exception ex)
             {
-                // Log exception
+               
                 throw new Exception($"Failed to add amphibian: {ex.Message}", ex);
             }
         }
@@ -344,7 +350,7 @@ namespace ANIMAL.Service
             }
             catch (Exception ex)
             {
-                // Log exception
+               
                 throw new Exception($"Failed to add amphibian: {ex.Message}", ex);
             }
         }
@@ -358,7 +364,7 @@ namespace ANIMAL.Service
             }
             catch (Exception ex)
             {
-                // Log exception
+               
                 throw new Exception($"Failed to add amphibian: {ex.Message}", ex);
             }
         }
@@ -372,7 +378,7 @@ namespace ANIMAL.Service
             }
             catch (Exception ex)
             {
-                // Log exception
+             
                 throw new Exception($"Failed to add amphibian: {ex.Message}", ex);
             }
 
@@ -387,7 +393,7 @@ namespace ANIMAL.Service
             }
             catch (Exception ex)
             {
-                // Log exception
+               
                 throw new Exception($"Failed to add amphibian: {ex.Message}", ex);
             }
 
@@ -428,7 +434,7 @@ namespace ANIMAL.Service
             }
             catch (Exception ex)
             {
-                // Handle exception as needed
+                
                 throw new Exception($"Failed to add animal: {ex.Message}");
             }
         }
@@ -458,7 +464,7 @@ namespace ANIMAL.Service
             }
             catch (Exception ex)
             {
-                // Handle exception as needed
+                
                 throw new Exception($"Failed to add record service message: {ex.Message}");
             }
            
@@ -474,7 +480,7 @@ namespace ANIMAL.Service
             }
             catch (Exception ex)
             {
-                // Handle exception as needed
+                
                 throw new Exception($"Failed to add found animal service message: {ex.Message}");
             }
         }
@@ -508,7 +514,7 @@ namespace ANIMAL.Service
             }
             catch (Exception ex)
             {
-                // Handle exception as needed
+             
                 throw new Exception($"Failed to add found animal service message: {ex.Message}");
             }
         }
@@ -768,7 +774,12 @@ namespace ANIMAL.Service
 
 
         //DELETE
-
+      async Task IService.DeleteNews(int id)
+        {
+            await _repository.DeleteNews(id);
+           
+          
+        }
         async Task<bool> IService.DeleteAdoptedAsync(int adoptedId)
         {
             await _repository.DeleteAdoptedAsync(adoptedId);

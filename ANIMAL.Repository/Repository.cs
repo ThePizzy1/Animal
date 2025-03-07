@@ -532,7 +532,7 @@ namespace ANIMAL.Repository
 
             if (adopterDb == null)
             {
-                return null; // ili obradi situaciju kako želite
+                return null; 
             }
 
             var adopterDomain = new AdopterDomain(
@@ -670,6 +670,31 @@ namespace ANIMAL.Repository
         //----------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------
+        AdopterDomain IRepository.GetAdopterByIdInt(int id)
+        {
+            var adopterDb = _appDbContext.Adopter.FirstOrDefault(a => a.Id == id);
+
+            if (adopterDb == null)
+            {
+                return null;
+            }
+
+            var adopterDomain = new AdopterDomain(
+                adopterDb.Id,
+                adopterDb.FirstName,
+                adopterDb.LastName,
+                adopterDb.DateOfBirth,
+                adopterDb.Residence,
+                adopterDb.Username,
+                adopterDb.Password,
+                adopterDb.NumAdoptedAnimals,
+                adopterDb.NumReturnedAnimals,
+                adopterDb.Flag,
+                adopterDb.RegisterId);
+
+            return adopterDomain;
+        }
+
         ToysDomain IRepository.GetOneToysDomain(int id)
         {
             var toyDb = _appDbContext.Toys.FirstOrDefault(a => a.Id == id);
@@ -2169,6 +2194,27 @@ namespace ANIMAL.Repository
 
         //DELETE
         //----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+       async Task IRepository.DeleteNews(int id)
+        {
+            var newsRecord = await _appDbContext.News.FirstOrDefaultAsync(a => a.Id == id);
+
+            if (newsRecord != null)
+            {
+               
+             var response=   _appDbContext.News.Remove(newsRecord);
+                await _appDbContext.SaveChangesAsync();
+                
+
+            }
+        }
+
+
+
+
+
+
         public async void DeleteAdoptedReturn(int adoptedId)
         {
 
@@ -2295,11 +2341,6 @@ namespace ANIMAL.Repository
 
       
 
-        Task IRepository.DeleteNews(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-       
+        
     }
 }

@@ -151,7 +151,7 @@ namespace ANIMAL.DAL.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    Description = table.Column<string>(unicode: false, maxLength: 500, nullable: false),
+                    Description = table.Column<string>(unicode: false, maxLength: 500, nullable: false),//dodaj  veći max lenght
                     DateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>

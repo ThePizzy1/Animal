@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ANIMAL.DAL.DataModel
-{
+{   //dodaj image tipa da je novost kao letak 
     public partial class News
     {
         public int Id { get; set; }

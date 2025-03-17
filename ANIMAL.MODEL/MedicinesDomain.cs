@@ -7,8 +7,8 @@ namespace ANIMAL.MODEL
 {
     public class MedicinesDomain
     {
-        //dodaj tablicu povjest dolest i spoji sve tablice bolesti na jednu i napravi da se sprema id životinje trajanje bolesti datum updata itd. kako bi mogli pratit sve.
-        //
+        //dodaj tablicu povjest bolest i spoji sve tablice bolesti na jednu i napravi da se sprema id životinje trajanje bolesti datum updata itd. kako bi mogli pratit sve.
+        //ZAR NE MOŽEŠ PRETRAŽIT NA FRONTENDU I ISPISAT
         public  MedicinesDomain() { }
         public MedicinesDomain( int animalId, string nameOfMedicines, string descriptio, string vetUsername, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage)
         {

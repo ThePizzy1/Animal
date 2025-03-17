@@ -292,7 +292,7 @@ namespace ANIMAL.Repository
             var labDomain = labDb.Select(e => new LabsDomain(
                 e.Id,
                 e.AnimalId,
-                e.Parameters,
+            
                 e.DateTime
                 
                 ));
@@ -333,7 +333,7 @@ namespace ANIMAL.Repository
         {
             var parameterDb= _appDbContext.Parameter.ToList();
             var parameterDomain = parameterDb.Select(e=> new ParameterDomain(
-                e.Id,
+             
              
                 e.ParameterName,
                 e.ParameterValue,
@@ -830,7 +830,7 @@ namespace ANIMAL.Repository
                             .Select(x => new LabsDomain(
                                  x.Labs.Id,
                                  x.Labs.AnimalId,
-                                 x.Labs.Parameters,
+                             
                                  x.Labs.DateTime
 
                              ))
@@ -1002,7 +1002,7 @@ namespace ANIMAL.Repository
                              .Select(x => new LabsDomain(
                             x.Labs.Id,
                             x.Labs.AnimalId,
-                            x.Labs.Parameters,
+                          
                             x.Labs.DateTime
 
 
@@ -1304,13 +1304,12 @@ namespace ANIMAL.Repository
             return true;
         }
 
-        public async Task<bool> UpdateAnimalBalansDomain(int id, decimal balance, DateTime lastUpdated, string password)//izmjena podataka na računu od donacija
+        public async Task<bool> UpdateAnimalBalansDomain(int id, decimal balance)//izmjena podataka na računu od donacija
         {
             var balans = await _appDbContext.Balans.FirstOrDefaultAsync(a => a.Id == id);
 
-            balans.Balance = balance;
-            balans.LastUpdated = lastUpdated;
-            balans.Password = password;
+            balans.Balance = balans.Balance+balance;
+        
 
             _appDbContext.Balans.Update(balans);
             await _appDbContext.SaveChangesAsync();
@@ -1450,18 +1449,7 @@ namespace ANIMAL.Repository
             return true;
         }
 
-        public async Task<bool> UpdateLabsDomain(int id, List<Parameter> parameters)  //ažurira se zbog dodavanja parametara
-        {
-            var labs = await _appDbContext.Labs.FirstOrDefaultAsync(a => a.Id == id);
-
-            labs.Parameters = parameters;
-
-
-            _appDbContext.Labs.Update(labs);
-            await _appDbContext.SaveChangesAsync();
-            return true;
-
-        }
+     
 
         public async Task<bool> UpdateMedicinesDomainUsage(int id, bool usage)  //ažurira se ako životinja ne koristi te ljekove, umjesto brisanja se životinje sa false sakriju
         {
@@ -1988,7 +1976,7 @@ namespace ANIMAL.Repository
 
 
 
-        async Task IRepository.AddFunds(int adopterId, decimal amount, string purpose, DateTime dateTime)
+        async Task IRepository.AddFunds(int adopterId, decimal amount, string purpose)
         {
             var adopterExists = await _appDbContext.Adopter.FirstOrDefaultAsync(a => a.Id == adopterId);
             if (adopterExists != null)
@@ -1998,7 +1986,7 @@ namespace ANIMAL.Repository
                     AdopterId=adopterId,
                     Amount=amount,
                     Purpose=purpose,
-                    DateTime=dateTime
+
                     
 
 
@@ -2101,13 +2089,13 @@ namespace ANIMAL.Repository
 
 
 
-     public async   Task AddBalans(string iban, decimal balance, DateTime lastUpdated, string password, string type)
+     public async   Task AddBalans(string iban, string password, string type)
         {
             var balans = new BalansDomain
             {
               Iban = iban,
-              Balance= balance,
-              LastUpdated= lastUpdated,
+              Balance= 0,
+           
               Password= password,
               Type= type
 

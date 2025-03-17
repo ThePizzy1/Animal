@@ -9,9 +9,9 @@ namespace ANIMAL.MODEL
          //planiram napravit da se prvo napravi nalaz spremi te da se parametri dodaju poslje lap te tako znaju koji je id nalaza
          //Napravi da je ID PRAMETAR = ID LAB
         public ParameterDomain() { }
-        public ParameterDomain(int id, string parameterName, decimal parameterValue, string remarks, string measurementUnits)
+        public ParameterDomain(string parameterName, decimal parameterValue, string remarks, string measurementUnits)
         {
-            Id = id;
+           
         
             ParameterName = parameterName;
             ParameterValue = parameterValue;
@@ -19,7 +19,7 @@ namespace ANIMAL.MODEL
             MeasurementUnits = measurementUnits;
         }
 
-        public int Id { get; set; }
+      
     
         public string ParameterName { get; set; }
         public decimal ParameterValue { get; set; }

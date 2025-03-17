@@ -12,6 +12,6 @@ namespace ANIMAL.DAL.DataModel
         public string Purpose { get; set; }
         public DateTime DateTimed { get; set; }
         
-        public Adopter  Adopter { get; set; }//u tablici je spojeno na Adopted 
+        public Adopter  Adopter { get; set; }
     }
 }

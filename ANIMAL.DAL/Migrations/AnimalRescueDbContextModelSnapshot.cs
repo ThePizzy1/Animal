@@ -313,7 +313,9 @@ namespace ANIMAL.DAL.Migrations
                         .IsUnicode(false);
 
                     b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2025, 3, 11, 15, 48, 23, 26, DateTimeKind.Local).AddTicks(1508));
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
@@ -323,6 +325,9 @@ namespace ANIMAL.DAL.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK__Balans");
+
+                    b.HasIndex("Iban")
+                        .IsUnique();
 
                     b.ToTable("Balans");
                 });
@@ -647,7 +652,9 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("decimal(20, 2)");
 
                     b.Property<DateTime>("DateTimed")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2025, 3, 11, 15, 48, 23, 60, DateTimeKind.Local).AddTicks(3822));
 
                     b.Property<string>("Purpose")
                         .IsRequired()
@@ -775,8 +782,8 @@ namespace ANIMAL.DAL.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(500)")
-                        .HasMaxLength(500)
+                        .HasColumnType("varchar(max)")
+                        .HasMaxLength(50000)
                         .IsUnicode(false);
 
                     b.Property<string>("Name")
@@ -793,11 +800,6 @@ namespace ANIMAL.DAL.Migrations
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Parameter", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("LabId")
                         .HasColumnType("int");
 
@@ -822,10 +824,8 @@ namespace ANIMAL.DAL.Migrations
                         .HasMaxLength(100)
                         .IsUnicode(false);
 
-                    b.HasKey("Id")
+                    b.HasKey("LabId")
                         .HasName("PK__Parameter");
-
-                    b.HasIndex("LabId");
 
                     b.ToTable("Parameter");
                 });
@@ -1291,8 +1291,9 @@ namespace ANIMAL.DAL.Migrations
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Parameter", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Labs", "Labs")
-                        .WithMany("Parameters")
+                        .WithMany()
                         .HasForeignKey("LabId")
+                        .HasConstraintName("FK__Parameter__Lab")
                         .IsRequired();
                 });
 

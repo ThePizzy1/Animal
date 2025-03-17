@@ -530,9 +530,9 @@ namespace ANIMAL.Service
             await _repository.AddMedicines( animalId,  nameOfMedicines,  descriptio,  vetUsername,  amountOfMedicine,  mesurmentUnit,  medicationIntake,  frequencyOfMedicationUse,  usage);
         }
 
-        async Task IService.AddFunds(int adopterId, decimal amount, string purpose, DateTime dateTime)
+        async Task IService.AddFunds(int adopterId, decimal amount, string purpose)
         {
-            await _repository.AddFunds( adopterId,  amount,  purpose,  dateTime);
+            await _repository.AddFunds( adopterId,  amount,  purpose);
 
         }
 
@@ -552,9 +552,9 @@ namespace ANIMAL.Service
             await _repository.AddContact(name, email, description, adopterId);
         }
 
-        async Task IService.AddBalans(string iban, decimal balance, DateTime lastUpdated, string password, string type)
+        async Task IService.AddBalans(string iban, string password, string type)
         {
-            await _repository.AddBalans(iban, balance, lastUpdated, password, type);
+            await _repository.AddBalans(iban, password, type);
               
         }
 
@@ -659,9 +659,9 @@ namespace ANIMAL.Service
             return true;
         }
 
-        async Task<bool> IService.UpdateAnimalBalansDomain(int id, decimal balance, DateTime lastUpdated, string password)
+        async Task<bool> IService.UpdateAnimalBalansDomain(int id, decimal balance)
         {
-            await _repository.UpdateAnimalBalansDomain( id,  balance,  lastUpdated,  password);
+            await _repository.UpdateAnimalBalansDomain( id,  balance);
             return true;
         }
 
@@ -720,12 +720,7 @@ namespace ANIMAL.Service
             return true;
         }
 
-        async Task<bool> IService.UpdateLabsDomain(int id, List<Parameter> parameters)
-        {
-            await _repository.UpdateLabsDomain( id, parameters);
-            return true;
-        }
-
+       
         async Task<bool> IService.UpdateMedicinesDomainUsage(int id, bool usage)
         {
             await _repository.UpdateMedicinesDomainUsage( id,  usage);

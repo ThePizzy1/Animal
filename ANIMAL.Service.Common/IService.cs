@@ -133,7 +133,7 @@ namespace ANIMAL.Service.Common
         public Task AddSystemRecord(int recordNumber, string recordName, string recordDescription);
 
         public Task AddMedicines(int animalId, string nameOfMedicines, string descriptio, string vetUsername, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage);
-        public Task AddFunds(int adopterId, decimal amount, string purpose, DateTime dateTime);
+        public Task AddFunds(int adopterId, decimal amount, string purpose);
 
         public Task AddEuthanasia(int animalId, DateTime date, string nameOfDesissse, bool complited);
 
@@ -141,7 +141,7 @@ namespace ANIMAL.Service.Common
 
         public Task AddContact(string name, string email, string description, int adopterId);
 
-        public Task AddBalans(string iban, decimal balance, DateTime lastUpdated, string password, string type);
+        public Task AddBalans(string iban, string password, string type);
 
 
 
@@ -185,7 +185,7 @@ namespace ANIMAL.Service.Common
 
         //novo
         public Task<bool> UpdateAnimalRecordDomain(int id, int recordId);
-        public Task<bool> UpdateAnimalBalansDomain(int id, decimal balance, DateTime lastUpdated, string password);
+        public Task<bool> UpdateAnimalBalansDomain(int id, decimal balance);
         public Task<bool> UpdateContageusAnimalsDomain(int id, bool contageus);
         public Task<bool> UpdateEuthanasiaDomain(int id, DateTime date, bool complited);
         public Task<bool> UpdateFoodDomainIncrement(int id);
@@ -195,7 +195,7 @@ namespace ANIMAL.Service.Common
         public Task<bool> UpdateToysDomainDecrement(int id);
         public Task<bool> UpdateToysDomain(int id, string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes);
         public Task<bool> UpdateFoundRecordDomain(int id, int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);
-        public Task<bool> UpdateLabsDomain(int id, List<Parameter> parameters);
+   
         public Task<bool> UpdateMedicinesDomainUsage(int id, bool usage);
         public Task<bool> UpdateMedicinesDomain(int id, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse);
         public Task<bool> UpdateNewsDomain(int id, string name, string description, DateTime dateTime);

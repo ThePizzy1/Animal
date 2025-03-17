@@ -817,8 +817,8 @@ namespace ANIMAL.WebApi.Controllers
             await _service.AddFunds(
               record.AdopterId,
               record.Amount,
-              record.Purpose,
-              record.DateTime
+              record.Purpose
+     
                 );
         }
 
@@ -870,8 +870,7 @@ namespace ANIMAL.WebApi.Controllers
         {
             await _service.AddBalans(
         record.Iban,
-        record.Balance,
-        record.LastUpdated,
+  
         record.Password,
         record.Type
                 );
@@ -1060,9 +1059,9 @@ namespace ANIMAL.WebApi.Controllers
             {
                 await _service.UpdateAnimalBalansDomain(
                record.Id,
-               record.Balance,
-               record.LastUpdated,
-               record.Password
+               record.Balance
+         
+
                       );
             }
             catch (Exception ex)

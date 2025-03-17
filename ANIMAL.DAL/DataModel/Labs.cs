@@ -8,7 +8,6 @@ namespace ANIMAL.DAL.DataModel
     {
         public int Id { get; set; }
         public int AnimalId { get; set; }
-        public List<Parameter> Parameters { get; set; }
         public DateTime DateTime { get; set; }
         public virtual Animals Animals { get; set; }
     

@@ -396,14 +396,23 @@ namespace ANIMAL.DAL.DataModel
                });
 
             modelBuilder.Entity<Balans>(entity =>
-            {
+            {//.IsUnique();
                 entity.HasKey(e => e.Id)
                  .HasName("PK__Balans");
                 entity.Property(e => e.Iban)
-            .IsRequired()
-            .HasMaxLength(21)
-            .IsUnicode(false);
+                .IsRequired()
+                .HasMaxLength(21)
+                .IsUnicode(false);
                 entity.Property(e => e.Balance).HasColumnType("decimal(20, 2)");
+                entity.HasIndex(e => e.Iban)
+                   .IsUnique();
+                entity.Property(e=>e.Iban)
+                .IsRequired()
+                .HasMaxLength(21)
+                .IsUnicode(false);
+                entity.Property(e => e.LastUpdated)
+                .HasDefaultValue(DateTime.Now)
+                .IsRequired();
             });
 
             modelBuilder.Entity<Contact>(entity =>
@@ -602,6 +611,9 @@ namespace ANIMAL.DAL.DataModel
                  .IsUnicode(false);
 
                 entity.Property(e => e.Amount).HasColumnType("decimal(20, 2)");
+                entity.Property(e => e.DateTimed)
+                .HasDefaultValue(DateTime.Now)
+                .IsRequired();
             });
 
             modelBuilder.Entity<Labs>(entity =>
@@ -620,12 +632,7 @@ namespace ANIMAL.DAL.DataModel
               
 
             });
-          modelBuilder.Entity<Parameter>()
-               .HasOne(a => a.Labs)
-               .WithMany(a => a.Parameters)
-               .HasForeignKey(a => a.LabId)
-               .OnDelete(DeleteBehavior.ClientSetNull);
-
+        
 
             modelBuilder.Entity<Medicines>(entity =>
             {
@@ -674,18 +681,25 @@ namespace ANIMAL.DAL.DataModel
 
                 entity.Property(e => e.Description)
                .IsRequired()
-               .HasMaxLength(500)
+               .HasMaxLength(50000)
                .IsUnicode(false);
 
 
             });
-
-
-            modelBuilder.Entity<Parameter>(entity =>
-            {
-                entity.HasKey(e => e.Id)
-                 .HasName("PK__Parameter");
+              modelBuilder.Entity<Parameter>(entity =>
+                        {
+                            entity.HasKey(e => e.LabId)
+                             .HasName("PK__Parameter");
              
+            modelBuilder.Entity<Parameter>()
+             .HasOne(a => a.Labs)
+             .WithMany()
+             .HasForeignKey(a => a.LabId)
+             .HasConstraintName("FK__Parameter__Lab")
+             .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+          
             
               
 

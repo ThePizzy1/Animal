@@ -3,11 +3,14 @@ using ANIMAL.MODEL;
 using ANIMAL.Repository.Common;
 using ANIMAL.Service.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ANIMAL.Service
 {
@@ -123,9 +126,9 @@ namespace ANIMAL.Service
             return newsDomains;
         }
 
-        IEnumerable<ParameterDomain> IService.GetAllParameterDomain()
+        IEnumerable<ParameterDomain> IService.GetAllParameterDomain(int id)
         {
-            IEnumerable<ParameterDomain> parametarDomains = _repository.GetAllParameterDomain();
+            IEnumerable<ParameterDomain> parametarDomains = _repository.GetAllParameterDomain(id);
             return parametarDomains;
         }
 
@@ -454,12 +457,12 @@ namespace ANIMAL.Service
 
         //add novo
         //-----------------------------------------------------------------------------------------------
-        async Task IService.AddAnimalRecord(int idAnimal, int idRecord)
+        async Task IService.AddAnimalRecord(int idAnimal)
         {
            
             try
             {
-                await _repository.AddAnimalRecord(idAnimal, idRecord);
+                await _repository.AddAnimalRecord(idAnimal);
               
             }
             catch (Exception ex)
@@ -557,8 +560,33 @@ namespace ANIMAL.Service
             await _repository.AddBalans(iban, password, type);
               
         }
+         Task<LabsDomain> IService.AddLab(int animalId, DateTime date)
+        {
+            try
+            {
+                Task<LabsDomain> labs = _repository.AddLab(animalId, date);
 
+                return labs;
+            }
+            catch (Exception ex)
+            {
 
+                throw new Exception($"Failed to add lab service: {ex.Message}");
+            }
+        }
+
+        async Task IService.AddParametar(ParameterDomain parametar)
+        {
+            await _repository.AddParametar(parametar);
+        }
+
+        async Task IService.AddLabNoReturn(int animalId, DateTime date)
+        {
+            await _repository.AddLab(animalId, date);
+
+            
+          
+        }
 
 
 
@@ -810,6 +838,6 @@ namespace ANIMAL.Service
             }
         }
 
-      
+       
     }
 }

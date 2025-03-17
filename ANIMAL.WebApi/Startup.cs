@@ -115,5 +115,24 @@ namespace ANIMAL.WebApi
                 }
             }
         }
+        private async Task CreateRecord(IServiceProvider serviceProvider)
+        {
+            var recordMenager = serviceProvider.GetRequiredService<SystemRecord>();
+            Dictionary<string, string> list = new Dictionary<string,string>();
+            list.Add("Arivall", "Arivall");
+            list.Add("", "");
+            list.Add("", "");
+            list.Add("", "");
+            list.Add("", "");
+            list.Add("", "");
+            list.Add("", "");
+            list.Add("", "");
+            list.Add("", "");
+            foreach(var l in list)
+            {
+
+            }
+
+        }
     }
 }

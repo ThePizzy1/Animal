@@ -390,8 +390,6 @@ namespace ANIMAL.DAL.DataModel
               .HasMaxLength(255)
               .IsUnicode(false);
 
-                   entity.Property(e => e.RecordNumber)
-                   .HasColumnType("integer");
 
                });
 
@@ -622,7 +620,7 @@ namespace ANIMAL.DAL.DataModel
                  .HasName("PK__Labs_1235468");
 
 
-                entity.HasOne(d => d.Animals)
+                entity.HasOne(d => d.Animal)
                     .WithMany()
                     .HasForeignKey(d => d.AnimalId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -688,7 +686,7 @@ namespace ANIMAL.DAL.DataModel
             });
               modelBuilder.Entity<Parameter>(entity =>
                         {
-                            entity.HasKey(e => e.LabId)
+                            entity.HasKey(e => e.Id)
                              .HasName("PK__Parameter");
              
             modelBuilder.Entity<Parameter>()

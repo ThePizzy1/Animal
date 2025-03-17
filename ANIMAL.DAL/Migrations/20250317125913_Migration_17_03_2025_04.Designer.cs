@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    [Migration("20250311144823_Migration_11_03_2025_04")]
-    partial class Migration_11_03_2025_04
+    [Migration("20250317125913_Migration_17_03_2025_04")]
+    partial class Migration_17_03_2025_04
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -317,7 +317,7 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<DateTime>("LastUpdated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 3, 11, 15, 48, 23, 26, DateTimeKind.Local).AddTicks(1508));
+                        .HasDefaultValue(new DateTime(2025, 3, 17, 13, 59, 12, 670, DateTimeKind.Local).AddTicks(9148));
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
@@ -656,7 +656,7 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<DateTime>("DateTimed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 3, 11, 15, 48, 23, 60, DateTimeKind.Local).AddTicks(3822));
+                        .HasDefaultValue(new DateTime(2025, 3, 17, 13, 59, 12, 709, DateTimeKind.Local).AddTicks(7871));
 
                     b.Property<string>("Purpose")
                         .IsRequired()
@@ -802,6 +802,11 @@ namespace ANIMAL.DAL.Migrations
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Parameter", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<int>("LabId")
                         .HasColumnType("int");
 
@@ -826,8 +831,10 @@ namespace ANIMAL.DAL.Migrations
                         .HasMaxLength(100)
                         .IsUnicode(false);
 
-                    b.HasKey("LabId")
+                    b.HasKey("Id")
                         .HasName("PK__Parameter");
+
+                    b.HasIndex("LabId");
 
                     b.ToTable("Parameter");
                 });
@@ -920,9 +927,6 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("varchar(255)")
                         .HasMaxLength(255)
                         .IsUnicode(false);
-
-                    b.Property<int>("RecordNumber")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id")
                         .HasName("PK__SystemRecord");
@@ -1265,7 +1269,7 @@ namespace ANIMAL.DAL.Migrations
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Labs", b =>
                 {
-                    b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animals")
+                    b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
                         .WithMany()
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__Labs__Animals")

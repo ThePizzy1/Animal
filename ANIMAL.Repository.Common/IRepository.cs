@@ -30,10 +30,11 @@ namespace ANIMAL.Repository.Common
         public IEnumerable<LabsDomain> GetAllLabsDomain();
         public IEnumerable<MedicinesDomain> GetAllMedicinesDomain();
         public IEnumerable<NewsDomain> GetAllNewsDomain();
-        public IEnumerable<ParameterDomain> GetAllParameterDomain();
+        public IEnumerable<ParameterDomain> GetAllParameterDomain(int id);
         public IEnumerable<SystemRecordDomain> GetAllSystemRecordDomain();
         public IEnumerable<ToysDomain> GetAllToysDomain();
         public IEnumerable<VetVisitsDomain> GetAllVetVisitsDomain();
+     
 
 
 
@@ -102,7 +103,7 @@ namespace ANIMAL.Repository.Common
          * 6.found record-                            --RADI                                      - NE SMIJEŠ POSLAT KRIVI REGISTER ID
          * 7.funds-                                                                               --NE TREBA- nemože osoba mjenjat količinu nocaca koje je poslala
          * 8.labs-                                                                                --PRVJERI-NEMA add pa nema ni ovo još
-         * 9.parametar-                                                                           --PRVJERI-NEMAM
+         * 9.parametar-                                                                           --PRVJERI-NEMA
          * 10.medicines-                              --RADI
          * 11.news-                                   --RADI
          * 12.system record-                                                                      --NE TREBA
@@ -182,7 +183,7 @@ namespace ANIMAL.Repository.Common
         */
 
         //Ovo oboje treba kad se životinja dodaje
-        public Task AddAnimalRecord(int idAnimal,  int idRecord);
+        public Task AddAnimalRecord(int idAnimal);
        public Task AddFoundRecord( int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);//RADI
        public Task AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
        public Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes);
@@ -205,9 +206,10 @@ namespace ANIMAL.Repository.Common
         public Task AddContact(string name, string email, string description, int adopterId);
 
         public Task AddBalans(string iban, string password, string type);
+        public Task<LabsDomain> AddLab(int animalId, DateTime date);
+        public Task AddParametar(ParameterDomain parametar);
 
-
-
+        public Task AddLabNoReturn(int animalId, DateTime date);
 
 
 

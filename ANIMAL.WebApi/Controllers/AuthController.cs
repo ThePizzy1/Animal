@@ -50,7 +50,7 @@ namespace ANIMAL.WebApi.Controllers
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "User");
+                await _userManager.AddToRoleAsync(user, "Admin");
                 return Ok(new { message = "User registered successfully" });
             }
             else
@@ -166,7 +166,7 @@ namespace ANIMAL.WebApi.Controllers
 
         private async Task<string> GenerateJwtToken(ApplicationUser user)
         {
-            var userClaims = await _userManager.GetClaimsAsync(user);
+             await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
 
             var claims = new List<Claim>

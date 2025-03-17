@@ -30,7 +30,7 @@ namespace ANIMAL.Service.Common
         public IEnumerable<LabsDomain> GetAllLabsDomain();
         public IEnumerable<MedicinesDomain> GetAllMedicinesDomain();
         public IEnumerable<NewsDomain> GetAllNewsDomain();
-        public IEnumerable<ParameterDomain> GetAllParameterDomain();
+        public IEnumerable<ParameterDomain> GetAllParameterDomain(int id);
         public IEnumerable<SystemRecordDomain> GetAllSystemRecordDomain();
         public IEnumerable<ToysDomain> GetAllToysDomain();
         public IEnumerable<VetVisitsDomain> GetAllVetVisitsDomain();
@@ -119,7 +119,7 @@ namespace ANIMAL.Service.Common
          public Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain);
 
         //novo
-        public Task AddAnimalRecord(int idAnimal, int idRecord);
+        public Task AddAnimalRecord(int idAnimal);
 
         public Task AddFoundRecord(int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);
 
@@ -143,9 +143,10 @@ namespace ANIMAL.Service.Common
 
         public Task AddBalans(string iban, string password, string type);
 
+        public Task<LabsDomain> AddLab(int animalId, DateTime date);
+        public Task AddParametar(ParameterDomain parametar);
 
-
-
+        public Task AddLabNoReturn(int animalId, DateTime date);
 
 
 

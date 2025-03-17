@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ANIMAL.DAL.Migrations
 {
-    public partial class Migration_11_03_2025_04 : Migration
+    public partial class Migration_17_03_2025_04 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -108,7 +108,7 @@ namespace ANIMAL.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Iban = table.Column<string>(unicode: false, maxLength: 21, nullable: false),
                     Balance = table.Column<decimal>(type: "decimal(20, 2)", nullable: false),
-                    LastUpdated = table.Column<DateTime>(nullable: false, defaultValue: new DateTime().AddTicks(1508)),
+                    LastUpdated = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2025, 3, 17, 13, 59, 12, 670, DateTimeKind.Local).AddTicks(9148)),
                     Password = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true)
                 },
@@ -165,7 +165,6 @@ namespace ANIMAL.DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RecordNumber = table.Column<int>(type: "integer", nullable: false),
                     RecordName = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
                     RecordDescription = table.Column<string>(unicode: false, maxLength: 255, nullable: false)
                 },
@@ -227,7 +226,7 @@ namespace ANIMAL.DAL.Migrations
                     AdopterId = table.Column<int>(nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(20, 2)", nullable: false),
                     Purpose = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    DateTimed = table.Column<DateTime>(nullable: false, defaultValue: new DateTime().AddTicks(3822))
+                    DateTimed = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2025, 3, 17, 13, 59, 12, 709, DateTimeKind.Local).AddTicks(7871))
                 },
                 constraints: table =>
                 {
@@ -680,6 +679,8 @@ namespace ANIMAL.DAL.Migrations
                 name: "Parameter",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     LabId = table.Column<int>(nullable: false),
                     ParameterName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     ParameterValue = table.Column<decimal>(type: "decimal(10, 4)", nullable: false),
@@ -688,7 +689,7 @@ namespace ANIMAL.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Parameter", x => x.LabId);
+                    table.PrimaryKey("PK__Parameter", x => x.Id);
                     table.ForeignKey(
                         name: "FK__Parameter__Lab",
                         column: x => x.LabId,
@@ -811,6 +812,11 @@ namespace ANIMAL.DAL.Migrations
                 name: "IX_Medicines_AnimalId",
                 table: "Medicines",
                 column: "AnimalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parameter_LabId",
+                table: "Parameter",
+                column: "LabId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReturnedAnimal_AdopterId",

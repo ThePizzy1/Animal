@@ -9,7 +9,7 @@ namespace ANIMAL.DAL.DataModel
         public int Id { get; set; }
         public int AnimalId { get; set; }
         public DateTime DateTime { get; set; }
-        public virtual Animals Animals { get; set; }
+        public virtual Animals Animal { get; set; }
     
     }
 }

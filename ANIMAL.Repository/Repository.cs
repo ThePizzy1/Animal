@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Security.Policy;
 using System.Xml.Linq;
+using System.Linq.Expressions;
 
 namespace ANIMAL.Repository
 {
@@ -291,8 +292,7 @@ namespace ANIMAL.Repository
             var labDb= _appDbContext.Labs.ToList();
             var labDomain = labDb.Select(e => new LabsDomain(
                 e.Id,
-                e.AnimalId,
-            
+                e.AnimalId,          
                 e.DateTime
                 
                 ));
@@ -329,12 +329,12 @@ namespace ANIMAL.Repository
             return newsDomain;
         }
 
-        IEnumerable<ParameterDomain> IRepository.GetAllParameterDomain()
+        IEnumerable<ParameterDomain> IRepository.GetAllParameterDomain(int id)
         {
-            var parameterDb= _appDbContext.Parameter.ToList();
+            var parameterDb= _appDbContext.Parameter.Where(a=>a.LabId==id).ToList();
             var parameterDomain = parameterDb.Select(e=> new ParameterDomain(
-             
-             
+                e.Id,
+                e.LabId,
                 e.ParameterName,
                 e.ParameterValue,
                 e.Remarks,
@@ -348,7 +348,7 @@ namespace ANIMAL.Repository
             var systemDb=_appDbContext.SystemRecord.ToList();
             var systemDomain = systemDb.Select(e => new SystemRecordDomain(
                 e.Id,
-                e.RecordNumber,
+               
                 e.RecordName,
                 e.RecordDescription
                 ));
@@ -1085,7 +1085,7 @@ namespace ANIMAL.Repository
                     ),
                      Record = new SystemRecordDomain(
                           e.Record.Id,
-                          e.Record.RecordNumber,
+                      
                           e.Record.RecordName,
                           e.Record.RecordDescription
 
@@ -1288,22 +1288,109 @@ namespace ANIMAL.Repository
 
        public async Task<bool>  UpdateAnimalRecordDomain(int id, int recordId)//To je ono što je životinja prošla to jest ažurira na kojem je dijelu, ušla u azil, kod veterinara itd
         {
-            var animal = await _appDbContext.AnimalRecord.FirstOrDefaultAsync(a => a.AnimalId == id);
-            if (animal == null)
+            //potrebno složiti provjeru na kojem je trenutno statusu kako bi onemogučili da životinja koja je tek došla može odmah i otići
+            /* 
+             * napraviti da se pokretanjem migracije isto kao role i ovo automatski sprema
+             1	Arivall	                pokreće se prilikom prve registracije životinje
+            2	First Vet Visit 	    pokreće se kad prvi put dodamo životinju u vet visit checkup - provjeri u bazi dali ima ta životinja koji checkup ako ne dodaje se tu ili mogu provjerit ako je životinje u systemu 1, a dodaje se novi vet visit
+            3	Quarantine 	            Problem: životinja može uvijek bit u ovom stanju, ali nekako moram smislit da barem jednom mora bit
+            4	Shelter 	            pokreće se automatski nakon što prođe datum Quarantine ili možda dodavanjem buttona da je to završilo
+            5	Socialized 	            mora imat preduvjet prva 4 minimum
+            6	Approve for Adoption	pokreće se na button Approve na stranici od veterinara// možeš samo ako ima prvih pet prođenih //omogućuje korisnicima da vide životinju da je za posvajanje
+            7	Adopted  	            pokreće se kad korisnik posvoji životinju  
+            8	Euthanasia 	Euthanasia  pokreće se kad se izvrši eutanazija
+            9	Returnd	Returnd         pokreće se kad osoba vrati životinju*/
+            /*
+             *  ako je stanje 9 proces kreće od 3
+             * primjer u bazi se zapiše 9 ta životinja iskoči veterinaru negdje, veterinar ju doda u Quarantine 
+             * Rješenje bi moglo biti u Switch Case, za svaku opciju napravit koje su mogućnosti
+             * problem 2: u teoriji samo prva dva stanja se ne mogu ponovit i 8 jel očit razlog
+             */
+            var eutanasia = await _appDbContext.Euthanasia.FirstOrDefaultAsync(v => v.AnimalId == id);
+           var vetVisit = _appDbContext.VetVisits.ToList().Where(a=> a.AnimalId==id);
+         
+             var animal = await _appDbContext.AnimalRecord.FirstOrDefaultAsync(a => a.AnimalId == id);
+            try
+            {
+                if (animal == null || eutanasia != null)
+                {
+                    return false;
+                }
+                switch(recordId)
+                {
+                    
+                    case 2:
+                        if(animal.RecordId == 1 && vetVisit==null)
+                        {
+                            animal.RecordId = recordId;
+                            _appDbContext.AnimalRecord.Update(animal);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+                        break;
+                    case 3:
+                        if(animal.RecordId >=2 && animal.RecordId!=7 && animal.RecordId !=8 )//bitno je samo da životinja iz stanja 1 ne ide u stanje 3.7 ne smije bit zato što životinja nijeu u vlasništvu skloništa, a 8 zato što je uginula
+                        {
+                            animal.RecordId = recordId;
+                            _appDbContext.AnimalRecord.Update(animal);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+                        break;
+                    case 4:
+                        if (animal.RecordId >=3 && animal.RecordId != 7  && animal.RecordId != 8)
+                        {
+                            animal.RecordId = recordId;
+                            _appDbContext.AnimalRecord.Update(animal);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+                        break;
+                    case 5:
+                        if (animal.RecordId == 4)
+                        {
+                            animal.RecordId = recordId;
+                            _appDbContext.AnimalRecord.Update(animal);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+                        break;
+                    case 6:
+                        if(animal.RecordId== 5 )
+                        {
+                            animal.RecordId = recordId;
+                            _appDbContext.AnimalRecord.Update(animal);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+                        break;
+                    case 7:
+                        if (animal.RecordId == 6)
+                        {
+                            animal.RecordId = recordId;
+                            _appDbContext.AnimalRecord.Update(animal);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+                        break;
+                    case 8://uvjet je da je životinja u tablici eutanazija i da je complited true i nekako moram napravit da ako životinja ima ovu oznaku da se ne pokazuje nigdje osim u tablici eutanazia. ili u listi kod admina
+                        break;
+                    case 9:
+                        if(animal.RecordId == 7)
+                        {
+                            animal.RecordId = recordId;
+                            _appDbContext.AnimalRecord.Update(animal);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            catch
             {
                 throw new Exception("Animal record not found");
             }
-            else
-            {
-                animal.RecordId = recordId;
-
-                _appDbContext.AnimalRecord.Update(animal);
-                await _appDbContext.SaveChangesAsync();
-
-            }
+           
+           
             return true;
         }
-
+      
         public async Task<bool> UpdateAnimalBalansDomain(int id, decimal balance)//izmjena podataka na računu od donacija
         {
             var balans = await _appDbContext.Balans.FirstOrDefaultAsync(a => a.Id == id);
@@ -1758,7 +1845,7 @@ namespace ANIMAL.Repository
         //-----------------------------------------------------------------------------------------
 
         //Kad admin ili radnik kreiraju životinj odmas se stvori i rekord kojemu je PK isti kao od životinjekako bi imali samo jedan record po životinj koji se updata
-       public async Task AddAnimalRecord(int idAnimal, int idRecord)
+       public async Task AddAnimalRecord(int idAnimal)
         {
            
                 var animalExists=await _appDbContext.Animals.FirstOrDefaultAsync(a=> a.IdAnimal ==  idAnimal);//vratio mi je null :o// radi bio je krivi request pa je slalo 0
@@ -1766,8 +1853,8 @@ namespace ANIMAL.Repository
             if (animalExists !=null)
                 { var animalRecord = new AnimalRecordDomain
                 {    
-                    RecordId = idRecord,
-                          AnimalId=idAnimal,
+                    RecordId = 1,
+                    AnimalId=idAnimal,
                  
               
                   
@@ -2108,12 +2195,61 @@ namespace ANIMAL.Repository
             await _appDbContext.SaveChangesAsync();
         }
 
+        //Novo 17/3/2025
+      async  Task<LabsDomain> IRepository.AddLab(int animalId, DateTime date)
+        {
+            
+                var labs = new LabsDomain
+                {
+                    AnimalId = animalId,
+                    DateTime = date
+                };
+
+                var labResponse = _mappingService.Map<Labs>(labs);
+                _appDbContext.Labs.Add(labResponse);
+                await _appDbContext.SaveChangesAsync();
+            return _mappingService.Map<LabsDomain>(labs);
+            
+        }
+
+       async Task IRepository.AddParametar(ParameterDomain parametar)
+        {
+            var p = new ParameterDomain
+            {
+               LabId=parametar.LabId,
+               ParameterName=parametar.ParameterName,
+               ParameterValue=parametar.ParameterValue,
+               Remarks=parametar.Remarks,
+               MeasurementUnits=parametar.MeasurementUnits
+            };
+
+            var pResponse = _mappingService.Map<Parameter>(p);
+            _appDbContext.Parameter.Add(pResponse);
+            await _appDbContext.SaveChangesAsync();
+        }
 
 
 
+       async Task IRepository.AddLabNoReturn(int animalId, DateTime date)
+        {
+            var animalExists = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
+            if (animalExists != null)
+            {
+                var labs = new LabsDomain
+                {
+                    AnimalId = animalId,
+                    DateTime = date
+                };
 
-
-
+                var labResponse = _mappingService.Map<Labs>(labs);
+                _appDbContext.Labs.Add(labResponse);
+                await _appDbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception($"Animal not faund!");
+            }
+        }
 
 
 
@@ -2184,7 +2320,7 @@ namespace ANIMAL.Repository
         //----------------------------------------------------------------------------------------------------------------------------------------------
 
 
-       async Task IRepository.DeleteNews(int id)
+        async Task IRepository.DeleteNews(int id)
         {
             var newsRecord = await _appDbContext.News.FirstOrDefaultAsync(a => a.Id == id);
 
@@ -2327,8 +2463,6 @@ namespace ANIMAL.Repository
             return true;
         }
 
-      
-
-        
+       
     }
 }

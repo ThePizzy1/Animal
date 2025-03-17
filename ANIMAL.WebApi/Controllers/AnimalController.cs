@@ -200,11 +200,11 @@ namespace ANIMAL.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("parameter_db")]
+        [Route("parameter_db/{id}")]
         [AllowAnonymous]
-        public IEnumerable<ParameterDomain> GetAllParameterDomain()
+        public IEnumerable<ParameterDomain> GetAllParameterDomain(int id)
         {
-            IEnumerable<ParameterDomain> animalDb = _service.GetAllParameterDomain();
+            IEnumerable<ParameterDomain> animalDb = _service.GetAllParameterDomain(id);
             return animalDb;
         }
 
@@ -332,7 +332,7 @@ namespace ANIMAL.WebApi.Controllers
          * 6.found record-                            --RADI                                     
          * 7.funds-                                   --RADI                                         
          * 8.labs-                                    --RADI                                        
-         * 9.parametar-                               --RADI                                       
+         * 9.parametar-                               --Nije potrebno                                       
          * 10.medicines-                              --RADI
          * 11.news-                                   --RADI
          * 12.system record-                          --RADI                                         
@@ -618,8 +618,7 @@ namespace ANIMAL.WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var returnedAnimal = await _service.CreateReturnedAnimalAsync(
+                 await _service.CreateReturnedAnimalAsync(
               
                 createReturnedAnimalDto.AdoptionCode,
                 createReturnedAnimalDto.AnimalId,
@@ -634,28 +633,14 @@ namespace ANIMAL.WebApi.Controllers
 
         //NOVO add
         //dodavanje novo 15 novih tablica 13/15
-        /*1.animalrecord- samo za dodavanje prve                   --RADI 
-         * funkcije koja se 
-         * pokreće samo kod unosa životinje,
-         * sve ostalo je update//OVO 
-         *                                                      
-         *2. Balans-mislim da ne treba add samo update.            --RADI SAMO MORAŠ SPOJIT IBAN
-         * Stvorila bih jedan račun i na njemu ddavala i 
-         * uzimala- Ako dodam još neku osobu koja će se
-         * bavit sa time dodat ću i add u frontend
-         * 
+        /*1.animalrecord- samo za dodavanje prve                   --RADI                                                      
+         *2. Balans-mislim da ne treba add samo update.            --RADI 
          * 3.Contact-potreban add i update za pročitano            --RADI
          * 4.contageus animals-potrebno add                        --RADI
          * 5 euthanasia-potreban add                               --RADI
          * 6.found record- potreban add                            --RADI
          * 7.funds-potreban add                                    --RADI
-         * 
-         * 8.labs-potreban add--opcija za parametar i labs,
-         * da labs
-         * napravi listu id i u tablici parametar napravi prazne 
-         * objekte... Opcija dva stavit da Parametar ima id labs,
-         * prvo napravit labs,a zatim parametre sa id od labs....
-         * 
+         * 8.labs-potreban                                         --
          * 9.parametar-potreban add                                --NAPRAVI
          * 10.medicines-potreban add                               --RADI
          * 11.news-potreban add                                    --RADI
@@ -671,7 +656,7 @@ namespace ANIMAL.WebApi.Controllers
         [AllowAnonymous]
         public async Task AddAnimalAsync([FromBody] AnimalRecordDomain record)
         {
-            await _service.AddAnimalRecord(record.AnimalId, record.RecordId);
+            await _service.AddAnimalRecord(record.AnimalId);
         }
 
 
@@ -876,9 +861,48 @@ namespace ANIMAL.WebApi.Controllers
                 );
         }
 
+        [HttpPost("addLabs")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddLab([FromForm] LabsDomain lab)
+        {
+
+            LabsDomain success = await _service.AddLab(lab.AnimalId, lab.DateTime);
+
+            if (success != null)
+            {
+                return Ok(success);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("addLabsN")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddLabNoReturn([FromForm] LabsDomain lab)
+        {
+
+            try
+            {
+
+                await _service.AddLabNoReturn(lab.AnimalId, lab.DateTime);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add lab controler: {ex.InnerException}");
+            }
 
 
+        }
 
+        [HttpPost("addParametar")]
+        [AllowAnonymous]
+        public async Task AddParametar([FromBody] ParameterDomain record)
+        {
+            await _service.AddParametar(record);
+        }
 
 
 
@@ -1368,6 +1392,12 @@ namespace ANIMAL.WebApi.Controllers
 
 
 
+
+
+
+
+
+
         //NEBITNO I NEPOTREBNO :)
         //Delete
         //-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -1409,7 +1439,7 @@ namespace ANIMAL.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+              
 
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
@@ -1439,7 +1469,7 @@ namespace ANIMAL.WebApi.Controllers
              }
              catch (Exception ex)
              {
-                 var innerMessage = ex.InnerException?.Message ?? ex.Message;
+               
 
                  return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
              }

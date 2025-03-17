@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20250127135335_Migracija_27_01_2025_06.Designer.cs" />
     <Compile Remove="Migrations\20250206111358_Migracija_06-02_2025_13.cs" />
     <Compile Remove="Migrations\20250206111358_Migracija_06-02_2025_13.Designer.cs" />
+    <Compile Remove="Migrations\20250317114132_Migration_17_03_2025_03.cs" />
+    <Compile Remove="Migrations\20250317114132_Migration_17_03_2025_03.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +26,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

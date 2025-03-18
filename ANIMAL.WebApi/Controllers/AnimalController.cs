@@ -863,7 +863,7 @@ namespace ANIMAL.WebApi.Controllers
 
         [HttpPost("addLabs")]
         [AllowAnonymous]
-        public async Task<IActionResult> AddLab([FromForm] LabsDomain lab)
+        public async Task<IActionResult> AddLab([FromBody] LabsDomain lab)
         {
 
             LabsDomain success = await _service.AddLab(lab.AnimalId, lab.DateTime);
@@ -876,25 +876,6 @@ namespace ANIMAL.WebApi.Controllers
             {
                 return BadRequest();
             }
-        }
-
-        [HttpPost("addLabsN")]
-        [AllowAnonymous]
-        public async Task<IActionResult> AddLabNoReturn([FromForm] LabsDomain lab)
-        {
-
-            try
-            {
-
-                await _service.AddLabNoReturn(lab.AnimalId, lab.DateTime);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add lab controler: {ex.InnerException}");
-            }
-
-
         }
 
         [HttpPost("addParametar")]

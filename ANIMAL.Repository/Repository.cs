@@ -12,6 +12,7 @@ using System.IO;
 using System.Security.Policy;
 using System.Xml.Linq;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace ANIMAL.Repository
 {
@@ -2196,23 +2197,23 @@ namespace ANIMAL.Repository
         }
 
         //Novo 17/3/2025
-      async  Task<LabsDomain> IRepository.AddLab(int animalId, DateTime date)
+        async Task<LabsDomain> IRepository.AddLab(int animalId, DateTime date)
         {
-            
-                var labs = new LabsDomain
-                {
-                    AnimalId = animalId,
-                    DateTime = date
-                };
 
-                var labResponse = _mappingService.Map<Labs>(labs);
-                _appDbContext.Labs.Add(labResponse);
-                await _appDbContext.SaveChangesAsync();
-            return _mappingService.Map<LabsDomain>(labs);
-            
+            var labs = new Labs
+            {
+                AnimalId = animalId,
+                DateTime = date
+            };
+
+            var labResponse = _mappingService.Map<Labs>(labs);
+            _appDbContext.Labs.Add(labResponse);
+            await _appDbContext.SaveChangesAsync();
+            return _mappingService.Map<LabsDomain>(labResponse);
+
         }
 
-       async Task IRepository.AddParametar(ParameterDomain parametar)
+        async Task IRepository.AddParametar(ParameterDomain parametar)
         {
             var p = new ParameterDomain
             {
@@ -2230,28 +2231,7 @@ namespace ANIMAL.Repository
 
 
 
-       async Task IRepository.AddLabNoReturn(int animalId, DateTime date)
-        {
-            var animalExists = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
-            if (animalExists != null)
-            {
-                var labs = new LabsDomain
-                {
-                    AnimalId = animalId,
-                    DateTime = date
-                };
-
-                var labResponse = _mappingService.Map<Labs>(labs);
-                _appDbContext.Labs.Add(labResponse);
-                await _appDbContext.SaveChangesAsync();
-            }
-            else
-            {
-                throw new Exception($"Animal not faund!");
-            }
-        }
-
-
+     
 
 
 

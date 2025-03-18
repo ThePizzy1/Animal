@@ -146,7 +146,7 @@ namespace ANIMAL.Service.Common
         public Task<LabsDomain> AddLab(int animalId, DateTime date);
         public Task AddParametar(ParameterDomain parametar);
 
-        public Task AddLabNoReturn(int animalId, DateTime date);
+        
 
 
 

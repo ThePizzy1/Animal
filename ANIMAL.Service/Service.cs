@@ -560,7 +560,7 @@ namespace ANIMAL.Service
             await _repository.AddBalans(iban, password, type);
               
         }
-         Task<LabsDomain> IService.AddLab(int animalId, DateTime date)
+        Task<LabsDomain> IService.AddLab(int animalId, DateTime date)
         {
             try
             {
@@ -580,15 +580,7 @@ namespace ANIMAL.Service
             await _repository.AddParametar(parametar);
         }
 
-        async Task IService.AddLabNoReturn(int animalId, DateTime date)
-        {
-            await _repository.AddLab(animalId, date);
-
-            
-          
-        }
-
-
+      
 
 
 

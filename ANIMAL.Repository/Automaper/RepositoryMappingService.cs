@@ -254,7 +254,7 @@ namespace ANIMAL.Repository.Automaper
 
                 //labs
                 cfg.CreateMap<Labs, LabsDomain>()
-                 .ForMember(dest => dest.AnimalId, opt => opt.Ignore());
+                 .ForMember(dest => dest.Animals, opt => opt.Ignore());
                 cfg.CreateMap<LabsDomain, Labs>()
                  .ForMember(dest => dest.Animal, opt => opt.Ignore());
                 //parametar

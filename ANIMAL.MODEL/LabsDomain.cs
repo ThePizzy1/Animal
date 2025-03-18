@@ -21,6 +21,12 @@ namespace ANIMAL.MODEL
             AnimalId = animalId;
             DateTime = dateTime;
         }
+        public LabsDomain(int animalId, DateTime dateTime)
+        {
+    
+            AnimalId = animalId;
+            DateTime = dateTime;
+        }
         public LabsDomain(int id, int animalId)
         {
             Id = id;

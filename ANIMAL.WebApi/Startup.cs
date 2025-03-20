@@ -30,56 +30,48 @@ namespace ANIMAL.WebApi
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+     public IConfiguration Configuration { get; }
 
      public void ConfigureServices(IServiceCollection services)
         {
      
             services.AddDbContext<AnimalRescueDbContext>(options => 
-        options.UseSqlServer(Configuration.GetConnectionString("ANIMAL_DBConnection")));
-    services.AddScoped<IService, Service.Service>();
-    services.AddScoped<IRepository, Repository.Repository>();
-    
-    services.AddScoped<IRepositoryMappingService, RepositoryMappingService>();
+            options.UseSqlServer(Configuration.GetConnectionString("ANIMAL_DBConnection")));
+            services.AddScoped<IService, Service.Service>();
+            services.AddScoped<IRepository, Repository.Repository>();    
+            services.AddScoped<IRepositoryMappingService, RepositoryMappingService>();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                        .AddEntityFrameworkStores<AnimalRescueDbContext>()
-                        .AddDefaultTokenProviders();
+                    services.AddIdentity<ApplicationUser, IdentityRole>()
+                                .AddEntityFrameworkStores<AnimalRescueDbContext>()
+                                .AddDefaultTokenProviders();
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(option =>
-            {
-                option.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                };
-            });
+                    services.AddAuthentication(options =>
+                    {
+                        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    }).AddJwtBearer(option =>
+                    {
+                        option.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = Configuration["Jwt:Issuer"],
+                            ValidAudience = Configuration["Jwt:Issuer"],
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                        };
+                    });
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:5173") // Dozvoljava pristup s odreðenog URL-a
-                                      .AllowAnyHeader() // Dozvoljava sve zaglavlja
-                                      .AllowAnyMethod()); // Dozvoljava sve HTTP metode
-            });
-
-                services.AddControllers();
-
-            
-
-            
-
-
-        }
+                    services.AddCors(options =>
+                    {
+                        options.AddPolicy("AllowSpecificOrigin",
+                            builder => builder.WithOrigins("http://localhost:5173") // Dozvoljava pristup s odreðenog URL-a
+                                              .AllowAnyHeader() // Dozvoljava sve zaglavlja
+                                              .AllowAnyMethod()); // Dozvoljava sve HTTP metode
+                    });
+                        services.AddControllers();
+                }
 
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
@@ -90,11 +82,9 @@ namespace ANIMAL.WebApi
             }
             CreateRoles(serviceProvider).Wait();
             app.UseHttpsRedirection();
-
             app.UseRouting();
             app.UseCors("AllowSpecificOrigin");
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -115,11 +105,13 @@ namespace ANIMAL.WebApi
                 }
             }
         }
+        //probat æu složit da kad se pokrene migracija da se u tablicu SystemRecord automatski doda sve što treba
+        //to æu si ostavit kao dio za završni
         private async Task CreateRecord(IServiceProvider serviceProvider)
         {
             var recordMenager = serviceProvider.GetRequiredService<SystemRecord>();
             Dictionary<string, string> list = new Dictionary<string,string>();
-            list.Add("Arivall", "Arivall");
+            list.Add("", "");
             list.Add("", "");
             list.Add("", "");
             list.Add("", "");

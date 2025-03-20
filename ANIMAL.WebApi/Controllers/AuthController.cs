@@ -22,8 +22,8 @@ namespace ANIMAL.WebApi.Controllers
     
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager; // Ispravljeno
-        private readonly SignInManager<ApplicationUser> _signInManager; // Ispravljeno
+        private readonly UserManager<ApplicationUser> _userManager; 
+        private readonly SignInManager<ApplicationUser> _signInManager; 
         private readonly IConfiguration _configuration;
         private readonly AnimalRescueDbContext _context;
         private IRepositoryMappingService _mappingService;
@@ -34,7 +34,7 @@ namespace ANIMAL.WebApi.Controllers
             _configuration = configuration;
             _mappingService = mapper;
         }
-        //dodaj tu ime, prezime, meil i broj telefona
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RgisterModel model)
         {
@@ -42,12 +42,8 @@ namespace ANIMAL.WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-           
-
             var user = new ApplicationUser { UserName = model.Username};
-
             var result = await _userManager.CreateAsync(user, model.Password);
-
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "Admin");
@@ -65,8 +61,6 @@ namespace ANIMAL.WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-
             var user = new ApplicationUser { UserName = model.Username, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, PhoneNumber = model.PhoneNumber };
             var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -75,15 +69,8 @@ namespace ANIMAL.WebApi.Controllers
                 await _userManager.AddToRoleAsync(user, model.Role);
                 return Ok(new { message = "User registered successfully" });
             }
-
             return BadRequest(result.Errors);
         }
-
-
-        //get all users treba za ispis podataka za veterinare, radnike itd...
-
-
-
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -99,8 +86,7 @@ namespace ANIMAL.WebApi.Controllers
                  u.UserName,
                  u.Email,
                  u.PhoneNumber,
-                Roles = role
-                
+                Roles = role              
                 });
             }
 
@@ -108,26 +94,8 @@ namespace ANIMAL.WebApi.Controllers
             {
                 return NotFound($"Korisnik nije pronađen.");
             }
-
-           
-
             return Ok(userList);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         [HttpGet("getUserByUsername/{username}")]
         public async Task<IActionResult> GetUserByUsername(string username)
         {
@@ -137,18 +105,13 @@ namespace ANIMAL.WebApi.Controllers
             {
                 return NotFound($"Korisnik s korisničkim imenom '{username}' nije pronađen.");
             }
-
             var userDto = new
             {
                 Id = user.Id,
-                Username = user.UserName,
-               
-               
+                Username = user.UserName,                         
             };
-
             return Ok(userDto);
         }
-
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -157,34 +120,28 @@ namespace ANIMAL.WebApi.Controllers
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(model.Username);
-
                 var token = GenerateJwtToken(user);
                 return Ok(new { token });
             }
             return Unauthorized();
         }
-
         private async Task<string> GenerateJwtToken(ApplicationUser user)
         {
-             await _userManager.GetClaimsAsync(user);
+            await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
+            var claims = new List<Claim>{
+                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim("id_usera", user.Id)
+                    };
 
-            var claims = new List<Claim>
-    {
-        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim("id_usera", user.Id)
-    };
-
-            // Dodajte samo nazive uloga kao tvrdnje
+           
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
             }
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Issuer"],

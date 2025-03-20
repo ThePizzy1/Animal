@@ -17,7 +17,7 @@ namespace ANIMAL.Repository.Common
         IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain();
         public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture();     
         IEnumerable<AdoptedDomain> GetAllAdoptedDomain();
-   //novo
+         //novo
         public IEnumerable<AnimalRecordDomain> GetAllAnimalRecordDomain();
         public IEnumerable<BalansDomain> GetAllBlansDomain();
         public IEnumerable<ContactDomain>GetaAllContactDomain();
@@ -34,11 +34,6 @@ namespace ANIMAL.Repository.Common
         public IEnumerable<ToysDomain> GetAllToysDomain();
         public IEnumerable<VetVisitsDomain> GetAllVetVisitsDomain();
      
-
-
-
-
-
 
         //GET BY ID
         //   public MammalDomain GetOne(int id);
@@ -67,15 +62,11 @@ namespace ANIMAL.Repository.Common
         public ContageusAnimalsDomain GetOneContageusAnimalsDomain(int id);
         public ContactDomain GetOneContactDomain(int id);
         public BalansDomain GetOneBalansDomain(int id);
-
-        //get by id od životinje
-        //napravi za ljekove, vet visit, animal record, contageus animals, labs
-        //potrebno za ispis podatak povjest bolesti
         public MedicinesDomain GetOneMedicinesAnimal(int id);
         public ContageusAnimalsDomain GetOneContageusAnimal(int id);
         public LabsDomain GetOneLabsAnimal(int id);
         public VetVisitsDomain GetOneVetVisitAnimal(int id);
-        public AnimalRecordDomain GetOneAnimalRecord(int id);//RADI
+        public AnimalRecordDomain GetOneAnimalRecord(int id);
         public AdopterDomain GetAdopterByIdInt(int id);
 
 
@@ -91,7 +82,7 @@ namespace ANIMAL.Repository.Common
 
 
         //update novo
-        // 15 novih tablica  13/15
+        // 15 novih tablica  15/15
         /*1.animalrecord-                             --RADI 
          *2. Balans-                                  --RADI
          * 3.Contact-                                 -NE TREBA                                            
@@ -108,6 +99,7 @@ namespace ANIMAL.Repository.Common
          * 14.food-                                   --RADI
          * 15.vet visit-                              --RADI
         */
+        //
         public Task UpdateAnimalRecordDomain(int id, int recordId);
         public  Task<bool> UpdateAnimalBalansDomain(int id, decimal balance);
         public  Task<bool> UpdateContageusAnimalsDomain(int id, bool contageus);
@@ -141,7 +133,7 @@ namespace ANIMAL.Repository.Common
 
 
 
-        //dodavanje novo 15 novih tablica 13/15
+        //dodavanje novo 15 novih tablica 15/15
         /*1.animalrecord- samo za dodavanje prve                   --RADI                                                   
          *2. Balans-mislim da ne treba add samo update.            --RADI
          * 3.Contact-potreban add i update za pročitano            --RADI

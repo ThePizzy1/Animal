@@ -27,6 +27,8 @@ namespace ANIMAL.WebApi.Controllers
             _service = service;
          
         }
+
+
         [HttpGet]
         [Route("animal_db")]
         [AllowAnonymous]
@@ -188,7 +190,6 @@ namespace ANIMAL.WebApi.Controllers
             IEnumerable<MedicinesDomain> animalDb = _service.GetAllMedicinesDomain();
             return animalDb;
         }
-
 
         [HttpGet]
         [Route("news_db")]
@@ -491,7 +492,7 @@ namespace ANIMAL.WebApi.Controllers
         [HttpGet]
         [Route("recordAnimal/{id}")]//ID ŽVOTINJE
         [AllowAnonymous]
-            public AnimalRecordDomain GetOneAnimalRecord(int id)
+        public AnimalRecordDomain GetOneAnimalRecord(int id)
             {
                 AnimalRecordDomain parametar = _service.GetOneAnimalRecord(id);
                 return parametar;
@@ -609,7 +610,6 @@ namespace ANIMAL.WebApi.Controllers
             return Ok();
         }
 
-
         [HttpPost("addReaturndAnimal")]
         [AllowAnonymous]
         public async Task<IActionResult> CreateReturnedAnimal([FromBody] ReturnedAnimalDomain  createReturnedAnimalDto)
@@ -631,6 +631,7 @@ namespace ANIMAL.WebApi.Controllers
         }
 
 
+        //---------------------------------------------------------------------------------------------------------------------------------------------------
         //NOVO add
         //dodavanje novo 15 novih tablica 13/15
         /*1.animalrecord- samo za dodavanje prve                   --RADI                                                      
@@ -640,8 +641,8 @@ namespace ANIMAL.WebApi.Controllers
          * 5 euthanasia-potreban add                               --RADI
          * 6.found record- potreban add                            --RADI
          * 7.funds-potreban add                                    --RADI
-         * 8.labs-potreban                                         --
-         * 9.parametar-potreban add                                --NAPRAVI
+         * 8.labs-potreban                                         --RADI
+         * 9.parametar-potreban add                                --RADI
          * 10.medicines-potreban add                               --RADI
          * 11.news-potreban add                                    --RADI
          * 12.system record- potreban add samo admin               --RADI
@@ -659,14 +660,12 @@ namespace ANIMAL.WebApi.Controllers
             await _service.AddAnimalRecord(record.AnimalId);
         }
 
-
         [HttpPost("addAnimalFound")]
         [AllowAnonymous]
         public async Task AddFoundRecord([FromBody] FoundRecordDomain record)
         {
             await _service.AddFoundRecord(record.AnimalId, record.Date, record.Adress, record.Description, record.OwnerName, record.OwnerSurname, record.OwnerPhoneNumber, record.OwnerOIB, record.RegisterId);
         }
-
 
         [HttpPost("addFood")]
         [AllowAnonymous]
@@ -700,7 +699,6 @@ namespace ANIMAL.WebApi.Controllers
             return Ok();
         }
 
-
         [HttpPost("addToy")]
         [AllowAnonymous]
         public async Task<IActionResult> AddToy([FromBody] ToysDomain response)
@@ -727,7 +725,6 @@ namespace ANIMAL.WebApi.Controllers
             return Ok();
         }
 
-
         [HttpPost("addNews")]
         [AllowAnonymous]
         public async Task<IActionResult> AddNews([FromBody] NewsDomain response)
@@ -748,8 +745,6 @@ namespace ANIMAL.WebApi.Controllers
             return Ok();
         }
 
-
-
         [HttpPost("addVetVisit")]
         [AllowAnonymous]
         public async Task AddVetVisit([FromBody] VetVisitsDomain record)
@@ -764,8 +759,6 @@ namespace ANIMAL.WebApi.Controllers
                 );
         }
 
-
-
         [HttpPost("addSystemRecord")]
         [AllowAnonymous]
         public async Task AddSystemRecord([FromBody] SystemRecordDomain record)
@@ -776,7 +769,6 @@ namespace ANIMAL.WebApi.Controllers
                 record.RecordDescription
                 );
         }
-
 
         [HttpPost("addMedicines")]
         [AllowAnonymous]
@@ -846,8 +838,6 @@ namespace ANIMAL.WebApi.Controllers
             record.AdopterId
                 );
         }
-
-
 
         [HttpPost("addBalans")]
         [AllowAnonymous]
@@ -927,7 +917,6 @@ namespace ANIMAL.WebApi.Controllers
             }
         }
 
-
         [HttpPut("incrementAdopted/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> IncrementNumberOfAdoptedAnimals(string id)
@@ -936,8 +925,6 @@ namespace ANIMAL.WebApi.Controllers
             return NoContent(); // HTTP 204 No Content
         }
 
-
-
         [HttpPut("incrementReturned/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> IncrementNumberOfReturnedAnimals(string id)
@@ -945,7 +932,6 @@ namespace ANIMAL.WebApi.Controllers
             await _service.IncrementNumberOfReturnedAnimalsAsync(id);
             return NoContent(); // HTTP 204 No Content
         }
-
 
         [HttpPut("updateAnimal/{idAnimal}")]
         [AllowAnonymous]
@@ -981,7 +967,6 @@ namespace ANIMAL.WebApi.Controllers
             }
         }
 
-
         [HttpPut("adoptionstatus/{animalId}")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateAdoptionStatus(int animalId)
@@ -990,7 +975,6 @@ namespace ANIMAL.WebApi.Controllers
 
             return Ok(new { Message = "Adoption status updated successfully" });
         }
-
 
         [HttpPut("adoptionstatusfalse/{animalId}")]
         [AllowAnonymous]
@@ -1001,9 +985,6 @@ namespace ANIMAL.WebApi.Controllers
             return Ok(new { Message = "Adoption status updated successfully" });
         }
       
-
-
-
         [HttpPut("flag/{adopterId}")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateAdopterFlag(int adopterId)
@@ -1024,36 +1005,27 @@ namespace ANIMAL.WebApi.Controllers
         // 15 novih tablica  13/15
         /*1.animalrecord-                             --RADI 
          *2. Balans-                                  --RADI
-         * 3.Contact-                                                                             --NE TREBA- nemože osoba mjenjat oruku koju je poslala
+         * 3.Contact-                                 --NE TREBA-osoba nemože  mjenjat oruku koju je poslala
          * 4.contageus animals-                       --RADI
          * 5 euthanasia-                              --RADI
          * 6.found record-                            --RADI                                      - NE SMIJEŠ POSLAT KRIVI REGISTER ID
-         * 7.funds-                                                                               --NE TREBA- nemože osoba mjenjat količinu nocaca koje je poslala
-         * 8.labs-                                                                                --PRVJERI-NEMA add pa nema ni ovo još
-         * 9.parametar-                                                                           --PRVJERI-NEMAM
+         * 7.funds-                                   --NE TREBA-  osoba nemože mjenjat količinu novca koju je poslala
+         * 8.labs-                                    --NE TREBA
+         * 9.parametar-                               --RADI
          * 10.medicines-                              --RADI
          * 11.news-                                   --RADI
-         * 12.system record-                                                                      --NE TREBA
+         * 12.system record-                          --NE TREBA
          * 13.toys-                                   --RADI
          * 14.food-                                   --RADI
          * 15.vet visit-                              --RADI
         */
         [HttpPut("updateAnimalRecord")]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateAnimalRecordDomain([FromBody] AnimalRecordDomain record)
-        {
-            try
-            {
-              await _service.UpdateAnimalRecordDomain(
-                   record.AnimalId,
-                  record.RecordId
-                    );
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
-            }
-            return Ok(new { Message = "Animal record updated successfully" });
+        public async Task UpdateAnimalRecordDomain([FromBody] AnimalRecordDomain record)
+        {            
+                 await _service.UpdateAnimalRecordDomain(
+                      record.AnimalId,
+                      record.RecordId);
         }
 
         [HttpPut("updateBalansDomain")]
@@ -1075,6 +1047,7 @@ namespace ANIMAL.WebApi.Controllers
             }
             return Ok(new { Message = "Animal record updated successfully" });
         }
+
         [HttpPut("updateContageusAnimalsDomain")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateContageusAnimalsDomain([FromBody] ContageusAnimalsDomain record)
@@ -1119,9 +1092,7 @@ namespace ANIMAL.WebApi.Controllers
             try
             {
                 await _service.UpdateFoodDomainIncrement(
-             record.Id
-            
-                      );
+                      record.Id );
             }
             catch (Exception ex)
             {
@@ -1371,6 +1342,21 @@ namespace ANIMAL.WebApi.Controllers
             return Ok(new { Message = "Animal record updated successfully" });
         }
 
+        [HttpPut("updateParametar")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateParametar([FromBody] ParameterDomain record)
+        {
+            try
+            {
+                await _service.UpdateParametar(record);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
 
 
 
@@ -1405,7 +1391,6 @@ namespace ANIMAL.WebApi.Controllers
         public async Task<IActionResult> DeleteNews(int id) {
             try
             {
-
                 await _service.DeleteNews(id);
                 return Ok("News successfully deleted.");
             }
@@ -1415,17 +1400,13 @@ namespace ANIMAL.WebApi.Controllers
             }
             catch (InvalidOperationException ex)
             {
-
                 return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-              
-
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
         }
-
         [HttpDelete("{idAnimal}")]
          [AllowAnonymous]
          public async Task<IActionResult> Delete(int idAnimal)
@@ -1455,6 +1436,16 @@ namespace ANIMAL.WebApi.Controllers
                  return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
              }
          }
+
+
+
+
+
+
+
+
+
+
         //Bilo potrebno imat, nema smisla da je tu
         /* [HttpPut("deladopted/{adopterId}")]
         [AllowAnonymous]

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -306,12 +307,7 @@ namespace ANIMAL.Service
         {
             Task<AnimalDomain> aniimal = _repository.UpdateAnimalAsync( idAnimal,  age,  weight,  height,  length,  neutered,  vaccinated,  microchipped,  trained,  socialized,  healthIssues,  personalityDescription);
             return aniimal;
-        }
-        public async Task<BirdDomain> UpdateBird(BirdDomain bird)
-        {
-           BirdDomain aniimal = await _repository.UpdateBird(bird);
-            return aniimal;
-        }
+        }   
         async Task<bool> IService.AdoptionStatus(int animalId)
         {
             await _repository.AdoptionStatus(animalId);
@@ -431,73 +427,6 @@ namespace ANIMAL.Service
         {
             Task<AdopterDomain> adopter = _repository.CreateAdopterAsync(firstName, lastName, dateOfBirth, residence, username, password, registerId);
             return adopter;
-        }
-        async Task<bool> IService.AddBirdAsync(BirdDomain birdDomain)
-        {
-            try
-            {
-                var isSuccess = await _repository.AddBirdAsync(birdDomain);
-                return isSuccess;
-            }
-            catch (Exception ex)
-            {
-               
-                throw new Exception($"Failed to add amphibian: {ex.Message}", ex);
-            }
-        }
-        async Task<bool> IService.AddMammalAsync(MammalDomain mammalDomain)
-        {
-            try
-            {
-                var isSuccess = await _repository.AddMammalAsync(mammalDomain);
-                return isSuccess;
-            }
-            catch (Exception ex)
-            {
-               
-                throw new Exception($"Failed to add amphibian: {ex.Message}", ex);
-            }
-        }
-        async Task<bool> IService.AddFishAsync(FishDomain fishDomain)
-        {
-            try
-            {
-                var isSuccess = await _repository.AddFishAsync(fishDomain);
-                return isSuccess;
-            }
-            catch (Exception ex)
-            {
-               
-                throw new Exception($"Failed to add amphibian: {ex.Message}", ex);
-            }
-        }
-        async Task<bool> IService.AddReptileAsync(ReptileDomain reptileDomain)
-        {
-            try
-            {
-                var isSuccess = await _repository.AddReptileAsync(reptileDomain);
-                return isSuccess;
-            }
-            catch (Exception ex)
-            {
-             
-                throw new Exception($"Failed to add amphibian: {ex.Message}", ex);
-            }
-
-        }
-        async Task<bool> IService.AddAmphibianAsync(AmphibianDomain amphibianDomain)
-        {
-            try
-            {
-                var isSuccess = await _repository.AddAmphibianAsync(amphibianDomain);
-                return isSuccess;
-            }
-            catch (Exception ex)
-            {
-               
-                throw new Exception($"Failed to add amphibian: {ex.Message}", ex);
-            }
-
         }
         public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId)
         {
@@ -647,38 +576,78 @@ namespace ANIMAL.Service
             await _repository.AddParametar(parametar);
         }
 
-      
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        //Zasebne karakteristike životinja Update i Add
+        async  Task IService.AddBirdAsync(BirdDomain birdDomain)
+        {
+           
+                await _repository.AddBirdAsync(birdDomain);
+           
+        }
+        async Task IService.AddMammalAsync(MammalDomain mammalDomain)
+        {        
+                await _repository.AddMammalAsync(mammalDomain);         
+        }
+        async Task IService.AddFishAsync(FishDomain fishDomain)
+        {          
+                await _repository.AddFishAsync(fishDomain);    
+        }
+        async Task IService.AddReptileAsync(ReptileDomain reptileDomain)
+        {
+                await _repository.AddReptileAsync(reptileDomain);
+        }
+        async Task IService.AddAmphibianAsync(AmphibianDomain amphibianDomain)
+        {
+                await _repository.AddAmphibianAsync(amphibianDomain);
+        }
+        async Task<bool> IService.UpdateBird(BirdDomain animal)
+        {
+            try
+            {
+                await _repository.UpdateBird(animal);
+                return true;
+            }
+            catch { return false; }
+        }
+        async Task<bool> IService.UpdateMammal(MammalDomain animal)
+        {
+            try
+            {
+                await _repository.UpdateMammal(animal);
+                return true;
+            }
+            catch { return false; }
+        }
+        async Task<bool> IService.UpdateFish(FishDomain animal)
+        {
+            try
+            {
+                await _repository.UpdateFish(animal);
+                return true;
+            }
+            catch { return false; }
+        }
+        async Task<bool> IService.UpdateReptile(ReptileDomain animal)
+        {
+            try
+            {
+                await _repository.UpdateReptile(animal);
+                return true;
+            }
+            catch { return false; }
+        }
+        async Task<bool> IService.UpdateAmphibian(AmphibianDomain animal)
+        {
+            try
+            {
+                await _repository.UpdateAmphibian(animal);
+                return true;
+            }
+            catch { return false; }
+        }     
 
 
 
@@ -694,7 +663,7 @@ namespace ANIMAL.Service
         {
             await _repository.DeleteAdoptedAsync(adoptedId);
             return true;
-        }
+        }      
         public  void DeleteAdoptedReturn(int adoptedId)
         {
              _repository.DeleteAdoptedReturn(adoptedId);
@@ -723,6 +692,6 @@ namespace ANIMAL.Service
             }
         }
 
-   
+       
     }
 }

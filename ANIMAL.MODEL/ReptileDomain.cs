@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ANIMAL.DAL.DataModel;
+using Newtonsoft.Json;
 //using ANIMAL.DAL.DataModel;
 namespace ANIMAL.MODEL
 {
@@ -16,8 +17,8 @@ namespace ANIMAL.MODEL
             CompatibleSpecies = compatibleSpecies;
             RecommendedItems = recommendedItems;
         }
+        [JsonConstructor]
         public ReptileDomain(int idAnimal, string tankSize, string sociability, string compatibleSpecies, string recommendedItems)
-            : base(idAnimal)
         {
             AnimalId = idAnimal;
             TankSize = tankSize;
@@ -25,13 +26,14 @@ namespace ANIMAL.MODEL
             CompatibleSpecies = compatibleSpecies;
             RecommendedItems = recommendedItems;
         }
+        public ReptileDomain() { }
 
         public int AnimalId { get; set; }
         public string TankSize { get; set; }
         public string Sociability { get; set; }
         public string CompatibleSpecies { get; set; }
         public string RecommendedItems { get; set; }
-        public AnimalDomain Animal { get; set; }
+        public virtual AnimalDomain Animal { get; set; }
     }
 
 }

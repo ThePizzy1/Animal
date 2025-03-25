@@ -105,26 +105,6 @@ namespace ANIMAL.WebApi
                 }
             }
         }
-        //probat æu složit da kad se pokrene migracija da se u tablicu SystemRecord automatski doda sve što treba
-        //to æu si ostavit kao dio za završni
-        private async Task CreateRecord(IServiceProvider serviceProvider)
-        {
-            var recordMenager = serviceProvider.GetRequiredService<SystemRecord>();
-            Dictionary<string, string> list = new Dictionary<string,string>();
-            list.Add("", "");
-            list.Add("", "");
-            list.Add("", "");
-            list.Add("", "");
-            list.Add("", "");
-            list.Add("", "");
-            list.Add("", "");
-            list.Add("", "");
-            list.Add("", "");
-            foreach(var l in list)
-            {
-
-            }
-
-        }
+        
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ANIMAL.DAL.DataModel;
+using Newtonsoft.Json;
 //using ANIMAL.DAL.DataModel;
 namespace ANIMAL.MODEL
 {
@@ -14,17 +15,18 @@ namespace ANIMAL.MODEL
             CoatType = coatType;
             GroomingProducts = groomingProducts;
         }
+        [JsonConstructor]
         public MammalDomain(int idAnimal, string coatType, string groomingProducts)
-           : base(idAnimal)
         {
             AnimalId = idAnimal;
             CoatType = coatType;
             GroomingProducts = groomingProducts;
         }
-
+        public MammalDomain() { }
         public int AnimalId { get; set; }
         public string CoatType { get; set; }
         public string GroomingProducts { get; set; }
+        public virtual AnimalDomain Animal { get; set; }
     }
 
 }

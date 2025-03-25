@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ANIMAL.DAL.DataModel;
+using Newtonsoft.Json;
 //using ANIMAL.DAL.DataModel;
 namespace ANIMAL.MODEL
 {
@@ -15,21 +16,24 @@ namespace ANIMAL.MODEL
             RecommendedToys = recommendedToys;
             Sociability = sociability;
         }
+        //nije htjelo bez ovoga baca grešku 
+        //https://stackoverflow.com/questions/59198417/deserialization-of-reference-types-without-parameterless-constructor-is-not-supp RJEŠENJE
+        [JsonConstructor]
         public BirdDomain(int idAnimal, string cageSize, string recommendedToys, string sociability)
-            : base(idAnimal)
+      
         {
             AnimalId = idAnimal;
             CageSize = cageSize;
             RecommendedToys = recommendedToys;
             Sociability = sociability;
         }
-
+        public BirdDomain() { }
         public int AnimalId { get; set; }
         public string CageSize { get; set; }
         public string RecommendedToys { get; set; }
         public string Sociability { get; set; }
-        public AnimalDomain Animal { get; set; }
-        public BirdDomain Bird { get; set; }
+        public virtual AnimalDomain Animal { get; set; }
+     
     }
 
 }

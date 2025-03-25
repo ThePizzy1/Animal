@@ -34,6 +34,9 @@ namespace ANIMAL.DAL.DataModel
 
         public virtual Birds Birds { get; set; }
         public virtual Reptiles Reptiles { get; set; }
+        public virtual Mammals Mammals { get; set; }
+        public virtual Amphibians Amphibians { get; set; }
+        public virtual Fish Fish { get; set; }
         public virtual ICollection<Adopted> AdoptedNavigation { get; set; }
         public virtual ICollection<ReturnedAnimal> ReturnedAnimal { get; set; }
         public virtual ICollection<FoundRecord> FoundRecord { get; set; }

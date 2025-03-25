@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    [Migration("20250317125913_Migration_17_03_2025_04")]
-    partial class Migration_17_03_2025_04
+    [Migration("20250325095012_Migration_25_03_2025_02")]
+    partial class Migration_25_03_2025_02
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -114,12 +114,13 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Humidity")
-                        .HasColumnType("decimal(5, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Temperature")
-                        .HasColumnType("decimal(5, 2)");
+                        .HasColumnType("decimal(18,2)");
 
-                    b.HasIndex("AnimalId");
+                    b.HasKey("AnimalId")
+                        .HasName("PK__Amphibians__A21A73070FA89F7C");
 
                     b.ToTable("Amphibians");
                 });
@@ -317,7 +318,7 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<DateTime>("LastUpdated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 3, 17, 13, 59, 12, 670, DateTimeKind.Local).AddTicks(9148));
+                        .HasDefaultValue(null);
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
@@ -340,22 +341,13 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CageSize")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasMaxLength(255)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RecommendedToys")
-                        .IsRequired()
-                        .HasColumnType("varchar(1000)")
-                        .HasMaxLength(1000)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sociability")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasMaxLength(255)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AnimalId")
                         .HasName("PK__Birds__A21A73070FA89F7C");
@@ -474,24 +466,16 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CompatibleSpecies")
-                        .IsRequired()
-                        .HasColumnType("varchar(1000)")
-                        .HasMaxLength(1000)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RecommendedItems")
-                        .IsRequired()
-                        .HasColumnType("varchar(1000)")
-                        .HasMaxLength(1000)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TankSize")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasMaxLength(255)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("AnimalId");
+                    b.HasKey("AnimalId")
+                        .HasName("PK__Fish__A21A73070FA89F7C");
 
                     b.ToTable("Fish");
                 });
@@ -656,7 +640,7 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<DateTime>("DateTimed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 3, 17, 13, 59, 12, 709, DateTimeKind.Local).AddTicks(7871));
+                        .HasDefaultValue(null);
 
                     b.Property<string>("Purpose")
                         .IsRequired()
@@ -699,18 +683,13 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CoatType")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasMaxLength(255)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GroomingProducts")
-                        .IsRequired()
-                        .HasColumnType("varchar(1000)")
-                        .HasMaxLength(1000)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("AnimalId");
+                    b.HasKey("AnimalId")
+                        .HasName("PK__Mammals__A21A73070FA89F7C");
 
                     b.ToTable("Mammals");
                 });
@@ -845,29 +824,19 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CompatibleSpecies")
-                        .HasColumnType("varchar(1000)")
-                        .HasMaxLength(1000)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RecommendedItems")
-                        .HasColumnType("varchar(1000)")
-                        .HasMaxLength(1000)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sociability")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasMaxLength(255)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TankSize")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasMaxLength(255)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AnimalId")
-                        .HasName("PK__Reptiles__A21A7307D28BF62E");
+                        .HasName("PK__Reptiles__A21A73070FA89F7C");
 
                     b.ToTable("Reptiles");
                 });
@@ -932,6 +901,62 @@ namespace ANIMAL.DAL.Migrations
                         .HasName("PK__SystemRecord");
 
                     b.ToTable("SystemRecord");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            RecordDescription = "Arivall",
+                            RecordName = "Arivall"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            RecordDescription = "First Vet Visit",
+                            RecordName = "First Vet Visit"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            RecordDescription = "Quarantine",
+                            RecordName = "Quarantine"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            RecordDescription = "Shelter",
+                            RecordName = "Shelter"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            RecordDescription = "Socialized",
+                            RecordName = "Socialized"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            RecordDescription = "Approve for Adoption",
+                            RecordName = "Approve for Adoption"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            RecordDescription = "Adopted",
+                            RecordName = "Adopted"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            RecordDescription = "Euthanasia",
+                            RecordName = "Euthanasia"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            RecordDescription = "Returnd",
+                            RecordName = "Returnd"
+                        });
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Toys", b =>
@@ -1177,9 +1202,10 @@ namespace ANIMAL.DAL.Migrations
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Amphibians", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
-                        .WithMany()
-                        .HasForeignKey("AnimalId")
+                        .WithOne("Amphibians")
+                        .HasForeignKey("ANIMAL.DAL.DataModel.Amphibians", "AnimalId")
                         .HasConstraintName("FK__Amphibian__Anima__5CD6CB2B")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -1238,9 +1264,10 @@ namespace ANIMAL.DAL.Migrations
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Fish", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
-                        .WithMany()
-                        .HasForeignKey("AnimalId")
+                        .WithOne("Fish")
+                        .HasForeignKey("ANIMAL.DAL.DataModel.Fish", "AnimalId")
                         .HasConstraintName("FK__Fish__AnimalId__5EBF139D")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -1279,9 +1306,10 @@ namespace ANIMAL.DAL.Migrations
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Mammals", b =>
                 {
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
-                        .WithMany()
-                        .HasForeignKey("AnimalId")
-                        .HasConstraintName("FK__Mammals__AnimalI__5535A963")
+                        .WithOne("Mammals")
+                        .HasForeignKey("ANIMAL.DAL.DataModel.Mammals", "AnimalId")
+                        .HasConstraintName("FK__Mammals__AnimalId__5EBF139D")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -1308,7 +1336,8 @@ namespace ANIMAL.DAL.Migrations
                     b.HasOne("ANIMAL.DAL.DataModel.Animals", "Animal")
                         .WithOne("Reptiles")
                         .HasForeignKey("ANIMAL.DAL.DataModel.Reptiles", "AnimalId")
-                        .HasConstraintName("FK__Reptiles__Animal__5AEE82B9")
+                        .HasConstraintName("FK__Reptiles__AnimalId__5EBF139D")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

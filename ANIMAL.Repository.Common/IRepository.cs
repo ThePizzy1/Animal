@@ -185,12 +185,16 @@ namespace ANIMAL.Repository.Common
         //NIŠTA DRUGO SE NE SMIJE OBRISAT ZATO ŠTO NAM TREBA PPOVIJEST PODATAKA
         //pogledaj  druge klase i napravi da se podatak sakrije ako se to stanje više ne dešava
 
-        //GLUPOSTI KOJE NE RADE
-        public Task<bool> AddBirdAsync(BirdDomain birdDomain);
-        public Task<bool> AddMammalAsync(MammalDomain mammalDomain);
-        public Task<bool> AddFishAsync(FishDomain fishDomain);
-        public Task<bool> AddReptileAsync(ReptileDomain reptileDomain);
-        public Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain);
-        public Task<BirdDomain> UpdateBird(BirdDomain bird);
+        //GLUPOSTI KOJE NE RADE ALI SU TREBALE OD PRIJE
+        public Task AddBirdAsync(BirdDomain birdDomain);
+        public Task AddMammalAsync(MammalDomain mammalDomain);
+        public Task AddFishAsync(FishDomain fishDomain);
+        public Task AddReptileAsync(ReptileDomain reptileDomain);
+        public Task AddAmphibianAsync(AmphibianDomain amphibianDomain);
+        public Task<bool> UpdateBird(BirdDomain animal);
+        public Task<bool> UpdateMammal(MammalDomain animal);
+        public Task<bool> UpdateFish(FishDomain animal);
+        public Task<bool> UpdateReptile(ReptileDomain animal);
+        public Task<bool> UpdateAmphibian(AmphibianDomain animal);
     }
 }

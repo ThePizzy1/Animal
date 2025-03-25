@@ -132,22 +132,7 @@ namespace ANIMAL.DAL.DataModel
                     .IsUnicode(false);
             });
 
-            // Amphibians entity configuration
-            modelBuilder.Entity<Amphibians>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.Humidity).HasColumnType("decimal(5, 2)");
-
-                entity.Property(e => e.Temperature).HasColumnType("decimal(5, 2)");
-
-                entity.HasOne(d => d.Animal)
-                    .WithMany()
-                    .HasForeignKey(d => d.AnimalId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Amphibian__Anima__5CD6CB2B");
-            });
-
+           
             // Animals entity configuration
             modelBuilder.Entity<Animals>(entity =>
             {
@@ -198,117 +183,66 @@ namespace ANIMAL.DAL.DataModel
                 entity.Property(e => e.Weight).HasColumnType("decimal(10, 2)");
             });
 
-            // Birds entity configuration
-            modelBuilder.Entity<Birds>(entity =>
-            {
-                entity.HasKey(e => e.AnimalId)
+            //Birds
+            modelBuilder.Entity<Birds>()
+                   .HasKey(e => e.AnimalId)
                     .HasName("PK__Birds__A21A73070FA89F7C");
-
-                entity.Property(e => e.AnimalId).ValueGeneratedNever();
-
-                entity.Property(e => e.CageSize)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.RecommendedToys)
-                    .IsRequired()
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Sociability)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Animal)
+            modelBuilder.Entity<Birds>()
+                .HasOne(d => d.Animal)
                     .WithOne(p => p.Birds)
                     .HasForeignKey<Birds>(d => d.AnimalId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Birds__AnimalId__5812160E");
-            });
+       
+          
+            // Amphibians 
+                 modelBuilder.Entity<Amphibians>()
+                 .HasKey(e => e.AnimalId)
+                 .HasName("PK__Amphibians__A21A73070FA89F7C");
 
-            // Fish entity configuration
-            modelBuilder.Entity<Fish>(entity =>
-            {
-                entity.HasNoKey();
+                 modelBuilder.Entity<Amphibians>()
+                    .HasOne(d => d.Animal)
+                    .WithOne(d=>d.Amphibians)
+                    .HasForeignKey<Amphibians>(d => d.AnimalId)
+                    .HasConstraintName("FK__Amphibian__Anima__5CD6CB2B");
 
-                entity.Property(e => e.CompatibleSpecies)
-                    .IsRequired()
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
+                // Fish 
 
-                entity.Property(e => e.RecommendedItems)
-                    .IsRequired()
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
+                modelBuilder.Entity<Fish>()
+                    .HasKey(e => e.AnimalId)
+                    .HasName("PK__Fish__A21A73070FA89F7C");
 
-                entity.Property(e => e.TankSize)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                modelBuilder.Entity<Fish>()
+                        .HasOne(d => d.Animal)
+                        .WithOne(d=>d.Fish)
+                        .HasForeignKey<Fish>(d => d.AnimalId)
+                        .HasConstraintName("FK__Fish__AnimalId__5EBF139D");
+                //Mammel
 
-                entity.HasOne(d => d.Animal)
-                    .WithMany()
-                    .HasForeignKey(d => d.AnimalId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Fish__AnimalId__5EBF139D");
-            });
+                modelBuilder.Entity<Mammals>()
+                     .HasKey(e => e.AnimalId)
+                     .HasName("PK__Mammals__A21A73070FA89F7C");
 
-            // Mammals entity configuration
-            modelBuilder.Entity<Mammals>(entity =>
-            {
-                entity.HasNoKey();
+                modelBuilder.Entity<Mammals>()
+                        .HasOne(d => d.Animal)
+                        .WithOne(d=> d.Mammals)
+                        .HasForeignKey<Mammals>(d => d.AnimalId)
+                        .HasConstraintName("FK__Mammals__AnimalId__5EBF139D");
 
-                entity.Property(e => e.CoatType)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
 
-                entity.Property(e => e.GroomingProducts)
-                    .IsRequired()
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
+            //Reptile
 
-                entity.HasOne(d => d.Animal)
-                    .WithMany()
-                    .HasForeignKey(d => d.AnimalId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Mammals__AnimalI__5535A963");
-            });
+                modelBuilder.Entity<Reptiles>()
+                   .HasKey(e => e.AnimalId)
+                   .HasName("PK__Reptiles__A21A73070FA89F7C");
 
-            // Reptiles entity configuration
-            modelBuilder.Entity<Reptiles>(entity =>
-            {
-                entity.HasKey(e => e.AnimalId)
-                    .HasName("PK__Reptiles__A21A7307D28BF62E");
+                modelBuilder.Entity<Reptiles>()
+                        .HasOne(d => d.Animal)
+                        .WithOne(d=> d.Reptiles)
+                        .HasForeignKey<Reptiles>(d => d.AnimalId)
+                        .HasConstraintName("FK__Reptiles__AnimalId__5EBF139D");
 
-                entity.Property(e => e.AnimalId).ValueGeneratedNever();
 
-                entity.Property(e => e.CompatibleSpecies)
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.RecommendedItems)
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Sociability)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.TankSize)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Animal)
-                    .WithOne(p => p.Reptiles)
-                    .HasForeignKey<Reptiles>(d => d.AnimalId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Reptiles__Animal__5AEE82B9");
-            });
 
             // ReturnedAnimal entity configuration
             modelBuilder.Entity<ReturnedAnimal>(entity =>
@@ -356,22 +290,7 @@ namespace ANIMAL.DAL.DataModel
                    .HasForeignKey(d => d.RecordId)
                    .OnDelete(DeleteBehavior.ClientSetNull)
                    .HasConstraintName("FK__AnimalRecord__SystemRecord__RecordId");
-            /*modelBuilder.Entity<AnimalRecord>(entity =>
-            {
-                
-                entity.HasOne(d => d.Record)
-                  .WithMany()
-                   .HasForeignKey(d => d.RecordId)
-                   .OnDelete(DeleteBehavior.ClientSetNull)
-                   .HasConstraintName("FK__AnimalRecord__Record");
-
-                //problem je što anmalId  može bit samo jedan u toj tablici, znači jedinstvaen je i samo se updata
-               /* entity.HasOne(d => d.Animal)
-                    .WithOne()//vjv ne radi zato što nije one to one
-                    .HasForeignKey(d => d.AnimalId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AnimalRecord__Animal");//baca grešku na ovaj key
-            });*/
+      
 
             modelBuilder.Entity<SystemRecord>(entity =>
                {
@@ -392,6 +311,18 @@ namespace ANIMAL.DAL.DataModel
 
 
                });
+            modelBuilder.Entity<SystemRecord>()
+                .HasData(
+                new SystemRecord {Id=1, RecordName="Arivall", RecordDescription= "Arivall"},
+                new SystemRecord { Id = 2, RecordName = "First Vet Visit", RecordDescription = "First Vet Visit" },
+                new SystemRecord { Id = 3, RecordName = "Quarantine", RecordDescription = "Quarantine" },
+                new SystemRecord { Id = 4, RecordName = "Shelter", RecordDescription = "Shelter" },
+                new SystemRecord { Id = 5, RecordName = "Socialized", RecordDescription = "Socialized" },
+                new SystemRecord { Id = 6, RecordName = "Approve for Adoption", RecordDescription = "Approve for Adoption" },
+                new SystemRecord { Id = 7, RecordName = "Adopted", RecordDescription = "Adopted" },
+                new SystemRecord { Id = 8, RecordName = "Euthanasia", RecordDescription = "Euthanasia" },
+                new SystemRecord { Id = 9, RecordName = "Returnd", RecordDescription = "Returnd" }
+                );
 
             modelBuilder.Entity<Balans>(entity =>
             {//.IsUnique();
@@ -409,7 +340,7 @@ namespace ANIMAL.DAL.DataModel
                 .HasMaxLength(21)
                 .IsUnicode(false);
                 entity.Property(e => e.LastUpdated)
-                .HasDefaultValue(DateTime.Now)
+                .HasDefaultValue()
                 .IsRequired();
             });
 
@@ -610,7 +541,7 @@ namespace ANIMAL.DAL.DataModel
 
                 entity.Property(e => e.Amount).HasColumnType("decimal(20, 2)");
                 entity.Property(e => e.DateTimed)
-                .HasDefaultValue(DateTime.Now)
+                .HasDefaultValue()
                 .IsRequired();
             });
 

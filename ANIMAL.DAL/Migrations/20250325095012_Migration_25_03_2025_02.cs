@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ANIMAL.DAL.Migrations
 {
-    public partial class Migration_17_03_2025_04 : Migration
+    public partial class Migration_25_03_2025_02 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -108,7 +108,7 @@ namespace ANIMAL.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Iban = table.Column<string>(unicode: false, maxLength: 21, nullable: false),
                     Balance = table.Column<decimal>(type: "decimal(20, 2)", nullable: false),
-                    LastUpdated = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2025, 3, 17, 13, 59, 12, 670, DateTimeKind.Local).AddTicks(9148)),
+                    LastUpdated = table.Column<DateTime>(nullable: false),
                     Password = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true)
                 },
@@ -226,7 +226,7 @@ namespace ANIMAL.DAL.Migrations
                     AdopterId = table.Column<int>(nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(20, 2)", nullable: false),
                     Purpose = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    DateTimed = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2025, 3, 17, 13, 59, 12, 709, DateTimeKind.Local).AddTicks(7871))
+                    DateTimed = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -271,17 +271,18 @@ namespace ANIMAL.DAL.Migrations
                 columns: table => new
                 {
                     AnimalId = table.Column<int>(nullable: false),
-                    Humidity = table.Column<decimal>(type: "decimal(5, 2)", nullable: false),
-                    Temperature = table.Column<decimal>(type: "decimal(5, 2)", nullable: false)
+                    Humidity = table.Column<decimal>(nullable: false),
+                    Temperature = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK__Amphibians__A21A73070FA89F7C", x => x.AnimalId);
                     table.ForeignKey(
                         name: "FK__Amphibian__Anima__5CD6CB2B",
                         column: x => x.AnimalId,
                         principalTable: "Animals",
                         principalColumn: "IdAnimal",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -289,9 +290,9 @@ namespace ANIMAL.DAL.Migrations
                 columns: table => new
                 {
                     AnimalId = table.Column<int>(nullable: false),
-                    CageSize = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
-                    RecommendedToys = table.Column<string>(unicode: false, maxLength: 1000, nullable: false),
-                    Sociability = table.Column<string>(unicode: false, maxLength: 255, nullable: false)
+                    CageSize = table.Column<string>(nullable: true),
+                    RecommendedToys = table.Column<string>(nullable: true),
+                    Sociability = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -354,18 +355,19 @@ namespace ANIMAL.DAL.Migrations
                 columns: table => new
                 {
                     AnimalId = table.Column<int>(nullable: false),
-                    TankSize = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
-                    CompatibleSpecies = table.Column<string>(unicode: false, maxLength: 1000, nullable: false),
-                    RecommendedItems = table.Column<string>(unicode: false, maxLength: 1000, nullable: false)
+                    TankSize = table.Column<string>(nullable: true),
+                    CompatibleSpecies = table.Column<string>(nullable: true),
+                    RecommendedItems = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK__Fish__A21A73070FA89F7C", x => x.AnimalId);
                     table.ForeignKey(
                         name: "FK__Fish__AnimalId__5EBF139D",
                         column: x => x.AnimalId,
                         principalTable: "Animals",
                         principalColumn: "IdAnimal",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -393,17 +395,18 @@ namespace ANIMAL.DAL.Migrations
                 columns: table => new
                 {
                     AnimalId = table.Column<int>(nullable: false),
-                    CoatType = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
-                    GroomingProducts = table.Column<string>(unicode: false, maxLength: 1000, nullable: false)
+                    CoatType = table.Column<string>(nullable: true),
+                    GroomingProducts = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK__Mammals__A21A73070FA89F7C", x => x.AnimalId);
                     table.ForeignKey(
-                        name: "FK__Mammals__AnimalI__5535A963",
+                        name: "FK__Mammals__AnimalId__5EBF139D",
                         column: x => x.AnimalId,
                         principalTable: "Animals",
                         principalColumn: "IdAnimal",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -438,20 +441,20 @@ namespace ANIMAL.DAL.Migrations
                 columns: table => new
                 {
                     AnimalId = table.Column<int>(nullable: false),
-                    TankSize = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
-                    Sociability = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
-                    CompatibleSpecies = table.Column<string>(unicode: false, maxLength: 1000, nullable: true),
-                    RecommendedItems = table.Column<string>(unicode: false, maxLength: 1000, nullable: true)
+                    TankSize = table.Column<string>(nullable: true),
+                    Sociability = table.Column<string>(nullable: true),
+                    CompatibleSpecies = table.Column<string>(nullable: true),
+                    RecommendedItems = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Reptiles__A21A7307D28BF62E", x => x.AnimalId);
+                    table.PrimaryKey("PK__Reptiles__A21A73070FA89F7C", x => x.AnimalId);
                     table.ForeignKey(
-                        name: "FK__Reptiles__Animal__5AEE82B9",
+                        name: "FK__Reptiles__AnimalId__5EBF139D",
                         column: x => x.AnimalId,
                         principalTable: "Animals",
                         principalColumn: "IdAnimal",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -698,6 +701,22 @@ namespace ANIMAL.DAL.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "SystemRecord",
+                columns: new[] { "Id", "RecordDescription", "RecordName" },
+                values: new object[,]
+                {
+                    { 1, "Arivall", "Arivall" },
+                    { 2, "First Vet Visit", "First Vet Visit" },
+                    { 3, "Quarantine", "Quarantine" },
+                    { 4, "Shelter", "Shelter" },
+                    { 5, "Socialized", "Socialized" },
+                    { 6, "Approve for Adoption", "Approve for Adoption" },
+                    { 7, "Adopted", "Adopted" },
+                    { 8, "Euthanasia", "Euthanasia" },
+                    { 9, "Returnd", "Returnd" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Adopted_AdopterId",
                 table: "Adopted",
@@ -706,11 +725,6 @@ namespace ANIMAL.DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Adopted_AnimalId",
                 table: "Adopted",
-                column: "AnimalId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Amphibians_AnimalId",
-                table: "Amphibians",
                 column: "AnimalId");
 
             migrationBuilder.CreateIndex(
@@ -779,11 +793,6 @@ namespace ANIMAL.DAL.Migrations
                 column: "AnimalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Fish_AnimalId",
-                table: "Fish",
-                column: "AnimalId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FoundRecord_AnimalId",
                 table: "FoundRecord",
                 column: "AnimalId");
@@ -801,11 +810,6 @@ namespace ANIMAL.DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Labs_AnimalId",
                 table: "Labs",
-                column: "AnimalId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Mammals_AnimalId",
-                table: "Mammals",
                 column: "AnimalId");
 
             migrationBuilder.CreateIndex(

@@ -1124,11 +1124,7 @@ namespace ANIMAL.Repository
 
             return true;
         }
-       //Ovo ne radi svejedno
-        public async Task<BirdDomain> UpdateBird(BirdDomain birdDomain)
-        {
-            return _mappingService.Map<BirdDomain>(birdDomain);
-        }
+    
 
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //update novo
@@ -1523,70 +1519,6 @@ namespace ANIMAL.Repository
 
             return _mappingService.Map<AdopterDomain>(adopter);
         }
-        public async Task<bool> AddBirdAsync(BirdDomain birdDomain)
-        {
-            var bird = new Birds
-            {
-                AnimalId = birdDomain.AnimalId,
-                CageSize = birdDomain.CageSize,
-                RecommendedToys = birdDomain.RecommendedToys,
-                Sociability = birdDomain.Sociability
-            };
-
-            await _appDbContext.Birds.AddAsync(bird);
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-        public async Task<bool> AddMammalAsync(MammalDomain mammalDomain)
-        {
-            var mammal = new Mammals
-            {
-                AnimalId = mammalDomain.AnimalId,
-                CoatType = mammalDomain.CoatType,
-                GroomingProducts = mammalDomain.GroomingProducts
-            };
-
-            await _appDbContext.Mammals.AddAsync(mammal);
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-        public async Task<bool> AddFishAsync(FishDomain fishDomain)
-        {
-            var fish = new Fish
-            {
-                AnimalId = fishDomain.AnimalId,
-                TankSize = fishDomain.TankSize,
-                CompatibleSpecies = fishDomain.CompatibleSpecies,
-                RecommendedItems = fishDomain.RecommendedItems
-            };
-
-            await _appDbContext.Fish.AddAsync(fish);
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-        public async Task<bool> AddReptileAsync(ReptileDomain reptileDomain)
-        {
-            var reptile = new Reptiles
-            {
-                AnimalId = reptileDomain.AnimalId,
-                TankSize = reptileDomain.TankSize,
-                Sociability = reptileDomain.Sociability,
-                CompatibleSpecies = reptileDomain.CompatibleSpecies,
-                RecommendedItems = reptileDomain.RecommendedItems
-            };
-
-            await _appDbContext.Reptiles.AddAsync(reptile);
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-        public async Task<bool> AddAmphibianAsync(AmphibianDomain amphibianDomain)
-        {
-            var amphibian = new Amphibians
-            {
-                AnimalId = amphibianDomain.AnimalId,
-                Humidity = amphibianDomain.Humidity,
-                Temperature = amphibianDomain.Temperature
-            };
-
-            await _appDbContext.Amphibians.AddAsync(amphibian);
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
         public async Task<bool> CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
         {
          
@@ -1978,68 +1910,139 @@ namespace ANIMAL.Repository
             await _appDbContext.SaveChangesAsync();
         }
 
+    
+        //ADD ZASEBNE KARAKTERISTIKE ŽIVOTINJE
+        //SVE RADI GOTOVO 
+        public async Task AddBirdAsync(BirdDomain birdDomain)
+        {
+            
+                var bird = new Birds
+                {
+                    AnimalId = Convert.ToInt32( birdDomain.AnimalId),
+                    CageSize = birdDomain.CageSize,
+                    RecommendedToys = birdDomain.RecommendedToys,
+                    Sociability = birdDomain.Sociability
+                };
 
+                var birdResponse = _mappingService.Map<Birds>(bird);
+                _appDbContext.Birds.Add(birdResponse);
+                await _appDbContext.SaveChangesAsync();
+                
+           
+        }
+        public async Task AddMammalAsync(MammalDomain mammalDomain)
+        {
+           
+                var mammal = new Mammals
+                {
+                    AnimalId = mammalDomain.AnimalId,
+                    CoatType = mammalDomain.CoatType,
+                    GroomingProducts = mammalDomain.GroomingProducts
+                };
 
-     
+                var mammalResponse = _mappingService.Map<Mammals>(mammal);
+                _appDbContext.Mammals.Add(mammalResponse);
+                await _appDbContext.SaveChangesAsync();
+              
+        }
+        public async Task AddFishAsync(FishDomain fishDomain)
+        {
+            
+                var fish = new Fish
+                {
+                    AnimalId = fishDomain.AnimalId,
+                    TankSize = fishDomain.TankSize,
+                    CompatibleSpecies = fishDomain.CompatibleSpecies,
+                    RecommendedItems = fishDomain.RecommendedItems
+                };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                var fishResponse = _mappingService.Map<Fish>(fish);
+                _appDbContext.Fish.Add(fishResponse);
+                await _appDbContext.SaveChangesAsync();
+             
+        }
+        public async Task AddReptileAsync(ReptileDomain reptileDomain)
+        {
+            
+                var reptile = new Reptiles
+                {
+                    AnimalId = reptileDomain.AnimalId,
+                    TankSize = reptileDomain.TankSize,
+                    Sociability = reptileDomain.Sociability,
+                    CompatibleSpecies = reptileDomain.CompatibleSpecies,
+                    RecommendedItems = reptileDomain.RecommendedItems
+                };
+                var reptileResponse = _mappingService.Map<Reptiles>(reptile);
+                _appDbContext.Reptiles.Add(reptileResponse);
+                await _appDbContext.SaveChangesAsync();
+              
+        }
+        public async Task AddAmphibianAsync(AmphibianDomain amphibianDomain)
+        {
+                var amphibian = new Amphibians
+                {
+                    AnimalId = amphibianDomain.AnimalId,
+                    Humidity = amphibianDomain.Humidity,//decimal
+                    Temperature = amphibianDomain.Temperature//decimal
+                };
+                var amphibianResponse = _mappingService.Map<Amphibians>(amphibian);
+                _appDbContext.Amphibians.Add(amphibianResponse);
+                await _appDbContext.SaveChangesAsync(); 
+            
+        }
+        //UPDATE ZASEBNE KARAKTERISTIKE ŽIVOTINJA
+        //GOTOVO I SVE RADI
+       async Task<bool> IRepository.UpdateMammal(MammalDomain animal)
+        {
+            var mamel = await _appDbContext.Mammals.FirstOrDefaultAsync(a => a.AnimalId==animal.AnimalId);
+            mamel.CoatType = animal.CoatType;
+            mamel.GroomingProducts = animal.GroomingProducts;
+            _appDbContext.Mammals.Update(mamel);
+            await _appDbContext.SaveChangesAsync();
+            return true;
+        }
+       async Task<bool> IRepository.UpdateFish(FishDomain animal)
+        {
+            var fish = await _appDbContext.Fish.FirstOrDefaultAsync(a => a.AnimalId == animal.AnimalId);
+            fish.TankSize = animal.TankSize;
+            fish.CompatibleSpecies = animal.CompatibleSpecies;
+            fish.RecommendedItems = animal.RecommendedItems;
+            _appDbContext.Fish.Update(fish);
+            await _appDbContext.SaveChangesAsync();
+            return true;
+        }
+       async Task<bool> IRepository.UpdateReptile(ReptileDomain animal)
+        {
+            var reptile = await _appDbContext.Reptiles.FirstOrDefaultAsync(a => a.AnimalId == animal.AnimalId);
+            reptile.TankSize = animal.TankSize;
+            reptile.CompatibleSpecies = animal.CompatibleSpecies;
+            reptile.RecommendedItems = animal.RecommendedItems;
+            reptile.Sociability = animal.Sociability;      
+            _appDbContext.Reptiles.Update(reptile);
+            await _appDbContext.SaveChangesAsync();
+            return true;
+        }
+       async Task<bool> IRepository.UpdateAmphibian(AmphibianDomain animal)
+        {
+            var amphibian = await _appDbContext.Amphibians.FirstOrDefaultAsync(a => a.AnimalId == animal.AnimalId);
+            amphibian.Humidity = animal.Humidity;
+            amphibian.Temperature = animal.Temperature;
+            _appDbContext.Amphibians.Update(amphibian);
+            await _appDbContext.SaveChangesAsync();
+            return true;
+        }
+       async Task<bool> IRepository.UpdateBird(BirdDomain animal)
+        {
+            var bird = await _appDbContext.Birds.FirstOrDefaultAsync(a => a.AnimalId == animal.AnimalId);
+            bird.Sociability = animal.Sociability;
+            bird.RecommendedToys = animal.RecommendedToys;
+            bird.CageSize = animal.CageSize;
+            _appDbContext.Birds.Update(bird);
+            await _appDbContext.SaveChangesAsync();
+            return true;
+        }   
+        
+        
 
 
 
@@ -2183,7 +2186,6 @@ namespace ANIMAL.Repository
             _appDbContext.SaveChanges();
             return true;
         }
-
 
     }
 }

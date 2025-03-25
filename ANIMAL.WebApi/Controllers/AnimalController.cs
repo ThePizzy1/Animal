@@ -1361,6 +1361,159 @@ namespace ANIMAL.WebApi.Controllers
 
 
 
+        //Zasebni podaci za životinje Update i Add
+
+  
+        [HttpPost("addBird")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddBirdAsync([FromBody] BirdDomain record)
+        {
+            try
+            {
+             await _service.AddBirdAsync(record);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(" "+ex.InnerException);
+            }
+        }
+        [HttpPost("addMammal")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddMammalAsync([FromBody] MammalDomain record)
+        {
+            try { 
+            await _service.AddMammalAsync(record);
+            return Ok();
+             }
+            catch(Exception ex)
+            {
+                throw new Exception(" "+ex.InnerException);
+             }
+        }
+        [HttpPost("addFish")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddFishAsync([FromBody] FishDomain record)
+        {
+            try { 
+            await _service.AddFishAsync(record);
+            return Ok();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(" "+ex.InnerException);
+              }
+            }
+
+        [HttpPost("addReptile")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddReptileAsync([FromBody] ReptileDomain record)
+        {
+            try { 
+            await _service.AddReptileAsync(record);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(" " + ex.InnerException);
+            }
+        }
+        [HttpPost("addAmphibian")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddAmphibianAsync([FromBody] AmphibianDomain record)
+        {
+            try { 
+            await _service.AddAmphibianAsync(record);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(" " + ex.InnerException);
+            }
+        }
+
+
+
+        //UPDATE 
+
+        [HttpPut("updateBird")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateBird([FromBody] BirdDomain record)
+        {
+            try
+            {
+                await _service.UpdateBird(record);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
+        [HttpPut("updateMammal")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateMammal([FromBody] MammalDomain record)
+        {
+            try
+            {
+                await _service.UpdateMammal(record);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
+        [HttpPut("updateFish")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateFish([FromBody] FishDomain record)
+        {
+            try
+            {
+                await _service.UpdateFish(record);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
+        [HttpPut("updateReptile")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateReptile([FromBody] ReptileDomain record)
+        {
+            try
+            {
+                await _service.UpdateReptile(record);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
+        [HttpPut("updateAmphibian")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateAmphibian([FromBody] AmphibianDomain record)
+        {
+            try
+            {
+                await _service.UpdateAmphibian(record);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
+
+
+
 
 
 
@@ -1436,10 +1589,6 @@ namespace ANIMAL.WebApi.Controllers
                  return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
              }
          }
-
-
-
-
 
 
 

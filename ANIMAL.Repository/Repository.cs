@@ -77,11 +77,10 @@ namespace ANIMAL.Repository
             }
             public IEnumerable<AnimalDomain> GetAllAnimalDomainAdopt()
             {
-                var animalDb = _appDbContext.Animals
-                    .Where(a => !a.Adopted) // Filtriranje po usvojenim životinjama
-                    .ToList();
-
-                var animalDomain = animalDb.Select(e => new AnimalDomain(
+                var animalDb = _appDbContext.Animals.Where(a => _appDbContext.AnimalRecord
+                                                .Any(ar => ar.RecordId != 8 && ar.RecordId != 7 && ar.AnimalId == a.IdAnimal))
+                                                .ToList();
+            var animalDomain = animalDb.Select(e => new AnimalDomain(
                     e.IdAnimal,
                     e.Name,
                     e.Family,
@@ -106,8 +105,11 @@ namespace ANIMAL.Repository
             }
             public IEnumerable<AnimalDomain> GetAllAnimalDomain()
             {
-                var animalDb = _appDbContext.Animals.ToList();
-                var animalDomain = animalDb.Select(e => new AnimalDomain(
+                var animalDb  = _appDbContext.Animals.Where(a => _appDbContext.AnimalRecord
+                                                .Any(ar => ar.RecordId != 8 && ar.AnimalId == a.IdAnimal))
+                                                .ToList();
+
+            var animalDomain = animalDb.Select(e => new AnimalDomain(
                     e.IdAnimal,
                     e.Name,
                     e.Family,
@@ -130,31 +132,45 @@ namespace ANIMAL.Repository
 
                 return animalDomain;
             }
-            public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture()
-            {
-                var animalDb = _appDbContext.Animals.ToList();
-                var animalDomain = animalDb.Select(e => new AnimalDomain(
-                    e.IdAnimal,
-                    e.Name,
-                    e.Family,
-                    e.Species,
-                    e.Subspecies,
-                    e.Age,
-                    e.Gender,
-                    e.Weight,
-                    e.Height,
-                    e.Length,
-                    e.Neutered,
-                    e.Vaccinated,
-                    e.Microchipped,
-                    e.Trained,
-                    e.Socialized,
-                    e.HealthIssues,
-                    e.PersonalityDescription,
-                    e.Adopted));
+        public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture()
+        {
+            //trebaš povuć record i ako je animal record 8 ne stavit ju u listu jel je to uginula životinja
+            /*_appDbContext.Animals.Where(a=> !_appDbContext.AnimalRecord
+                                                .Any(ar=>ar.RecordId!=8 && ar.AnimalId==a.IdAnimal ))
+                                                .ToList();
+            OVO VRAĆA SVE ŽIVOTINJE KOJE IMAJU RECORD 8
+        */
+            var animalDb = _appDbContext.Animals.Where(a=> _appDbContext.AnimalRecord
+                                                .Any(ar=>ar.RecordId!=8 && ar.AnimalId==a.IdAnimal ))
+                                                .ToList();
+        
+          
+            //koristi taj parametar tu 
+            var animalDomain = animalDb.Select(e => new AnimalDomain(
+                e.IdAnimal,
+                e.Name,
+                e.Family,
+                e.Species,
+                e.Subspecies,
+                e.Age,
+                e.Gender,
+                e.Weight,
+                e.Height,
+                e.Length,
+                e.Neutered,
+                e.Vaccinated,
+                e.Microchipped,
+                e.Trained,
+                e.Socialized,
+                e.HealthIssues,
+                e.PersonalityDescription,
+                e.Adopted));
+                   
 
                 return animalDomain;
-            }
+            
+          
+        }
 
         //Get all novo
             IEnumerable<AnimalRecordDomain> IRepository.GetAllAnimalRecordDomain()

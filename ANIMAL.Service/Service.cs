@@ -51,7 +51,7 @@ namespace ANIMAL.Service
         }  
         IEnumerable<AnimalDomain> IService.GetAllAnimalDomainNoPicture()
         {
-            IEnumerable<AnimalDomain> animalDomains = _repository.GetAllAnimalDomain();
+            IEnumerable<AnimalDomain> animalDomains = _repository.GetAllAnimalDomainNoPicture();
             return animalDomains;
         }
 

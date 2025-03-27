@@ -170,9 +170,13 @@ namespace ANIMAL.WebApi.Controllers
                             table.AddColumn(Unit.FromCentimeter(3));
             Row row = table.AddRow();
             row.Shading.Color = Colors.Aquamarine;
-            table.Borders.Visible = true;
+            table.Borders.Visible = false;
             table.Format.Font.Size = Unit.FromPoint(14);
-        
+            table.TopPadding = 0.5;
+            table.BottomPadding = 0.5;
+            table.LeftPadding = 0.5;
+            table.RightPadding = 0.5;
+            
             Cell cell = row.Cells[0];
             cell.AddParagraph("Description");
             cell = row.Cells[1];

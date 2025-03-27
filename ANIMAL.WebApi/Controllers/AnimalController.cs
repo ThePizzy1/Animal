@@ -30,7 +30,7 @@ namespace ANIMAL.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("animal_db")]
+        [HttpGet("animal_db")]
         [AllowAnonymous]
         public IEnumerable<AnimalDomain> GetAnimalDomains()
         {

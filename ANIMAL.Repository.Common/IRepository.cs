@@ -7,11 +7,13 @@ using ANIMAL.DAL.DataModel;
 using ANIMAL.MODEL;
 namespace ANIMAL.Repository.Common
 {
+    
   public   interface IRepository { 
      
         //GET ALL     
         // public IEnumerable<AnimalDomain> ();
         IEnumerable<AnimalDomain> GetAllAnimalDomain();
+        //izbacuje sve životinje koje su bileposvojene umjesto one koja je trenutno
         IEnumerable<AnimalDomain> GetAllAnimalDomainAdopt();
         IEnumerable<AdopterDomain> GetAllAdopterDomain();
         IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain();
@@ -126,6 +128,7 @@ namespace ANIMAL.Repository.Common
 
         //DODAVANJE
         public Task<bool> CreateReturnedAnimalAsync( int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason);
+        //nakon ovoga i dalje vidimživotinju u ponudi za posvajanje
         public  Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate);    
         public  Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);   
         Task<AnimalDomain> AddAnimalAsync( string name, string family,  string species,  string subspecies,  int age, string gender, decimal weight, decimal height, decimal length,      bool neutered, bool vaccinated,   bool microchipped,   bool trained,  bool socialized,   string healthIssues,   byte[] picture, string personalityDescription, bool adopted);

@@ -30,11 +30,51 @@ namespace ANIMAL.Repository
             }
             //GET ALL
             public IEnumerable<AdoptedDomain> GetAllAdoptedDomain()
-            {
-                var adoptedEntities = _appDbContext.Adopted.ToList();
-                var adoptedDomains = adoptedEntities.Select(a => new AdoptedDomain(a)).ToList();
-                return adoptedDomains;
-            }
+            {//trebam uzet kod posvajanja i provjerit dali postoji objekt koi je vraćen sa im id ao postoji n eispisati ga
+
+            var animalDb = _appDbContext.Adopted.Where(a => _appDbContext.ReturnedAnimal
+                                          .Any(ar => ar.AdoptionCode != a.Code))
+                                          .Include(a => a.Animal)
+                                          .ToList();
+
+            //provjerava dali je žvotinja po rekordu i Adopted parametru posvojena
+            var adoptedEntities = animalDb
+                                   .Where(a => _appDbContext.AnimalRecord
+                                   .Any(an => an.RecordId == 7  && a.Animal.Adopted == true))
+                                   .ToList();
+
+            var adoptedDomains = adoptedEntities
+           .Select(e => new AdoptedDomain
+           {
+               Code = e.Code,
+               Animal = new AnimalDomain(
+                       e.Animal.IdAnimal,
+                       e.Animal.Name,
+                       e.Animal.Species,
+                       e.Animal.Family,
+                       e.Animal.Subspecies,
+                       e.Animal.Age,
+                       e.Animal.Gender,
+                       e.Animal.Weight,
+                       e.Animal.Height,
+                       e.Animal.Length,
+                       e.Animal.Neutered,
+                       e.Animal.Vaccinated,
+                       e.Animal.Microchipped,
+                       e.Animal.Trained,
+                       e.Animal.Socialized,
+                       e.Animal.HealthIssues,
+                       e.Animal.Picture,
+                       e.Animal.PersonalityDescription,
+                       e.Animal.Adopted
+                   ),
+               AdoptionDate = e.AdoptionDate,
+              
+
+           }).ToList();
+
+            return adoptedDomains;
+        }
             public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain()
             {
                 var returnedAnimalEntities = _appDbContext.ReturnedAnimal.ToList();
@@ -75,10 +115,10 @@ namespace ANIMAL.Repository
 
                 return amphibian;
             }
-            public IEnumerable<AnimalDomain> GetAllAnimalDomainAdopt()
+            public IEnumerable<AnimalDomain> GetAllAnimalDomainAdopt()//povuci sve životinje koje se mogu posvojit
             {
                 var animalDb = _appDbContext.Animals.Where(a => _appDbContext.AnimalRecord
-                                                .Any(ar => ar.RecordId != 8 && ar.RecordId != 7 && ar.AnimalId == a.IdAnimal))
+                                                .Any(ar => ar.RecordId == 6 && ar.AnimalId == a.IdAnimal))
                                                 .ToList();
             var animalDomain = animalDb.Select(e => new AnimalDomain(
                     e.IdAnimal,
@@ -103,6 +143,7 @@ namespace ANIMAL.Repository
 
                 return animalDomain;
             }
+        //samo životinje koje su broj 6 se smiju prikazati na glavnoj stranici za posvajanje, 6 odobrava veterinar
             public IEnumerable<AnimalDomain> GetAllAnimalDomain()
             {
                 var animalDb  = _appDbContext.Animals.Where(a => _appDbContext.AnimalRecord
@@ -132,7 +173,7 @@ namespace ANIMAL.Repository
 
                 return animalDomain;
             }
-        public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture()
+            public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture()
         {
             //trebaš povuć record i ako je animal record 8 ne stavit ju u listu jel je to uginula životinja
             /*_appDbContext.Animals.Where(a=> !_appDbContext.AnimalRecord
@@ -452,9 +493,11 @@ namespace ANIMAL.Repository
                 return reptile;
             }
           public AnimalDomain GetAnimalById(int animalId)
-            {
+            {//promjena ako je rekord te životinje različit od 7 dopusti pregled
                 var animalData = _appDbContext.Animals
-                    .Where(a => a.IdAnimal == animalId && !a.Adopted) // Filtriranje po ID-u i neudomljenosti
+
+                    .Where(a => _appDbContext.AnimalRecord
+                    .Any(an=> an.RecordId!=7 && a.IdAnimal==animalId)) // Filtriranje po ID-u i neudomljenosti
                     .Select(e => new AnimalDomain(
                         e.IdAnimal,
                         e.Name,
@@ -532,18 +575,23 @@ namespace ANIMAL.Repository
                 return adopterDomain;
 
             }
-          public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId)
+          public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId)//ovo je na profilu
             {
-                var returnedAnimals = _appDbContext.ReturnedAnimal
-               .Select(r => r.AnimalId) // Pretpostavljamo da 'Code' identificira vraćene životinje
-               .ToList();
-                var adoptedEntities = _appDbContext.Adopted
-                                                   .Where(a => a.AdopterId == adopterId && a.Animal.Adopted == true)
-                                                   .Include(a => a.Animal) // Uključi podatke o životinji
-                                                   .Include(a => a.Adopter) // Uključi podatke o usvojitelju
-                                                   .ToList();
+            //uključi i record da bi vidjela dali je životinja na stanju 7
+            //ovo stavi u listu samo životinje koje su posvojene i nisu vraćene
+            var animalDb = _appDbContext.Adopted.Where(a => _appDbContext.ReturnedAnimal
+                                                .Any(ar => ar.AdoptionCode != a.Code))
+                                                .Include(a => a.Animal)
+                                                .Include(a => a.Adopter)
+                                                .ToList();
 
-             var adoptedDomains = adoptedEntities.Where(e => !returnedAnimals.Contains(e.Code)) // Filtriraj životinje koje nisu vraćene
+            //provjerava dali je žvotinja po rekordu i Adopted parametru posvojena
+                var adoptedEntities =  animalDb
+                                       .Where(a => _appDbContext.AnimalRecord
+                                       .Any(an=>an.RecordId==7 && a.AdopterId == adopterId ))      
+                                       .ToList();
+
+             var adoptedDomains = adoptedEntities 
             .Select(e => new AdoptedDomain
                 {
                     Code = e.Code,
@@ -633,11 +681,6 @@ namespace ANIMAL.Repository
 
                 return returnedAnimalDomains;
             }
-
-    
-      
-
-
           AdopterDomain IRepository.GetAdopterByUsername(string username)
             {
                 throw new NotImplementedException();
@@ -1252,8 +1295,15 @@ namespace ANIMAL.Repository
         public async Task<bool> UpdateAnimalBalansDomain(int id, decimal balance)//izmjena podataka na računu od donacija
         {
             var balans = await _appDbContext.Balans.FirstOrDefaultAsync(a => a.Id == id);
-
-            balans.Balance = balans.Balance+balance;
+            if (balans.Balance == null)
+            {
+                balans.Balance = balance;
+            }
+            else
+            {
+                balans.Balance = balans.Balance+balance;
+            }
+           
         
 
             _appDbContext.Balans.Update(balans);
@@ -1564,7 +1614,7 @@ namespace ANIMAL.Repository
                     AnimalId = animalId,
                     AdopterId = adopterId,
                     AdoptionDate = adoptionDate
-                    // Don't set Code explicitly if it's an identity column
+                    
                 };
 
                 _appDbContext.Adopted.Add(adoptedEntity);

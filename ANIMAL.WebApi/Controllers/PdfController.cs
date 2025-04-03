@@ -153,9 +153,9 @@ namespace ANIMAL.WebApi.Controllers
             paragraphH.Format.Font.Size = 24;
             paragraphH.Format.Font.Bold = true;
             Paragraph paragraph = document.LastSection.AddParagraph("Name: "+animalData.Name, "Heading3");
-            document.LastSection.AddParagraph("Family: " + animalData.Family+", "+animalData.Species+", "+animalData.Subspecies, "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph("Age: " + animalData.Age, "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph("Gender: " + animalData.Gender, "Heading3").Format.Font.Size = 14;
+            document.LastSection.AddParagraph($"Family:{animalData.Family}, {animalData.Species} ,{animalData.Subspecies}", "Heading3").Format.Font.Size = 14;
+            document.LastSection.AddParagraph($"Age:  {animalData.Age}" , "Heading3").Format.Font.Size = 14;
+            document.LastSection.AddParagraph($"Gender: {animalData.Gender}"  , "Heading3").Format.Font.Size = 14;
             paragraph.Format.Font.Size = 14;
             paragraph.Format.Font.Bold = false;
             document.LastSection.AddParagraph(" ", "Heading3");

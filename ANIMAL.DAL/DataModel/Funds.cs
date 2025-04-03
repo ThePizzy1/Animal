@@ -11,7 +11,8 @@ namespace ANIMAL.DAL.DataModel
         public decimal Amount {  get; set; }
         public string Purpose { get; set; }
         public DateTime DateTimed { get; set; }
-        
+        public string Iban { get; set; }
         public Adopter  Adopter { get; set; }
+        
     }
 }

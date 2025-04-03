@@ -26,6 +26,15 @@ namespace ANIMAL.MODEL
             Description = description;
         Contageus = contageus;
         }
+        public ContageusAnimalsDomain(int id, int animalId, string desisseName, string description, bool contageus,DateTime startTime)
+        {
+            Id = id;
+            AnimalId = animalId;
+            DesisseName = desisseName;
+            Description = description;
+            Contageus = contageus;
+            StartTime=startTime;
+        }
         public ContageusAnimalsDomain(int id, bool contageus)
         {
             Id = id;

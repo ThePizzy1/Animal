@@ -35,7 +35,7 @@ namespace ANIMAL.Service.Common
         public IEnumerable<ToysDomain> GetAllToysDomain();
         public IEnumerable<VetVisitsDomain> GetAllVetVisitsDomain();
 
-
+        public IEnumerable<TransactionsDomain> GetAllTransactionsDomain();
 
 
 
@@ -109,10 +109,10 @@ namespace ANIMAL.Service.Common
         public Task<bool> UpdateEuthanasiaDomain(int id, DateTime date, bool complited);
         public Task<bool> UpdateFoodDomainIncrement(int id);
         public Task<bool> UpdateFoodDomainDecrement(int id);
-        public Task<bool> UpdateFoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
+        public Task<bool> UpdateFoodDomain(FoodDomain food);
         public Task<bool> UpdateToysDomainIncrement(int id);
         public Task<bool> UpdateToysDomainDecrement(int id);
-        public Task<bool> UpdateToysDomain(int id, string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes);
+        public Task<bool> UpdateToysDomain(ToysDomain toy);
         public Task<bool> UpdateFoundRecordDomain(int id, int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);
         public Task<bool> UpdateMedicinesDomainUsage(int id, bool usage);
         public Task<bool> UpdateMedicinesDomain(int id, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse);
@@ -161,7 +161,7 @@ namespace ANIMAL.Service.Common
         public Task AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes);
         public Task AddSystemRecord(int recordNumber, string recordName, string recordDescription);
         public Task AddMedicines(int animalId, string nameOfMedicines, string descriptio, string vetUsername, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage);
-        public Task AddFunds(int adopterId, decimal amount, string purpose);
+        public Task AddFunds(int adopterId, decimal amount, string purpose, string iban);
         public Task AddEuthanasia(int animalId, DateTime date, string nameOfDesissse, bool complited);
         public Task AddContageus(int animalId, string desisseName, DateTime startTime, string description, bool contageus);
         public Task AddContact(string name, string email, string description, int adopterId);
@@ -169,7 +169,7 @@ namespace ANIMAL.Service.Common
         public Task<LabsDomain> AddLab(int animalId, DateTime date);
         public Task AddParametar(ParameterDomain parametar);
 
-
+        public Task AddTransactions(TransactionsDomain transactions);
 
 
         //Zasebne karakteristike životinja UPDATE I ADD

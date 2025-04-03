@@ -22,5 +22,6 @@ namespace ANIMAL.DAL.DataModel
         public DateTime ExporationDate { get; set; }
         public int Quantity { get; set; }
         public string Notes { get; set; }
+        public decimal Price { get; set; }
     }
 }

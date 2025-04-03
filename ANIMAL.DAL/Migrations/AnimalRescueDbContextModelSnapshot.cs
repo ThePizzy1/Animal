@@ -545,6 +545,9 @@ namespace ANIMAL.DAL.Migrations
                         .HasMaxLength(1000)
                         .IsUnicode(false);
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(20, 2)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -639,6 +642,12 @@ namespace ANIMAL.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValue(null);
+
+                    b.Property<string>("Iban")
+                        .IsRequired()
+                        .HasColumnType("varchar(21)")
+                        .HasMaxLength(21)
+                        .IsUnicode(false);
 
                     b.Property<string>("Purpose")
                         .IsRequired()
@@ -770,6 +779,9 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
+
+                    b.Property<byte[]>("Picture")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id")
                         .HasName("PK__News");
@@ -997,6 +1009,9 @@ namespace ANIMAL.DAL.Migrations
                         .HasMaxLength(255)
                         .IsUnicode(false);
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(20, 2)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -1013,6 +1028,41 @@ namespace ANIMAL.DAL.Migrations
                         .HasName("PK__Toys");
 
                     b.ToTable("Toys");
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Transactions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Iban")
+                        .HasColumnType("varchar(21)");
+
+                    b.Property<string>("IbanAnimalShelter")
+                        .HasColumnType("varchar(21)");
+
+                    b.Property<string>("Purpose")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id")
+                        .HasName("Pk__Transactions");
+
+                    b.HasIndex("Iban");
+
+                    b.HasIndex("IbanAnimalShelter");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.VetVisits", b =>
@@ -1358,6 +1408,19 @@ namespace ANIMAL.DAL.Migrations
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__ReturnedA__Anima__52593CB8")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ANIMAL.DAL.DataModel.Transactions", b =>
+                {
+                    b.HasOne("ANIMAL.DAL.DataModel.Funds", "Funds")
+                        .WithMany()
+                        .HasForeignKey("Iban")
+                        .HasPrincipalKey("Iban");
+
+                    b.HasOne("ANIMAL.DAL.DataModel.Balans", "Balans")
+                        .WithMany()
+                        .HasForeignKey("IbanAnimalShelter")
+                        .HasPrincipalKey("Iban");
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.VetVisits", b =>

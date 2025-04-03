@@ -16,7 +16,10 @@ using Columns = DocumentFormat.OpenXml.Wordprocessing.Columns;
 using Index = DocumentFormat.OpenXml.Drawing.Charts.Index;
 
 
-
+/*
+ * Dodaj EXCEL za Transakcije
+ * Dodaj EXCEL za Hranu i dodatke potrošnju
+ */
 namespace ANIMAL.WebApi.Controllers
 {
     [Route("api/excel")]

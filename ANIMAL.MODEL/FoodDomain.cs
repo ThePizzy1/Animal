@@ -7,7 +7,7 @@ namespace ANIMAL.DAL.DataModel
     public class FoodDomain
     {
         public FoodDomain() { }
-        public FoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight)
+        public FoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight, decimal price)
         {
             Id = id;
             BrandName = brandName;
@@ -25,6 +25,27 @@ namespace ANIMAL.DAL.DataModel
             Quantity = quantity;
             Notes = notes;
             MeasurementWeight = measurementWeight;
+            Price = price;
+        }
+        public FoodDomain( string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight, decimal price)
+        {
+         
+            BrandName = brandName;
+            Name = name;
+            FoodType = foodType;
+            AnimalType = animalType;
+            AgeGroup = ageGroup;
+            Weight = weight;
+            CaloriesPerServing = caloriesPerServing;
+            WeightPerServing = weightPerServing;
+            MeasurementPerServing = measurementPerServing;
+            FatContent = fatContent;
+            FiberContent = fiberContent;
+            ExporationDate = exporationDate;
+            Quantity = quantity;
+            Notes = notes;
+            MeasurementWeight = measurementWeight;
+            Price = price;
         }
         public FoodDomain(int id, int quantity)
         {
@@ -48,5 +69,6 @@ namespace ANIMAL.DAL.DataModel
         public DateTime ExporationDate { get; set; }
         public int Quantity { get; set; }
         public string Notes { get; set; }
+        public decimal Price { get; set; }
     }
 }

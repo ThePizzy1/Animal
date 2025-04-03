@@ -8,7 +8,7 @@ namespace ANIMAL.MODEL
     {
         public ToysDomain() { }
 
-        public ToysDomain(int id, string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes)
+        public ToysDomain(int id, string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes, decimal price)
         {
             Id = id;
             BrandName = brandName;
@@ -20,8 +20,9 @@ namespace ANIMAL.MODEL
             Width = width;
             Quantity = quantity;
             Notes = notes;
+            Price = price;
         }
-        public ToysDomain(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes)
+        public ToysDomain(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes, decimal price)
         {
            
             BrandName = brandName;
@@ -33,6 +34,7 @@ namespace ANIMAL.MODEL
             Width = width;
             Quantity = quantity;
             Notes = notes;
+            Price= price;
         }
         public ToysDomain(int id, int quantity) 
         {  Id = id;
@@ -48,5 +50,6 @@ namespace ANIMAL.MODEL
         public decimal Width { get; set; }
         public int Quantity { get; set; }
         public string Notes { get; set; }
+        public decimal Price { get; set; }
     }
 }

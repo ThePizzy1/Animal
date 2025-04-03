@@ -134,7 +134,11 @@ namespace ANIMAL.Service
             return vetDomains;
         }
 
-
+        IEnumerable<TransactionsDomain> IService.GetAllTransactionsDomain()
+        {
+            IEnumerable<TransactionsDomain> result = _repository.GetAllTransactionsDomain();
+            return result;
+        }
 
 
 
@@ -360,9 +364,9 @@ namespace ANIMAL.Service
             await _repository.UpdateFoodDomainDecrement( id);
             return true;
         }
-        async Task<bool> IService.UpdateFoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight)
+        async Task<bool> IService.UpdateFoodDomain(FoodDomain food)
         {
-            await _repository.UpdateFoodDomain( id,  brandName,  name,  foodType,  animalType,  ageGroup,  weight,  caloriesPerServing,  weightPerServing,  measurementPerServing,  fatContent,  fiberContent,  exporationDate,  quantity,  notes,  measurementWeight)
+            await _repository.UpdateFoodDomain( food)
        ;
             return true;
         }
@@ -376,9 +380,9 @@ namespace ANIMAL.Service
             await _repository.UpdateToysDomainDecrement(id);
             return true;
         }
-        async Task<bool> IService.UpdateToysDomain(int id, string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes)
+        async Task<bool> IService.UpdateToysDomain(ToysDomain toy)
         {
-            await _repository.UpdateToysDomain( id,  brandName,  name,  animalType,  toyType,  ageGroup,  hight,  width,  quantity,  notes);
+            await _repository.UpdateToysDomain(toy);
             return true;
         }
         async Task<bool> IService.UpdateFoundRecordDomain(int id, int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId)
@@ -535,9 +539,9 @@ namespace ANIMAL.Service
         {
             await _repository.AddMedicines( animalId,  nameOfMedicines,  descriptio,  vetUsername,  amountOfMedicine,  mesurmentUnit,  medicationIntake,  frequencyOfMedicationUse,  usage);
         }
-        async Task IService.AddFunds(int adopterId, decimal amount, string purpose)
+        async Task IService.AddFunds(int adopterId, decimal amount, string purpose, string iban)
         {
-            await _repository.AddFunds( adopterId,  amount,  purpose);
+            await _repository.AddFunds( adopterId,  amount,  purpose,iban);
 
         }
         async  Task IService.AddEuthanasia(int animalId, DateTime date, string nameOfDesissse, bool complited)
@@ -576,7 +580,10 @@ namespace ANIMAL.Service
             await _repository.AddParametar(parametar);
         }
 
-
+       async Task IService.AddTransactions(TransactionsDomain transactions)
+        {
+            await _repository.AddTransactions(transactions);
+        }
 
 
 
@@ -692,6 +699,6 @@ namespace ANIMAL.Service
             }
         }
 
-       
+        
     }
 }

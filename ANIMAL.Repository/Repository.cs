@@ -13,6 +13,7 @@ using System.Security.Policy;
 using System.Xml.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace ANIMAL.Repository
 {
@@ -294,7 +295,8 @@ namespace ANIMAL.Repository
                     e.ExporationDate,
                     e.Quantity,
                     e.Notes,
-                    e.MeasurementWeight
+                    e.MeasurementWeight,
+                    e.Price
                     ));
 
                 return foodDomain;
@@ -325,7 +327,8 @@ namespace ANIMAL.Repository
                         e.AdopterId,
                         e.Amount,
                         e.Purpose,
-                        e.DateTimed
+                        e.DateTimed,
+                        e.Iban
                     ));
                 return fundsDomain;
             }
@@ -403,7 +406,8 @@ namespace ANIMAL.Repository
                     e.Hight,
                     e.Width,
                     e.Quantity,
-                    e.Notes
+                    e.Notes,
+                    e.Price
                     ));
                 return toysDomain;
             }
@@ -423,7 +427,23 @@ namespace ANIMAL.Repository
             }
 
 
-
+        IEnumerable<TransactionsDomain> IRepository.GetAllTransactionsDomain()
+        {
+            var transactionsDb = _appDbContext.Transactions.ToList();
+            var transactionsDomain=
+                transactionsDb.Select(
+                    e => new TransactionsDomain(
+                        e.Id,
+                        e.Iban,
+                        e.IbanAnimalShelter,
+                        e.Type,
+                        e.Date,
+                        e.Cost,
+                        e.Purpose
+                       
+                        ));
+            return transactionsDomain;
+        }
 
 
 
@@ -435,7 +455,7 @@ namespace ANIMAL.Repository
         //--------------------------------------------------------------------------------------------------------------------------------------------
 
         //--------------------------------------------------------------------------------------------------------------------------------------------
-          public BirdDomain GetAllBirdDomain(int id)
+        public BirdDomain GetAllBirdDomain(int id)
             {
                 var bird = _appDbContext.Birds
                     .Join(_appDbContext.Animals, b => b.AnimalId, a => a.IdAnimal,
@@ -737,7 +757,8 @@ namespace ANIMAL.Repository
                     toyDb.Hight,
                     toyDb.Width,
                     toyDb.Quantity,
-                    toyDb.Notes
+                    toyDb.Notes,
+                    toyDb.Price
                    );
 
                 return toyDomain;
@@ -786,7 +807,8 @@ namespace ANIMAL.Repository
                     foodDb.ExporationDate,
                     foodDb.Quantity,
                     foodDb.Notes,
-                    foodDb.MeasurementWeight
+                    foodDb.MeasurementWeight,
+                    foodDb.Price
                    );
 
                 return foodDomain;
@@ -859,7 +881,8 @@ namespace ANIMAL.Repository
                                     x.Funds.AdopterId,
                                     x.Funds.Amount,
                                     x.Funds.Purpose,
-                                    x.Funds.DateTimed
+                                    x.Funds.DateTimed,
+                                    x.Funds.Iban
                                   )).FirstOrDefault();
 
                 return funds;
@@ -1356,24 +1379,24 @@ namespace ANIMAL.Repository
             return true;
         }
         //ažurira se ako postoji greška u nazivu hrane itd
-        public async Task<bool> UpdateFoodDomain(int id, string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight)
+        public async Task<bool> UpdateFoodDomain(FoodDomain foods)
         {
-            var food = await _appDbContext.Food.FirstOrDefaultAsync(a => a.Id == id);
-            food.BrandName=brandName;
-            food.Name = name;
-            food.FoodType=foodType;
-            food.AnimalType=animalType;
-            food.AgeGroup=ageGroup;
-            food.Weight=weight;
-            food.CaloriesPerServing=caloriesPerServing;
-            food.WeightPerServing=weightPerServing;
-            food.MeasurementPerServing=measurementPerServing;
-            food.FatContent=fatContent;
-            food.FiberContent=fiberContent;
-            food.ExporationDate=exporationDate;
-            food.Quantity=quantity;
-            food.Notes=notes;
-            food.MeasurementWeight=measurementWeight;
+            var food = await _appDbContext.Food.FirstOrDefaultAsync(a => a.Id == foods.Id);
+            food.BrandName= foods.BrandName;
+            food.Name = foods.Name;
+            food.FoodType= foods.FoodType;
+            food.AnimalType= foods.AnimalType;
+            food.AgeGroup= foods.AgeGroup;
+            food.Weight= foods.Weight;
+            food.CaloriesPerServing= foods.CaloriesPerServing;
+            food.WeightPerServing= foods.WeightPerServing;
+            food.MeasurementPerServing= foods.MeasurementPerServing;
+            food.FatContent= foods.FatContent;
+            food.FiberContent= foods.FiberContent;
+            food.ExporationDate= foods.ExporationDate;
+            food.Quantity= foods.Quantity;
+            food.Notes= foods.Notes;
+            food.MeasurementWeight= foods.MeasurementWeight;
 
             _appDbContext.Food.Update(food);
             await _appDbContext.SaveChangesAsync();
@@ -1400,19 +1423,20 @@ namespace ANIMAL.Repository
             return true;
         }
         //ažurira se ako postoji greška 
-        public async Task<bool> UpdateToysDomain(int id, string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes)
+        public async Task<bool> UpdateToysDomain(ToysDomain toys)
         {
-            var toy = await _appDbContext.Toys.FirstOrDefaultAsync(a => a.Id == id);
+            var toy = await _appDbContext.Toys.FirstOrDefaultAsync(a => a.Id == toys.Id);
 
-            toy.BrandName= brandName;
-            toy.Name= name;
-            toy.AnimalType= animalType;
-            toy.ToyType= toyType;
-            toy.AgeGroup= ageGroup;
-            toy.Hight= hight;
-            toy.Width= width;
-            toy.Quantity= quantity;
-            toy.Notes= notes;
+            toy.BrandName= toys.BrandName;
+            toy.Name= toys.Name;
+            toy.AnimalType= toys.AnimalType;
+            toy.ToyType= toys.ToyType;
+            toy.AgeGroup= toys.AgeGroup;
+            toy.Hight= toys.Hight;
+            toy.Width= toys.Width;
+            toy.Quantity= toys.Quantity;
+            toy.Notes= toys.Notes;
+            toy.Price=toys.Price;
 
             _appDbContext.Toys.Update(toy);
             await _appDbContext.SaveChangesAsync();
@@ -1833,7 +1857,7 @@ namespace ANIMAL.Repository
                 throw new Exception($"Životinj {animalExists.IdAnimal} ne postoji!");
             }
         }
-       async Task IRepository.AddFunds(int adopterId, decimal amount, string purpose)
+       async Task IRepository.AddFunds(int adopterId, decimal amount, string purpose, string iban)
         {
             var adopterExists = await _appDbContext.Adopter.FirstOrDefaultAsync(a => a.Id == adopterId);
             if (adopterExists != null)
@@ -1843,6 +1867,7 @@ namespace ANIMAL.Repository
                     AdopterId=adopterId,
                     Amount=amount,
                     Purpose=purpose,
+                    Iban=iban
                 };
                 var fundsResponse = _mappingService.Map<Funds>(funds);
                 _appDbContext.Funds.Add(fundsResponse);
@@ -1976,7 +2001,22 @@ namespace ANIMAL.Repository
             await _appDbContext.SaveChangesAsync();
         }
 
-    
+        //Novo 3.4.2025
+       public async Task AddTransactions(TransactionsDomain transactions)
+        {
+            var t = new Transactions
+            {
+               Iban=transactions.Iban,
+               IbanAnimalShelter=transactions.IbanAnimalShelter,
+               Type=transactions.Type,
+               Cost=transactions.Cost,
+               Purpose=transactions.Purpose,
+            };
+            var tResponse = _mappingService.Map<Transactions>(t);
+            _appDbContext.Transactions.Add(tResponse);
+            await _appDbContext.SaveChangesAsync();
+        
+        }
         //ADD ZASEBNE KARAKTERISTIKE ŽIVOTINJE
         //SVE RADI GOTOVO 
         public async Task AddBirdAsync(BirdDomain birdDomain)
@@ -2253,5 +2293,6 @@ namespace ANIMAL.Repository
             return true;
         }
 
+       
     }
 }

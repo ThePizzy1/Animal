@@ -270,8 +270,14 @@ namespace ANIMAL.Repository.Automaper
                 cfg.CreateMap<ParameterDomain, Parameter>()
                    .ForMember(dest => dest.Labs, opt => opt.Ignore());
 
+                //transactions
 
-
+                cfg.CreateMap<Transactions, TransactionsDomain>()
+                .ForMember(dest => dest.Iban, opt => opt.Ignore())
+                .ForMember(dest => dest.IbanAnimalShelter, opt => opt.Ignore());
+                cfg.CreateMap<TransactionsDomain, Transactions>()
+                 .ForMember(dest => dest.Iban, opt => opt.Ignore())
+                .ForMember(dest => dest.IbanAnimalShelter, opt => opt.Ignore());
 
 
 

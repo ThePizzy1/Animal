@@ -10,39 +10,32 @@ namespace ANIMAL.DAL.DataModel
 
 
         public FundsDomain() { }
-        public FundsDomain( int adopterId, decimal amount, string purpose, DateTime dateTime)
+        public FundsDomain( int adopterId, decimal amount, string purpose, string iban)
         {
           
             AdopterId = adopterId;
             Amount = amount;
             Purpose = purpose;
-            DateTime = dateTime;
-
+            Iban = iban;
         }
-        public FundsDomain(int id, int adopterId, decimal amount, string purpose, DateTime dateTime, AdopterDomain adopter)
+        public FundsDomain(int id, int adopterId, decimal amount, string purpose, DateTime dateTime, string iban)
         {
             Id = id;
             AdopterId = adopterId;
             Amount = amount;
             Purpose = purpose;
             DateTime = dateTime;
-            Adopter = adopter;
-        }
-        public FundsDomain(int id, int adopterId, decimal amount, string purpose, DateTime dateTime)
-        {
-            Id = id;
-            AdopterId = adopterId;
-            Amount = amount;
-            Purpose = purpose;
-            DateTime = dateTime;
+            Iban = iban;
          
         }
+    
         public int Id { get; set; }
         public int AdopterId { get; set; }
         public decimal Amount { get; set; }
         public string Purpose { get; set; }
         public DateTime DateTime { get; set; }
 
+        public string Iban {  get; set; }
         public AdopterDomain Adopter { get; set; }
     }
 }

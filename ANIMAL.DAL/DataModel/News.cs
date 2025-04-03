@@ -12,6 +12,7 @@ namespace ANIMAL.DAL.DataModel
         public string Description { get; set; }
         public DateTime DateTime { get; set; }
 
+        public byte[] Picture { get; set; }
 
     }
 }

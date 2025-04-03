@@ -237,9 +237,19 @@ namespace ANIMAL.WebApi.Controllers
         }
 
 
+        [HttpGet]
+        [Route("transaction_db")]
+        [AllowAnonymous]
+        public IEnumerable<TransactionsDomain> GetAllTransactionsDomain()
+        {
+            IEnumerable<TransactionsDomain> animalDb = _service.GetAllTransactionsDomain();
+            return animalDb;
+        }
+
+
         //get with id
         //-----------------------------------------------------------------------------------------------------------------------------------------------
-   
+
 
 
         [HttpGet]
@@ -794,7 +804,8 @@ namespace ANIMAL.WebApi.Controllers
             await _service.AddFunds(
               record.AdopterId,
               record.Amount,
-              record.Purpose
+              record.Purpose,
+              record.Iban
      
                 );
         }
@@ -873,6 +884,13 @@ namespace ANIMAL.WebApi.Controllers
         public async Task AddParametar([FromBody] ParameterDomain record)
         {
             await _service.AddParametar(record);
+        }
+
+        [HttpPost("addTransactions")]
+        [AllowAnonymous]
+        public async Task AddTransactions([FromBody] TransactionsDomain record)
+        {
+            await _service.AddTransactions(record);
         }
 
 
@@ -1125,25 +1143,7 @@ namespace ANIMAL.WebApi.Controllers
         {
             try
             {
-                await _service.UpdateFoodDomain(
-             record.Id,
-             record.BrandName,
-             record.Name,
-             record.FoodType,
-             record.AnimalType,
-             record.AgeGroup,
-             record.Weight,
-             record.CaloriesPerServing,
-             record.WeightPerServing,
-             record.MeasurementPerServing,
-             record.FatContent,
-             record.FatContent,
-             record.ExporationDate,
-             record.Quantity,
-             record.Notes,
-             record.MeasurementPerServing
-
-                      );
+                await _service.UpdateFoodDomain(record );
             }
             catch (Exception ex)
             {
@@ -1195,16 +1195,7 @@ namespace ANIMAL.WebApi.Controllers
             try
             {
                 await _service.UpdateToysDomain(
-             record.Id,
-             record.BrandName,
-             record.Name,
-             record.AnimalType,
-             record.ToyType,
-             record.AnimalType,
-             record.Hight,
-             record.Width,
-             record.Quantity,
-             record.Notes
+             record
 
                       );
             }

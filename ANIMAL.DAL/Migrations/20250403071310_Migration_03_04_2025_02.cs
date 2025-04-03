@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ANIMAL.DAL.Migrations
 {
-    public partial class Migration_25_03_2025_02 : Migration
+    public partial class Migration_03_04_2025_02 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -115,6 +115,7 @@ namespace ANIMAL.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__Balans", x => x.Id);
+                    table.UniqueConstraint("AK_Balans_Iban", x => x.Iban);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,7 +138,8 @@ namespace ANIMAL.DAL.Migrations
                     FiberContent = table.Column<decimal>(type: "decimal(10, 4)", nullable: false),
                     ExporationDate = table.Column<DateTime>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
-                    Notes = table.Column<string>(unicode: false, maxLength: 1000, nullable: false)
+                    Notes = table.Column<string>(unicode: false, maxLength: 1000, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(20, 2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -152,7 +154,8 @@ namespace ANIMAL.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Description = table.Column<string>(unicode: false, maxLength: 50000, nullable: false),
-                    DateTime = table.Column<DateTime>(nullable: false)
+                    DateTime = table.Column<DateTime>(nullable: false),
+                    Picture = table.Column<byte[]>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -187,7 +190,8 @@ namespace ANIMAL.DAL.Migrations
                     Hight = table.Column<decimal>(type: "decimal(10,2 )", nullable: false),
                     Width = table.Column<decimal>(type: "decimal(10,2 )", nullable: false),
                     Quantity = table.Column<int>(nullable: false),
-                    Notes = table.Column<string>(unicode: false, maxLength: 255, nullable: false)
+                    Notes = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(20, 2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -226,11 +230,13 @@ namespace ANIMAL.DAL.Migrations
                     AdopterId = table.Column<int>(nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(20, 2)", nullable: false),
                     Purpose = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    DateTimed = table.Column<DateTime>(nullable: false)
+                    DateTimed = table.Column<DateTime>(nullable: false),
+                    Iban = table.Column<string>(unicode: false, maxLength: 21, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__Funds", x => x.Id);
+                    table.UniqueConstraint("AK_Funds_Iban", x => x.Iban);
                     table.ForeignKey(
                         name: "FK__Funds__Adopter",
                         column: x => x.AdopterId,
@@ -644,6 +650,36 @@ namespace ANIMAL.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Iban = table.Column<string>(nullable: true),
+                    IbanAnimalShelter = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Cost = table.Column<decimal>(nullable: false),
+                    Purpose = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("Pk__Transactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Funds_Iban",
+                        column: x => x.Iban,
+                        principalTable: "Funds",
+                        principalColumn: "Iban",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Balans_IbanAnimalShelter",
+                        column: x => x.IbanAnimalShelter,
+                        principalTable: "Balans",
+                        principalColumn: "Iban",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ReturnedAnimal",
                 columns: table => new
                 {
@@ -838,6 +874,16 @@ namespace ANIMAL.DAL.Migrations
                 column: "AnimalId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Transactions_Iban",
+                table: "Transactions",
+                column: "Iban");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_IbanAnimalShelter",
+                table: "Transactions",
+                column: "IbanAnimalShelter");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_VetVisits_AnimalId",
                 table: "VetVisits",
                 column: "AnimalId");
@@ -867,9 +913,6 @@ namespace ANIMAL.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Balans");
-
-            migrationBuilder.DropTable(
                 name: "Birds");
 
             migrationBuilder.DropTable(
@@ -889,9 +932,6 @@ namespace ANIMAL.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "FoundRecord");
-
-            migrationBuilder.DropTable(
-                name: "Funds");
 
             migrationBuilder.DropTable(
                 name: "Mammals");
@@ -915,6 +955,9 @@ namespace ANIMAL.DAL.Migrations
                 name: "Toys");
 
             migrationBuilder.DropTable(
+                name: "Transactions");
+
+            migrationBuilder.DropTable(
                 name: "VetVisits");
 
             migrationBuilder.DropTable(
@@ -933,10 +976,16 @@ namespace ANIMAL.DAL.Migrations
                 name: "Adopted");
 
             migrationBuilder.DropTable(
-                name: "Adopter");
+                name: "Funds");
+
+            migrationBuilder.DropTable(
+                name: "Balans");
 
             migrationBuilder.DropTable(
                 name: "Animals");
+
+            migrationBuilder.DropTable(
+                name: "Adopter");
         }
     }
 }

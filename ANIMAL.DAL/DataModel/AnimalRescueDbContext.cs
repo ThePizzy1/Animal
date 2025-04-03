@@ -41,6 +41,7 @@ namespace ANIMAL.DAL.DataModel
         public virtual DbSet<Parameter> Parameter { get; set; }
         public virtual DbSet<Toys> Toys { get; set; }
         public virtual DbSet<VetVisits> VetVisits { get; set; }
+        public virtual DbSet<Transactions> Transactions { get; set; }
 
 
 
@@ -54,7 +55,6 @@ namespace ANIMAL.DAL.DataModel
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
             modelBuilder.Entity<IdentityUserRole<string>>().HasKey(r => new { r.UserId, r.RoleId });
             modelBuilder.Entity<IdentityUserToken<string>>().HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
-
             modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
             modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles");
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("AspNetUserRoles");
@@ -66,23 +66,20 @@ namespace ANIMAL.DAL.DataModel
 
 
 
-
-
-
-
-
-
             // Adopted entity configuration
             modelBuilder.Entity<Adopted>(entity =>
             {
                 entity.HasKey(e => e.Code)
                     .HasName("PK__Adopted__A25C5AA69BF7B47B");
+
                 entity.Property(e => e.AdoptionDate).HasColumnType("date");
+
                 entity.HasOne(d => d.Adopter)
                     .WithMany(p => p.Adopted)
                     .HasForeignKey(d => d.AdopterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Adopted__Adopter__4E88ABD4");
+
                 entity.HasOne(d => d.Animal)
                     .WithMany(p => p.AdoptedNavigation)
                     .HasForeignKey(d => d.AnimalId)
@@ -185,22 +182,21 @@ namespace ANIMAL.DAL.DataModel
 
             //Birds
             modelBuilder.Entity<Birds>()
-                   .HasKey(e => e.AnimalId)
-                    .HasName("PK__Birds__A21A73070FA89F7C");
+                    .HasKey(e => e.AnimalId)
+                    .HasName("PK__Birds__A21A73070FA89F7C");  
+            
             modelBuilder.Entity<Birds>()
-                .HasOne(d => d.Animal)
+                    .HasOne(d => d.Animal)
                     .WithOne(p => p.Birds)
                     .HasForeignKey<Birds>(d => d.AnimalId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Birds__AnimalId__5812160E");
        
-          
-            // Amphibians 
-                 modelBuilder.Entity<Amphibians>()
-                 .HasKey(e => e.AnimalId)
-                 .HasName("PK__Amphibians__A21A73070FA89F7C");
+            modelBuilder.Entity<Amphibians>()
+                     .HasKey(e => e.AnimalId)
+                     .HasName("PK__Amphibians__A21A73070FA89F7C");
 
-                 modelBuilder.Entity<Amphibians>()
+            modelBuilder.Entity<Amphibians>()
                     .HasOne(d => d.Animal)
                     .WithOne(d=>d.Amphibians)
                     .HasForeignKey<Amphibians>(d => d.AnimalId)
@@ -249,21 +245,26 @@ namespace ANIMAL.DAL.DataModel
             {
                 entity.HasKey(e => e.ReturnCode)
                     .HasName("PK__Returned__4CF726C86410F49F");
+
                 entity.Property(e => e.ReturnDate).HasColumnType("date");
+
                 entity.Property(e => e.ReturnReason)
                     .IsRequired()
                     .HasMaxLength(1000)
                     .IsUnicode(false);
+
                 entity.HasOne(d => d.Adopter)
                     .WithMany(p => p.ReturnedAnimal)
                     .HasForeignKey(d => d.AdopterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ReturnedA__Adopt__534D60F1");
+
                 entity.HasOne(d => d.AdoptionCodeNavigation)
                     .WithMany(p => p.ReturnedAnimal)
                     .HasForeignKey(d => d.AdoptionCode)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ReturnedA__Adopt__5165187F");
+
                 entity.HasOne(d => d.Animal)
                     .WithMany(p => p.ReturnedAnimal)
                     .HasForeignKey(d => d.AnimalId)
@@ -275,7 +276,7 @@ namespace ANIMAL.DAL.DataModel
 
            modelBuilder.Entity<AnimalRecord>()
                   .HasKey(e => e.AnimalId)
-                 .HasName("PK__AnimalRecord");
+                  .HasName("PK__AnimalRecord");
 
             modelBuilder.Entity<AnimalRecord>()
                 .HasOne(r => r.Animal)
@@ -285,8 +286,8 @@ namespace ANIMAL.DAL.DataModel
  
 
             modelBuilder.Entity<AnimalRecord>()
-                .HasOne(d => d.Record)
-                  .WithMany()
+                   .HasOne(d => d.Record)
+                   .WithMany()
                    .HasForeignKey(d => d.RecordId)
                    .OnDelete(DeleteBehavior.ClientSetNull)
                    .HasConstraintName("FK__AnimalRecord__SystemRecord__RecordId");
@@ -294,20 +295,20 @@ namespace ANIMAL.DAL.DataModel
 
             modelBuilder.Entity<SystemRecord>(entity =>
                {
-                   entity.HasKey(e => e.Id)
-                   .HasName("PK__SystemRecord");
+                  entity.HasKey(e => e.Id)
+                        .HasName("PK__SystemRecord");
 
 
-                   entity.Property(e => e.RecordName)
-                .IsRequired()
-                .HasMaxLength(255)
-                .IsUnicode(false);
+                  entity.Property(e => e.RecordName)
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .IsUnicode(false);
 
 
                    entity.Property(e => e.RecordDescription)
-              .IsRequired()
-              .HasMaxLength(255)
-              .IsUnicode(false);
+                          .IsRequired()
+                          .HasMaxLength(255)
+                          .IsUnicode(false);
 
 
                });
@@ -328,27 +329,50 @@ namespace ANIMAL.DAL.DataModel
             {//.IsUnique();
                 entity.HasKey(e => e.Id)
                  .HasName("PK__Balans");
+
                 entity.Property(e => e.Iban)
                 .IsRequired()
                 .HasMaxLength(21)
                 .IsUnicode(false);
+
                 entity.Property(e => e.Balance).HasColumnType("decimal(20, 2)");
+
                 entity.HasIndex(e => e.Iban)
                    .IsUnique();
+
                 entity.Property(e=>e.Iban)
                 .IsRequired()
                 .HasMaxLength(21)
                 .IsUnicode(false);
+
                 entity.Property(e => e.LastUpdated)
                 .HasDefaultValue()
                 .IsRequired();
             });
 
+
+            modelBuilder.Entity<Transactions>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .HasName("Pk__Transactions");
+            });
+            //povezuje ibane kako ih nebi morala dodatno provjeravati i da smanjim poguću pogrešku
+            modelBuilder.Entity<Transactions>()
+                .HasOne(b => b.Balans)
+                .WithMany()
+                .HasForeignKey(i => i.IbanAnimalShelter)
+                .HasPrincipalKey(i => i.Iban);
+
+            modelBuilder.Entity<Transactions>()
+               .HasOne(b => b.Funds)
+               .WithMany()
+               .HasForeignKey(i => i.Iban)
+               .HasPrincipalKey(i => i.Iban);
+
             modelBuilder.Entity<Contact>(entity =>
             {
                 entity.HasKey(e => e.Id)
                  .HasName("PK__Contact");
-
 
                 entity.HasOne(d => d.Adopter)
                     .WithMany()
@@ -356,15 +380,16 @@ namespace ANIMAL.DAL.DataModel
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Contact__Adopter");
 
-
                 entity.Property(e => e.Name)
                    .IsRequired()
                    .HasMaxLength(50)
                    .IsUnicode(false);
+
                 entity.Property(e => e.Description)
                   .IsRequired()
                   .HasMaxLength(255)
                   .IsUnicode(false);
+
                 entity.Property(e => e.Email)
                   .IsRequired()
                   .HasMaxLength(50)
@@ -378,7 +403,6 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasKey(e => e.Id)
                  .HasName("PK__ContageusAnimals");
 
-
                 entity.HasOne(d => d.Animals)
                     .WithMany()
                     .HasForeignKey(d => d.AnimalId)
@@ -386,13 +410,14 @@ namespace ANIMAL.DAL.DataModel
                     .HasConstraintName("FK__ContageusAnimals__Animal");
 
                 entity.Property(e => e.DesisseName)
-                .IsRequired()
-                .HasMaxLength(100)
-                .IsUnicode(false);
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Description)
-                  .IsRequired()
-                  .HasMaxLength(255)
-                  .IsUnicode(false);
+                   .IsRequired()
+                   .HasMaxLength(255)
+                   .IsUnicode(false);
 
 
             });
@@ -403,7 +428,6 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasKey(e => e.Id)
                  .HasName("PK__Euthanasia");
 
-
                 entity.HasOne(d => d.Animals)
                     .WithMany()
                     .HasForeignKey(d => d.AnimalId)
@@ -411,9 +435,9 @@ namespace ANIMAL.DAL.DataModel
                     .HasConstraintName("FK__Euthanasia__Animal");
 
                 entity.Property(e => e.NameOfDesissse)
-                .IsRequired()
-                .HasMaxLength(100)
-                .IsUnicode(false);
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
 
             });
@@ -422,28 +446,32 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasKey(e => e.Id)
                  .HasName("PK__Food");
 
-
-
                 entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
                 entity.Property(e => e.BrandName)
                 .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
                 entity.Property(e => e.FoodType)
                 .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
                 entity.Property(e => e.AnimalType)
                 .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
                 entity.Property(e => e.AgeGroup)
                 .IsRequired()
                 .HasMaxLength(10)
                 .IsUnicode(false);
+
+                entity.Property(e => e.Price).HasColumnType("decimal(20, 2)");
 
                 entity.Property(e => e.Weight).HasColumnType("decimal(10, 2)");
 
@@ -454,14 +482,17 @@ namespace ANIMAL.DAL.DataModel
                 entity.Property(e => e.FatContent).HasColumnType("decimal(10, 4)");
 
                 entity.Property(e => e.FiberContent).HasColumnType("decimal(10, 4)");
+
                 entity.Property(e => e.MeasurementPerServing)
                  .IsRequired()
                  .HasMaxLength(5)
                  .IsUnicode(false);
+
                 entity.Property(e => e.MeasurementWeight)
                 .IsRequired()
                 .HasMaxLength(5)
                 .IsUnicode(false);
+
                 entity.Property(e => e.Notes)
                 .IsRequired()
                 .HasMaxLength(1000)
@@ -475,10 +506,11 @@ namespace ANIMAL.DAL.DataModel
 
 
                 entity.HasOne(d => d.Animal)
-                    .WithMany(d=>d.FoundRecord)//vjv ne radi zato što nije one to one
+                    .WithMany(d=>d.FoundRecord)
                     .HasForeignKey(d => d.AnimalId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__FoundRecord__Animal");
+
                 entity.HasOne(d => d.User)
                    .WithMany()
                    .HasForeignKey(d => d.RegisterId)
@@ -486,38 +518,34 @@ namespace ANIMAL.DAL.DataModel
                    .HasConstraintName("FK__FoundRecord__User");
 
                 entity.Property(e => e.Description)
-                .IsRequired()
-                .HasMaxLength(255)
-                .IsUnicode(false);
-
+                   .IsRequired()
+                   .HasMaxLength(255)
+                   .IsUnicode(false);
 
                 entity.Property(e => e.Adress)
-               .IsRequired()
-               .HasMaxLength(150)
-               .IsUnicode(false);
-
+                   .IsRequired()
+                   .HasMaxLength(150)
+                   .IsUnicode(false);
 
                 entity.Property(e => e.OwnerName)
-               .IsRequired()
-               .HasMaxLength(50)
-               .IsUnicode(false);
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .IsUnicode(false);
 
                 entity.Property(e => e.OwnerSurname)
-               .IsRequired()
-               .HasMaxLength(50)
-               .IsUnicode(false);
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .IsUnicode(false);
 
                 entity.Property(e => e.OwnerPhoneNumber)
-               .IsRequired()
-               .HasMaxLength(13)
-               .IsUnicode(false);
+                   .IsRequired()
+                   .HasMaxLength(13)
+                   .IsUnicode(false);
 
                 entity.Property(e => e.OwnerOIB)
-                .IsRequired()
-                .HasMaxLength(11)
-                .IsUnicode(false);
-
-
+                    .IsRequired()
+                    .HasMaxLength(11)
+                    .IsUnicode(false);
 
             });
 
@@ -526,13 +554,16 @@ namespace ANIMAL.DAL.DataModel
             {
                 entity.HasKey(e => e.Id)
                  .HasName("PK__Funds");
-
+                entity.Property(e => e.Iban)
+                 .IsRequired()
+                 .HasMaxLength(21)
+                 .IsUnicode(false);
 
                 entity.HasOne(d => d.Adopter)
-                    .WithMany()
-                    .HasForeignKey(d => d.AdopterId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Funds__Adopter");
+                 .WithMany()
+                 .HasForeignKey(d => d.AdopterId)
+                 .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("FK__Funds__Adopter");
 
                 entity.Property(e => e.Purpose)
                  .IsRequired()
@@ -540,9 +571,10 @@ namespace ANIMAL.DAL.DataModel
                  .IsUnicode(false);
 
                 entity.Property(e => e.Amount).HasColumnType("decimal(20, 2)");
+
                 entity.Property(e => e.DateTimed)
-                .HasDefaultValue()
-                .IsRequired();
+                 .HasDefaultValue()
+                 .IsRequired();
             });
 
             modelBuilder.Entity<Labs>(entity =>
@@ -556,9 +588,7 @@ namespace ANIMAL.DAL.DataModel
                     .HasForeignKey(d => d.AnimalId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Labs__Animals");
-
-
-              
+           
 
             });
         
@@ -567,7 +597,6 @@ namespace ANIMAL.DAL.DataModel
             {
                 entity.HasKey(e => e.Id)
                  .HasName("PK__Medicines");
-
 
                 entity.HasOne(d => d.Animal)
                     .WithMany()
@@ -579,22 +608,27 @@ namespace ANIMAL.DAL.DataModel
                  .IsRequired()
                  .HasMaxLength(50)
                  .IsUnicode(false);
+
                 entity.Property(e => e.Description)
-               .IsRequired()
-               .HasMaxLength(255)
-               .IsUnicode(false);
+                   .IsRequired()
+                   .HasMaxLength(255)
+                   .IsUnicode(false);
+
                 entity.Property(e => e.VetUsername)
-               .IsRequired()
-               .HasMaxLength(50)
-               .IsUnicode(false);
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .IsUnicode(false);
+
                 entity.Property(e => e.MesurmentUnit)
-               .IsRequired()
-               .HasMaxLength(10)
-               .IsUnicode(false);
+                   .IsRequired()
+                   .HasMaxLength(10)
+                   .IsUnicode(false);
+
                 entity.Property(e => e.FrequencyOfMedicationUse)
-               .IsRequired()
-               .HasMaxLength(50)
-               .IsUnicode(false);
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .IsUnicode(false);
+
                 entity.Property(e => e.AmountOfMedicine).HasColumnType("decimal(20, 6)");
             });
 
@@ -604,14 +638,14 @@ namespace ANIMAL.DAL.DataModel
                  .HasName("PK__News");
 
                 entity.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Description)
-               .IsRequired()
-               .HasMaxLength(50000)
-               .IsUnicode(false);
+                   .IsRequired()
+                   .HasMaxLength(50000)
+                   .IsUnicode(false);
 
 
             });
@@ -620,17 +654,12 @@ namespace ANIMAL.DAL.DataModel
                             entity.HasKey(e => e.Id)
                              .HasName("PK__Parameter");
              
-            modelBuilder.Entity<Parameter>()
-             .HasOne(a => a.Labs)
-             .WithMany()
-             .HasForeignKey(a => a.LabId)
-             .HasConstraintName("FK__Parameter__Lab")
-             .OnDelete(DeleteBehavior.ClientSetNull);
-
-
-          
-            
-              
+              modelBuilder.Entity<Parameter>()
+                 .HasOne(a => a.Labs)
+                 .WithMany()
+                 .HasForeignKey(a => a.LabId)
+                 .HasConstraintName("FK__Parameter__Lab")
+                 .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.Property(e => e.ParameterName)
                 .IsRequired()
@@ -687,7 +716,7 @@ namespace ANIMAL.DAL.DataModel
                 .HasMaxLength(255)
                 .IsUnicode(false);
 
-
+                entity.Property(e => e.Price).HasColumnType("decimal(20, 2)");
                 entity.Property(e => e.Hight).HasColumnType("decimal(10,2 )");
                 entity.Property(e => e.Width).HasColumnType("decimal(10,2 )");
             });
@@ -705,29 +734,18 @@ namespace ANIMAL.DAL.DataModel
                     .HasConstraintName("FK__VetVisits__Animal");
 
                 entity.Property(e => e.TypeOfVisit)
-                .IsRequired()
-                .HasMaxLength(255)
-                .IsUnicode(false);
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Notes)
-               .IsRequired()
-               .HasMaxLength(255)
-               .IsUnicode(false);
+                   .IsRequired()
+                   .HasMaxLength(255)
+                   .IsUnicode(false);
 
 
            
             });
-
-
-
-
-
-
-
-
-
-
-
 
 
 

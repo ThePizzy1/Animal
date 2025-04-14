@@ -599,59 +599,62 @@ namespace ANIMAL.Repository
             {
             //uključi i record da bi vidjela dali je životinja na stanju 7
             //ovo stavi u listu samo životinje koje su posvojene i nisu vraćene
-            var animalDb = _appDbContext.Adopted.Where(a => _appDbContext.ReturnedAnimal
-                                                .Any(ar => ar.AdoptionCode != a.Code))
-                                                .Include(a => a.Animal)
-                                                .Include(a => a.Adopter)
-                                                .ToList();
 
-            //provjerava dali je žvotinja po rekordu i Adopted parametru posvojena
-                var adoptedEntities =  animalDb
+          
+                var animalDb = _appDbContext.Adopted
+                                                    .Include(a => a.Animal)
+                                                    .Include(a => a.Adopter)
+                                                    .ToList();
+
+
+
+                //provjerava dali je žvotinja po rekordu i Adopted parametru posvojena
+                var adoptedEntities = animalDb
                                        .Where(a => _appDbContext.AnimalRecord
-                                       .Any(an=>an.RecordId==7 && a.AdopterId == adopterId ))      
+                                       .Any(an => an.RecordId == 7 && a.AdopterId == adopterId))
                                        .ToList();
 
-             var adoptedDomains = adoptedEntities 
-            .Select(e => new AdoptedDomain
-                {
-                    Code = e.Code,
-                    Animal = new AnimalDomain(
-                        e.Animal.IdAnimal,
-                        e.Animal.Name,
-                        e.Animal.Species,
-                        e.Animal.Family,
-                        e.Animal.Subspecies,
-                        e.Animal.Age,
-                        e.Animal.Gender,
-                        e.Animal.Weight,
-                        e.Animal.Height,
-                        e.Animal.Length,
-                        e.Animal.Neutered,
-                        e.Animal.Vaccinated,
-                        e.Animal.Microchipped,
-                        e.Animal.Trained,
-                        e.Animal.Socialized,
-                        e.Animal.HealthIssues,
-                        e.Animal.Picture,
-                        e.Animal.PersonalityDescription,
-                        e.Animal.Adopted
-                    ),
-                    AdoptionDate = e.AdoptionDate,
-                    Adopter = new AdopterDomain(
-                        e.Adopter.Id,
-                        e.Adopter.FirstName,
-                        e.Adopter.LastName,
-                        e.Adopter.Residence,
-                        e.Adopter.DateOfBirth,
-                        e.Adopter.NumAdoptedAnimals,
-                        e.Adopter.NumReturnedAnimals
-            
-            
-            ),
+                var adoptedDomains = adoptedEntities
+               .Select(e => new AdoptedDomain
+               {
+                   Code = e.Code,
+                   Animal = new AnimalDomain(
+                           e.Animal.IdAnimal,
+                           e.Animal.Name,
+                           e.Animal.Species,
+                           e.Animal.Family,
+                           e.Animal.Subspecies,
+                           e.Animal.Age,
+                           e.Animal.Gender,
+                           e.Animal.Weight,
+                           e.Animal.Height,
+                           e.Animal.Length,
+                           e.Animal.Neutered,
+                           e.Animal.Vaccinated,
+                           e.Animal.Microchipped,
+                           e.Animal.Trained,
+                           e.Animal.Socialized,
+                           e.Animal.HealthIssues,
+                           e.Animal.Picture,
+                           e.Animal.PersonalityDescription,
+                           e.Animal.Adopted
+                       ),
+                   AdoptionDate = e.AdoptionDate,
+                   Adopter = new AdopterDomain(
+                           e.Adopter.Id,
+                           e.Adopter.FirstName,
+                           e.Adopter.LastName,
+                           e.Adopter.Residence,
+                           e.Adopter.DateOfBirth,
+                           e.Adopter.NumAdoptedAnimals,
+                           e.Adopter.NumReturnedAnimals
 
-                }).ToList();
 
+               ),
+
+               }).ToList();
                 return adoptedDomains;
+            
             } 
           public async Task<Animals> GetByIdAsync(int id)
             {
@@ -1184,23 +1187,17 @@ namespace ANIMAL.Repository
         {
             // Fetch the existing adopter from the database using registerId
             var animal = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
-
-            animal.Adopted = true;
-           
-
+            animal.Adopted = true;         
             _appDbContext.Animals.Update(animal);
             await _appDbContext.SaveChangesAsync();
-
             return true;
         }
+
         public async Task<bool> AdoptionStatusFalse(int animalId)
         {
             // Fetch the existing adopter from the database using registerId
             var animal = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
-
             animal.Adopted = false;
-
-
             _appDbContext.Animals.Update(animal);
             await _appDbContext.SaveChangesAsync();
 
@@ -1609,7 +1606,7 @@ namespace ANIMAL.Repository
 
             return _mappingService.Map<AdopterDomain>(adopter);
         }
-        public async Task<bool> CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
+        public async Task<bool> CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, string returnReason)
         {
          
             var returnedAnimalDomain = new ReturnedAnimal
@@ -1617,8 +1614,7 @@ namespace ANIMAL.Repository
               
                 AdoptionCode = adoptionCode,
                 AnimalId = animalId,
-                AdopterId = adopterId,
-                ReturnDate = returnDate,
+                AdopterId = adopterId,        
                 ReturnReason = returnReason
             };
 

@@ -633,8 +633,7 @@ namespace ANIMAL.WebApi.Controllers
               
                 createReturnedAnimalDto.AdoptionCode,
                 createReturnedAnimalDto.AnimalId,
-                createReturnedAnimalDto.AdopterId,
-                createReturnedAnimalDto.ReturnDate,
+                createReturnedAnimalDto.AdopterId,  
                 createReturnedAnimalDto.ReturnReason
             );
 

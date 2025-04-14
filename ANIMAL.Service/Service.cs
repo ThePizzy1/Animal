@@ -470,9 +470,9 @@ namespace ANIMAL.Service
                 throw new Exception($"Failed to add animal: {ex.Message}");
             }
         }     
-        async Task<bool> IService.CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
+        async Task<bool> IService.CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId,  string returnReason)
         {
-            await _repository.CreateReturnedAnimalAsync(adoptionCode, animalId, adopterId, returnDate, returnReason);
+            await _repository.CreateReturnedAnimalAsync(adoptionCode, animalId, adopterId, returnReason);
             return true;
         }
         async Task<bool> IService.CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate)

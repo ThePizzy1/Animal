@@ -46,7 +46,7 @@ namespace ANIMAL.WebApi.Controllers
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "User");
+                await _userManager.AddToRoleAsync(user, "Admin");
                 return Ok(new { message = "User registered successfully" });
             }
             else

@@ -26,34 +26,23 @@ namespace ANIMAL.WebApi.Controllers
     //Prvo izradi tablicu, zatim shvati kak pdf dio
     //Napravi da imaš drugu funkciju u kojoj stvaraš tablicu i onda ju pozovi  u ovom glavnom dijelu prebaci u pdf
     //Kad napraviš osnovno probaj složit nekek da možeš birat koju tablicu ćeš izradit bila bi korisna na više mjesta
-    
+
     [Route("api/pdf")]
     [ApiController]
 
-    public class PdfController :    ControllerBase
+    public class PdfController : ControllerBase
     {
         private readonly AnimalRescueDbContext _appDbContext;
         public PdfController(AnimalRescueDbContext appDbContext)
         {
             _appDbContext = appDbContext;
-           
-        }
-        /* 
-         * za renderiranje pdf
-    var pdfRenderer = new PdfDocumentRenderer();
-    pdfRenderer.Document = document;
-    pdfRenderer.RenderDocument();
-    MemoryStream memoryStream = new MemoryStream();
-    pdfRenderer.PdfDocument.Save(memoryStream, false);
-    memoryStream.Seek(0, SeekOrigin.Begin);
-                                        /govori koji tip dokumenta      /naziv stavi svoj        
-    return File(memoryStream.ToArray(), "application/pdf", "Amandman_ID_" + IzradaAmandmana.AmandmanId + ".pdf");  */
 
+        }
 
         //Uspješno generir neku ružnu tablicu :)
-        [HttpGet("generateTest")]      
+        [HttpGet("generateTest")]
         public async Task<IActionResult> RendererPdf()//Zove funkciju DefineTables() i pretvara u pdf
-            {
+        {
             try
             {
 
@@ -94,707 +83,721 @@ namespace ANIMAL.WebApi.Controllers
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 return File(memoryStream.ToArray(), "application/pdf", "medicines.pdf");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("Greska: "+ex.InnerException);
+                throw new Exception("Greska: " + ex.InnerException);
             }
-                                     
-                
+
+
         }
         //Ljekovi se pozivaju na id životinje BITNO!!
         [HttpGet("generateMedicines/{idAnimal}")]
-        public async Task<IActionResult> RendererPdfMedicines(int idAnimal)//Zove funkciju DefineTables() i pretvara u pdf
+        public async Task<IActionResult> RendererPdfMedicines(int idAnimal)
         {
-                //ovo bi trebalo vratit sve ljekove koje životinja ima
-
-                var meds = _appDbContext.Medicines.ToList();
-                var medicinesDomain = meds.Select(e => new MedicinesDomain(
-                    e.Id,
-                    e.AnimalId,
-                    e.NameOfMedicines,
-                    e.Description,
-                    e.VetUsername,
-                    e.AmountOfMedicine,
-                    e.MesurmentUnit,
-                    e.MedicationIntake,
-                    e.FrequencyOfMedicationUse,
-                    e.Usage
-                    )).Where(a=>a.AnimalId == idAnimal).ToList();
-                   ;//vrati dobro
-                
-                //povuci iz baze sve podatke životinje,  njih stavi kao onaj fensi tekst, a ljeove strpaj u tablicu
-                var animalData = _appDbContext.Animals
-                  .Where(a => a.IdAnimal == idAnimal ) 
-                  .Select(e => new AnimalDomain(
-                      e.IdAnimal,
-                      e.Name,
-                      e.Family,
-                      e.Species,
-                      e.Subspecies,
-                      e.Age,
-                      e.Gender,
-                      e.Weight,
-                      e.Height,
-                      e.Length,
-                      e.Neutered,
-                      e.Vaccinated,
-                      e.Microchipped,
-                      e.Trained,
-                      e.Socialized,
-                      e.HealthIssues,
-                      e.Picture,
-                      e.PersonalityDescription,
-                      e.Adopted))
-                  .FirstOrDefault();//vrati dobro
-
-
-
-            MigraDoc.DocumentObjectModel.Document document = new MigraDoc.DocumentObjectModel.Document();
-            
-            Paragraph paragraphH = document.LastSection.AddParagraph("Medicines", "Heading1");
-            paragraphH.Format.Font.Size = 24;
-            paragraphH.Format.Font.Bold = true;
-            Paragraph paragraph = document.LastSection.AddParagraph("Name: "+animalData.Name, "Heading3");
-            document.LastSection.AddParagraph($"Family:{animalData.Family}, {animalData.Species} ,{animalData.Subspecies}", "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph($"Age:  {animalData.Age}" , "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph($"Gender: {animalData.Gender}"  , "Heading3").Format.Font.Size = 14;
-            paragraph.Format.Font.Size = 14;
-            paragraph.Format.Font.Bold = false;
-            document.LastSection.AddParagraph(" ", "Heading3");
-
-
-            Table table = new Table();
-            table.Borders.Width = 0.5;
-            Column column = table.AddColumn(Unit.FromCentimeter(4)); 
-                            table.AddColumn(Unit.FromCentimeter(3));
-                            table.AddColumn(Unit.FromCentimeter(4));
-                            table.AddColumn(Unit.FromCentimeter(3));
-                            table.AddColumn(Unit.FromCentimeter(3));
-            Row row = table.AddRow();
-            row.Shading.Color = Colors.Gray;
-            table.Borders.Visible = false;
-            table.Format.Font.Size = Unit.FromPoint(14);
-            table.TopPadding = 0.5;
-            table.BottomPadding = 0.5;
-            table.LeftPadding = 0.5;
-            table.RightPadding = 0.5;
-            
-            Cell cell = row.Cells[0];
-            cell.AddParagraph("Description");
-            cell = row.Cells[1];
-            cell.AddParagraph("Name");
-            cell = row.Cells[2];
-            cell.AddParagraph("Amount");
-            cell = row.Cells[3];
-            cell.AddParagraph("Intake");
-            cell = row.Cells[4];
-            cell.AddParagraph("Frequency");
-
-            foreach (MedicinesDomain m in medicinesDomain)
+            try
             {
-                row = table.AddRow();
-                cell = row.Cells[0];
-                cell.AddParagraph(m.Description);
-                cell = row.Cells[1];
-                cell.AddParagraph(m.NameOfMedicines);
-                cell = row.Cells[2];
-                cell.AddParagraph(Convert.ToString( m.AmountOfMedicine)+ m.MesurmentUnit);
-                cell = row.Cells[3];
-                cell.AddParagraph(Convert.ToString(m.MedicationIntake));
-                cell = row.Cells[4];
-                cell.AddParagraph(m.FrequencyOfMedicationUse);
-             
-            }
-          
-             table.Rows.Alignment = RowAlignment.Center;
-            document.LastSection.Add(table);
+                // Dohvati lijekove za zadanu životinju
+                var meds = _appDbContext.Medicines.ToList();
+                var medicinesDomain = meds
+                    .Where(m => m.AnimalId == idAnimal)
+                    .Select(e => new MedicinesDomain(
+                        e.Id,
+                        e.AnimalId,
+                        e.NameOfMedicines,
+                        e.Description,
+                        e.VetUsername,
+                        e.AmountOfMedicine,
+                        e.MesurmentUnit,
+                        e.MedicationIntake,
+                        e.FrequencyOfMedicationUse,
+                        e.Usage
+                    )).ToList();
 
-            //ovo dalje za pdf
-            MemoryStream memoryStream = new MemoryStream();
-                var pdfRenderer = new PdfDocumentRenderer();
-                pdfRenderer.Document = document;
+                // Dohvati podatke o životinji
+                var animalData = _appDbContext.Animals
+                    .Where(a => a.IdAnimal == idAnimal)
+                    .Select(e => new AnimalDomain(
+                        e.IdAnimal,
+                        e.Name,
+                        e.Family,
+                        e.Species,
+                        e.Subspecies,
+                        e.Age,
+                        e.Gender,
+                        e.Weight,
+                        e.Height,
+                        e.Length,
+                        e.Neutered,
+                        e.Vaccinated,
+                        e.Microchipped,
+                        e.Trained,
+                        e.Socialized,
+                        e.HealthIssues,
+                        e.Picture,
+                        e.PersonalityDescription,
+                        e.Adopted))
+                    .FirstOrDefault();
+
+                if (animalData == null)
+                    return NotFound($"Animal with ID {idAnimal} not found.");
+
+                // Kreiraj dokument
+                MigraDoc.DocumentObjectModel.Document document = new MigraDoc.DocumentObjectModel.Document();
+                document.Info.Title = "Animal Medication Report";
+                document.Info.Subject = "Detailed report of medications for a specific animal";
+                document.Info.Author = "Animal Rescue Web API";
+
+                var section = document.AddSection();
+
+                // Naslov
+                var title = section.AddParagraph("Animal Medication Report");
+                title.Format.Font.Size = 20;
+                title.Format.Font.Bold = true;
+                title.Format.SpaceAfter = Unit.FromCentimeter(0.5);
+                title.Format.Alignment = ParagraphAlignment.Center;
+
+                // Podaci o životinji
+                var animalInfo = section.AddParagraph();
+                animalInfo.Format.Font.Size = 12;
+                animalInfo.Format.SpaceAfter = Unit.FromCentimeter(0.5);
+
+                animalInfo.AddFormattedText("Name: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Name}\n");
+
+                animalInfo.AddFormattedText("Family: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Family}, {animalData.Species}, {animalData.Subspecies}\n");
+
+                animalInfo.AddFormattedText("Age: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Age} years\n");
+
+                animalInfo.AddFormattedText("Gender: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Gender}\n");
+
+                // Prazan red za razmak
+                section.AddParagraph();
+
+                // Kreiraj tablicu lijekova
+                var table = new Table();
+                table.Borders.Width = 0.75;
+                table.Borders.Color = Colors.DarkGray;
+                table.Rows.LeftIndent = 0;
+
+                // Definiraj stupce
+                table.AddColumn(Unit.FromCentimeter(5));  // Description
+                table.AddColumn(Unit.FromCentimeter(3));  // Name
+                table.AddColumn(Unit.FromCentimeter(3));  // Amount
+                table.AddColumn(Unit.FromCentimeter(3));  // Intake
+                table.AddColumn(Unit.FromCentimeter(4));  // Frequency
+
+                // Zaglavlje tablice
+                var headerRow = table.AddRow();
+                headerRow.Shading.Color = Colors.LightGray;
+                headerRow.Format.Font.Bold = true;
+                headerRow.Format.Alignment = ParagraphAlignment.Center;
+
+                headerRow.Cells[0].AddParagraph("Description");
+                headerRow.Cells[1].AddParagraph("Name");
+                headerRow.Cells[2].AddParagraph("Amount");
+                headerRow.Cells[3].AddParagraph("Intake");
+                headerRow.Cells[4].AddParagraph("Frequency");
+
+                // Popuni redove tablice
+                foreach (var m in medicinesDomain)
+                {
+                    var row = table.AddRow();
+                    row.Cells[0].AddParagraph(string.IsNullOrWhiteSpace(m.Description) ? "N/A" : m.Description);
+                    row.Cells[1].AddParagraph(string.IsNullOrWhiteSpace(m.NameOfMedicines) ? "N/A" : m.NameOfMedicines);
+                    row.Cells[2].AddParagraph($"{m.AmountOfMedicine} {m.MesurmentUnit}".Trim());
+                    row.Cells[3].AddParagraph(m.MedicationIntake.ToString() ?? "N/A");
+                    row.Cells[4].AddParagraph(string.IsNullOrWhiteSpace(m.FrequencyOfMedicationUse) ? "N/A" : m.FrequencyOfMedicationUse);
+                }
+
+                table.Rows.Alignment = RowAlignment.Center;
+                section.Add(table);
+
+                // Generiraj PDF u memorijski tok
+                using var memoryStream = new MemoryStream();
+                var pdfRenderer = new PdfDocumentRenderer(unicode: true)
+                {
+                    Document = document
+                };
                 pdfRenderer.RenderDocument();
                 pdfRenderer.PdfDocument.Save(memoryStream, false);
                 memoryStream.Seek(0, SeekOrigin.Begin);
-                return File(memoryStream.ToArray(), "application/pdf", "medicines.pdf");
-           
 
-
-        }
-
-        [HttpGet("generateLabs/{idAnimal}")]
-        public async Task<IActionResult> RendererPdfLabs(int idAnimal)//Zove funkciju DefineTables() i pretvara u pdf
-        {
-            //id albaratorija i onda iz toga izvuci životinju
-           
-            //povuci iz baze sve podatke životinje,  njih stavi kao onaj fensi tekst, a ljeove strpaj u tablicu
-            var animalData = _appDbContext.Animals
-              .Where(a => a.IdAnimal == idAnimal)
-              .Select(e => new AnimalDomain(
-                  e.IdAnimal,
-                  e.Name,
-                  e.Family,
-                  e.Species,
-                  e.Subspecies,
-                  e.Age,
-                  e.Gender,
-                  e.Weight,
-                  e.Height,
-                  e.Length,
-                  e.Neutered,
-                  e.Vaccinated,
-                  e.Microchipped,
-                  e.Trained,
-                  e.Socialized,
-                  e.HealthIssues,
-                  e.Picture,
-                  e.PersonalityDescription,
-                  e.Adopted))
-              .FirstOrDefault();//vrati dobro
-
-            var labs = _appDbContext.Labs
-                  .Join(_appDbContext.Animals, r => r.AnimalId, a => a.IdAnimal,
-                                      (r, a) => new { Labs = r, Animal = a })
-                                  .Where(x => x.Labs.AnimalId == idAnimal)
-                               .Select(x => new LabsDomain(
-                                    x.Labs.Id,
-                                    x.Labs.AnimalId,
-                                    x.Labs.DateTime
-                                )).FirstOrDefault();
-
-            var parameterDb = _appDbContext.Parameter.ToList();
-            var parameterDomain = parameterDb.Select(e => new ParameterDomain(
-                e.Id,
-                e.LabId,
-                e.ParameterName,
-                e.ParameterValue,
-                e.Remarks,
-                e.MeasurementUnits
-                )).Where(a => a.LabId == labs.Id);
-
-
-            MigraDoc.DocumentObjectModel.Document document = new MigraDoc.DocumentObjectModel.Document();
-
-            Paragraph paragraphH = document.LastSection.AddParagraph("Labs", "Heading1");
-            paragraphH.Format.Font.Size = 24;
-            paragraphH.Format.Font.Bold = true;
-            Paragraph paragraph = document.LastSection.AddParagraph("Name: " + animalData.Name, "Heading3");
-            document.LastSection.AddParagraph($"Family:{animalData.Family}, {animalData.Species} ,{animalData.Subspecies}", "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph($"Age:  {animalData.Age}", "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph($"Gender: {animalData.Gender}", "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph($"Lab Number:  {labs.Id}", "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph($"Date: {labs.DateTime}", "Heading3").Format.Font.Size = 14;
-            paragraph.Format.Font.Size = 14;
-            paragraph.Format.Font.Bold = false;
-            document.LastSection.AddParagraph(" ", "Heading3");
-
-
-            Table table = new Table();
-            table.Borders.Width = 0.5;
-            Column column = table.AddColumn(Unit.FromCentimeter(5));
-            table.AddColumn(Unit.FromCentimeter(6));
-            table.AddColumn(Unit.FromCentimeter(5));
-      
-   
-            Row row = table.AddRow();
-            row.Shading.Color = Colors.Gray;
-            table.Borders.Visible = false;
-            table.Format.Font.Size = Unit.FromPoint(14);
-            table.TopPadding = 0.5;
-            table.BottomPadding = 0.5;
-            table.LeftPadding = 0.5;
-            table.RightPadding = 0.5;
-
-            Cell cell = row.Cells[0];
-            cell.AddParagraph("Parameter Name");
-            cell = row.Cells[1];
-            cell.AddParagraph("Parameter Value");
-            cell = row.Cells[2];
-            cell.AddParagraph("Remarks");
-          
-         
-
-            foreach (ParameterDomain m in parameterDomain)
-            {
-                row = table.AddRow();
-                cell = row.Cells[0];
-                cell.AddParagraph(m.ParameterName);
-                cell = row.Cells[1];
-                cell.AddParagraph(Convert.ToString( m.ParameterValue)+" "+m.MeasurementUnits);
-                cell = row.Cells[2];
-                cell.AddParagraph(m.Remarks);
-      
-
+                // Vrati PDF datoteku
+                return File(memoryStream.ToArray(), "application/pdf", $"animal_medicines_{idAnimal}.pdf");
             }
-
-            table.Rows.Alignment = RowAlignment.Center;
-            document.LastSection.Add(table);
-
-            //ovo dalje za pdf
-            MemoryStream memoryStream = new MemoryStream();
-            var pdfRenderer = new PdfDocumentRenderer();
-            pdfRenderer.Document = document;
-            pdfRenderer.RenderDocument();
-            pdfRenderer.PdfDocument.Save(memoryStream, false);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            return File(memoryStream.ToArray(), "application/pdf", "medicines.pdf");
-
-
-
+            catch (Exception ex)
+            {
+                return BadRequest($"Greška prilikom generiranja PDF-a: {ex.Message}");
+            }
         }
+        [HttpGet("generateLabs/{idAnimal}")]
+        public async Task<IActionResult> RendererPdfLabs(int idAnimal)
+        {
+            try
+            {
+                // Dohvati podatke o životinji
+                var animalData = _appDbContext.Animals
+                    .Where(a => a.IdAnimal == idAnimal)
+                    .Select(e => new AnimalDomain(
+                        e.IdAnimal,
+                        e.Name,
+                        e.Family,
+                        e.Species,
+                        e.Subspecies,
+                        e.Age,
+                        e.Gender,
+                        e.Weight,
+                        e.Height,
+                        e.Length,
+                        e.Neutered,
+                        e.Vaccinated,
+                        e.Microchipped,
+                        e.Trained,
+                        e.Socialized,
+                        e.HealthIssues,
+                        e.Picture,
+                        e.PersonalityDescription,
+                        e.Adopted))
+                    .FirstOrDefault();
 
+                if (animalData == null)
+                    return NotFound($"Animal with ID {idAnimal} not found.");
 
+                // Dohvati laboratorijske pretrage za životinju
+                var labs = _appDbContext.Labs
+                    .Where(l => l.AnimalId == idAnimal)
+                    .OrderByDescending(l => l.DateTime)
+                    .Select(l => new LabsDomain(
+                        l.Id,
+                        l.AnimalId,
+                        l.DateTime))
+                    .FirstOrDefault();
+
+                if (labs == null)
+                    return NotFound($"No lab data found for animal ID {idAnimal}.");
+
+                // Dohvati parametre laboratorijskih pretraga
+                var parameterDomain = _appDbContext.Parameter
+                    .Where(p => p.LabId == labs.Id)
+                    .Select(e => new ParameterDomain(
+                        e.Id,
+                        e.LabId,
+                        e.ParameterName,
+                        e.ParameterValue,
+                        e.Remarks,
+                        e.MeasurementUnits))
+                    .ToList();
+
+                // Kreiraj dokument i sekciju
+                var document = new MigraDoc.DocumentObjectModel.Document();
+                document.Info.Title = "Laboratory Report";
+                document.Info.Subject = "Detailed laboratory results for a specific animal";
+                document.Info.Author = "Animal Rescue Web API";
+
+                var section = document.AddSection();
+
+                // Naslov
+                var title = section.AddParagraph("Laboratory Report");
+                title.Format.Font.Size = 20;
+                title.Format.Font.Bold = true;
+                title.Format.SpaceAfter = Unit.FromCentimeter(0.5);
+                title.Format.Alignment = ParagraphAlignment.Center;
+
+                // Podaci o životinji
+                var animalInfo = section.AddParagraph();
+                animalInfo.Format.Font.Size = 12;
+                animalInfo.Format.SpaceAfter = Unit.FromCentimeter(0.5);
+
+                animalInfo.AddFormattedText("Name: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Name}\n");
+
+                animalInfo.AddFormattedText("Family: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Family}, {animalData.Species}, {animalData.Subspecies}\n");
+
+                animalInfo.AddFormattedText("Age: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Age} years\n");
+
+                animalInfo.AddFormattedText("Gender: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Gender}\n");
+
+                animalInfo.AddFormattedText("Lab Number: ", TextFormat.Bold);
+                animalInfo.AddText($"{labs.Id}\n");
+
+                animalInfo.AddFormattedText("Date: ", TextFormat.Bold);
+                animalInfo.AddText($"{labs.DateTime:dd.MM.yyyy HH:mm}\n");
+
+                section.AddParagraph();
+
+                // Kreiraj tablicu za parametre laboratorijskih nalaza
+                var table = new Table();
+                table.Borders.Width = 0.75;
+                table.Borders.Color = Colors.DarkGray;
+
+                table.AddColumn(Unit.FromCentimeter(6)); // Parameter Name
+                table.AddColumn(Unit.FromCentimeter(4)); // Parameter Value
+                table.AddColumn(Unit.FromCentimeter(6)); // Remarks
+
+                // Zaglavlje tablice
+                var headerRow = table.AddRow();
+                headerRow.Shading.Color = Colors.LightGray;
+                headerRow.Format.Font.Bold = true;
+                headerRow.Format.Alignment = ParagraphAlignment.Center;
+
+                headerRow.Cells[0].AddParagraph("Parameter Name");
+                headerRow.Cells[1].AddParagraph("Parameter Value");
+                headerRow.Cells[2].AddParagraph("Remarks");
+
+                // Podaci u tablici
+                foreach (var p in parameterDomain)
+                {
+                    var row = table.AddRow();
+                    row.Cells[0].AddParagraph(string.IsNullOrWhiteSpace(p.ParameterName) ? "N/A" : p.ParameterName);
+                    row.Cells[1].AddParagraph($"{p.ParameterValue} {p.MeasurementUnits}".Trim());
+                    row.Cells[2].AddParagraph(string.IsNullOrWhiteSpace(p.Remarks) ? "-" : p.Remarks);
+                }
+
+                table.Rows.Alignment = RowAlignment.Center;
+                section.Add(table);
+
+                // Generiranje PDF-a u memorijski tok
+                using var memoryStream = new MemoryStream();
+                var pdfRenderer = new PdfDocumentRenderer(unicode: true)
+                {
+                    Document = document
+                };
+                pdfRenderer.RenderDocument();
+                pdfRenderer.PdfDocument.Save(memoryStream, false);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                return File(memoryStream.ToArray(), "application/pdf", $"lab_report_{idAnimal}.pdf");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Greška prilikom generiranja PDF-a: {ex.Message}");
+            }
+        }
 
 
 
         [HttpGet("generateVetVisits/{idAnimal}")]
-        public async Task<IActionResult> RendererPdfVetVisit(int idAnimal)//Zove funkciju DefineTables() i pretvara u pdf
+        public async Task<IActionResult> RendererPdfVetVisit(int idAnimal)
         {
-
-            //povuci iz baze sve podatke životinje,  njih stavi kao onaj fensi tekst, a ljeove strpaj u tablicu
-            var animalData = _appDbContext.Animals
-              .Where(a => a.IdAnimal == idAnimal)
-              .Select(e => new AnimalDomain(
-                  e.IdAnimal,
-                  e.Name,
-                  e.Family,
-                  e.Species,
-                  e.Subspecies,
-                  e.Age,
-                  e.Gender,
-                  e.Weight,
-                  e.Height,
-                  e.Length,
-                  e.Neutered,
-                  e.Vaccinated,
-                  e.Microchipped,
-                  e.Trained,
-                  e.Socialized,
-                  e.HealthIssues,
-                  e.Picture,
-                  e.PersonalityDescription,
-                  e.Adopted))
-              .FirstOrDefault();//vrati dobro
-
-
-            var vetVisitDb = _appDbContext.VetVisits.ToList();
-            var vetVisitDomain = vetVisitDb.Select(
-                e => new VetVisitsDomain(
-                    e.Id,
-                    e.AnimalId,
-                    e.StartTime,
-                    e.EndTime,
-                    e.TypeOfVisit,
-                    e.Notes
-                    )).Where(v=>v.AnimalId==idAnimal);
-
-
-
-
-            MigraDoc.DocumentObjectModel.Document document = new MigraDoc.DocumentObjectModel.Document();
-
-            Paragraph paragraphH = document.LastSection.AddParagraph("Vet Visit", "Heading1");
-            paragraphH.Format.Font.Size = 24;
-            paragraphH.Format.Font.Bold = true;
-            Paragraph paragraph = document.LastSection.AddParagraph("Name: " + animalData.Name, "Heading3");
-            document.LastSection.AddParagraph($"Family:{animalData.Family}, {animalData.Species} ,{animalData.Subspecies}", "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph($"Age:  {animalData.Age}", "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph($"Gender: {animalData.Gender}", "Heading3").Format.Font.Size = 14;
-          
-
-
-            paragraph.Format.Font.Size = 14;
-            paragraph.Format.Font.Bold = false;
-            document.LastSection.AddParagraph(" ", "Heading3");
-
-
-            Table table = new Table();
-            table.Borders.Width = 0.5;
-            Column column = table.AddColumn(Unit.FromCentimeter(4));
-            table.AddColumn(Unit.FromCentimeter(4));
-            table.AddColumn(Unit.FromCentimeter(4));
-            table.AddColumn(Unit.FromCentimeter(5));
-
-            Row row = table.AddRow();
-            row.Shading.Color = Colors.Gray;
-            table.Borders.Visible = false;
-            table.Format.Font.Size = Unit.FromPoint(14);
-            table.TopPadding = 0.5;
-            table.BottomPadding = 0.5;
-            table.LeftPadding = 0.5;
-            table.RightPadding = 0.5;
-
-            Cell cell = row.Cells[0];
-            cell.AddParagraph("Type Of Visit");
-            cell = row.Cells[1];
-            cell.AddParagraph("Start Time");
-            cell = row.Cells[2];
-            cell.AddParagraph("End Time");
-            cell = row.Cells[3];
-            cell.AddParagraph("Notes");
-
-
-            foreach (VetVisitsDomain m in vetVisitDomain)
+            try
             {
-                row = table.AddRow();
-                cell = row.Cells[0];
-                cell.AddParagraph(m.TypeOfVisit);
-                cell = row.Cells[1];
-                cell.AddParagraph(Convert.ToString(m.StartTime));
-                cell = row.Cells[2];
-                cell.AddParagraph(Convert.ToString( m.EndTime));
-                cell = row.Cells[3];
-                cell.AddParagraph(Convert.ToString(m.Notes));
+                // Dohvati podatke o životinji
+                var animalData = _appDbContext.Animals
+                    .Where(a => a.IdAnimal == idAnimal)
+                    .Select(e => new AnimalDomain(
+                        e.IdAnimal,
+                        e.Name,
+                        e.Family,
+                        e.Species,
+                        e.Subspecies,
+                        e.Age,
+                        e.Gender,
+                        e.Weight,
+                        e.Height,
+                        e.Length,
+                        e.Neutered,
+                        e.Vaccinated,
+                        e.Microchipped,
+                        e.Trained,
+                        e.Socialized,
+                        e.HealthIssues,
+                        e.Picture,
+                        e.PersonalityDescription,
+                        e.Adopted))
+                    .FirstOrDefault();
 
+                if (animalData == null)
+                    return NotFound($"Animal with ID {idAnimal} not found.");
+
+                // Dohvati veterinarske preglede za životinju
+                var vetVisitDomain = _appDbContext.VetVisits
+                    .Where(v => v.AnimalId == idAnimal)
+                    .Select(e => new VetVisitsDomain(
+                        e.Id,
+                        e.AnimalId,
+                        e.StartTime,
+                        e.EndTime,
+                        e.TypeOfVisit,
+                        e.Notes))
+                    .ToList();
+
+                // Kreiraj dokument i sekciju
+                var document = new MigraDoc.DocumentObjectModel.Document();
+                document.Info.Title = "Veterinary Visits Report";
+                document.Info.Subject = "Detailed veterinary visit records for an animal";
+                document.Info.Author = "Animal Rescue Web API";
+
+                var section = document.AddSection();
+
+                // Naslov
+                var title = section.AddParagraph("Veterinary Visits");
+                title.Format.Font.Size = 20;
+                title.Format.Font.Bold = true;
+                title.Format.SpaceAfter = Unit.FromCentimeter(0.5);
+                title.Format.Alignment = ParagraphAlignment.Center;
+
+                // Podaci o životinji
+                var animalInfo = section.AddParagraph();
+                animalInfo.Format.Font.Size = 12;
+                animalInfo.Format.SpaceAfter = Unit.FromCentimeter(0.5);
+
+                animalInfo.AddFormattedText("Name: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Name}\n");
+
+                animalInfo.AddFormattedText("Family: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Family}, {animalData.Species}, {animalData.Subspecies}\n");
+
+                animalInfo.AddFormattedText("Age: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Age} years\n");
+
+                animalInfo.AddFormattedText("Gender: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Gender}\n");
+
+                section.AddParagraph();
+
+                // Kreiraj tablicu za veterinarske preglede
+                var table = new Table();
+                table.Borders.Width = 0.75;
+                table.Borders.Color = Colors.DarkGray;
+
+                table.AddColumn(Unit.FromCentimeter(4)); // Type Of Visit
+                table.AddColumn(Unit.FromCentimeter(4)); // Start Time
+                table.AddColumn(Unit.FromCentimeter(4)); // End Time
+                table.AddColumn(Unit.FromCentimeter(5)); // Notes
+
+                // Zaglavlje tablice
+                var headerRow = table.AddRow();
+                headerRow.Shading.Color = Colors.LightGray;
+                headerRow.Format.Font.Bold = true;
+                headerRow.Format.Alignment = ParagraphAlignment.Center;
+
+                headerRow.Cells[0].AddParagraph("Type Of Visit");
+                headerRow.Cells[1].AddParagraph("Start Time");
+                headerRow.Cells[2].AddParagraph("End Time");
+                headerRow.Cells[3].AddParagraph("Notes");
+
+                // Podaci u tablici
+                foreach (var visit in vetVisitDomain)
+                {
+                    var row = table.AddRow();
+                    row.Cells[0].AddParagraph(string.IsNullOrWhiteSpace(visit.TypeOfVisit) ? "-" : visit.TypeOfVisit);
+                    row.Cells[1].AddParagraph(visit.StartTime.ToString("dd.MM.yyyy HH:mm"));
+                    row.Cells[2].AddParagraph(visit.EndTime != null ? visit.EndTime.ToString("dd.MM.yyyy HH:mm") : "-");
+                    row.Cells[3].AddParagraph(string.IsNullOrWhiteSpace(visit.Notes) ? "-" : visit.Notes);
+                }
+
+                table.Rows.Alignment = RowAlignment.Center;
+                section.Add(table);
+
+                // Generiranje PDF-a u memorijski tok
+                using var memoryStream = new MemoryStream();
+                var pdfRenderer = new PdfDocumentRenderer(unicode: true)
+                {
+                    Document = document
+                };
+                pdfRenderer.RenderDocument();
+                pdfRenderer.PdfDocument.Save(memoryStream, false);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                return File(memoryStream.ToArray(), "application/pdf", $"vet_visits_{idAnimal}.pdf");
             }
-
-            table.Rows.Alignment = RowAlignment.Center;
-            document.LastSection.Add(table);
-
-            //ovo dalje za pdf
-            MemoryStream memoryStream = new MemoryStream();
-            var pdfRenderer = new PdfDocumentRenderer();
-            pdfRenderer.Document = document;
-            pdfRenderer.RenderDocument();
-            pdfRenderer.PdfDocument.Save(memoryStream, false);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            return File(memoryStream.ToArray(), "application/pdf", "vetvisits.pdf");
-
-
-
+            catch (Exception ex)
+            {
+                return BadRequest($"Greška prilikom generiranja PDF-a: {ex.Message}");
+            }
         }
-
 
 
 
 
         [HttpGet("generateMedicalHistory/{idAnimal}")]
-        public async Task<IActionResult> RendererPdfMedicalHistory(int idAnimal)//Zove funkciju DefineTables() i pretvara u pdf
+        public async Task<IActionResult> RendererPdfMedicalHistory(int idAnimal)
         {
-
-            //povuci iz baze sve podatke životinje,  njih stavi kao onaj fensi tekst, a ljeove strpaj u tablicu
-            var animalData = _appDbContext.Animals
-              .Where(a => a.IdAnimal == idAnimal)
-              .Select(e => new AnimalDomain(
-                  e.IdAnimal,
-                  e.Name,
-                  e.Family,
-                  e.Species,
-                  e.Subspecies,
-                  e.Age,
-                  e.Gender,
-                  e.Weight,
-                  e.Height,
-                  e.Length,
-                  e.Neutered,
-                  e.Vaccinated,
-                  e.Microchipped,
-                  e.Trained,
-                  e.Socialized,
-                  e.HealthIssues,
-                  e.Picture,
-                  e.PersonalityDescription,
-                  e.Adopted))
-              .FirstOrDefault();//vrati dobro
-
-            var contageusAnimalsDb = _appDbContext.ContageusAnimals.ToList();
-            var contageusAnimalsDomain = contageusAnimalsDb.Select(
-                e => new ContageusAnimalsDomain(
-                    e.Id,
-                    e.AnimalId,
-                    e.DesisseName,
-                    e.Description,
-                    e.Contageus,
-                    e.StartTime
-                    )).Where(c=>c.AnimalId==animalData.IdAnimal);
-
-            var vetVisitDb = _appDbContext.VetVisits.ToList();
-            var vetVisitDomain = vetVisitDb.Select(
-                e => new VetVisitsDomain(
-                    e.Id,
-                    e.AnimalId,
-                    e.StartTime,
-                    e.EndTime,
-                    e.TypeOfVisit,
-                    e.Notes
-                    )).Where(v => v.AnimalId == idAnimal);
-
-
-            var labs = _appDbContext.Labs
-                 .Join(_appDbContext.Animals, r => r.AnimalId, a => a.IdAnimal,
-                                     (r, a) => new { Labs = r, Animal = a })
-                                 .Where(x => x.Labs.AnimalId == idAnimal)
-                              .Select(x => new LabsDomain(
-                                   x.Labs.Id,
-                                   x.Labs.AnimalId,
-                                   x.Labs.DateTime
-                               )).ToList();
-
-          
-
-            var meds = _appDbContext.Medicines.ToList();
-            var medicinesDomain = meds.Select(e => new MedicinesDomain(
-                e.Id,
-                e.AnimalId,
-                e.NameOfMedicines,
-                e.Description,
-                e.VetUsername,
-                e.AmountOfMedicine,
-                e.MesurmentUnit,
-                e.MedicationIntake,
-                e.FrequencyOfMedicationUse,
-                e.Usage
-                )).Where(a => a.AnimalId == idAnimal).ToList();
-            
-
-
-
-
-            MigraDoc.DocumentObjectModel.Document document = new MigraDoc.DocumentObjectModel.Document();
-
-            Paragraph paragraphH = document.LastSection.AddParagraph("Medical History", "Heading1");
-            paragraphH.Format.Font.Size = 24;
-            paragraphH.Format.Font.Bold = true;
-            Paragraph paragraph = document.LastSection.AddParagraph("Name: " + animalData.Name, "Heading3");
-            document.LastSection.AddParagraph($"Family:{animalData.Family}, {animalData.Species} ,{animalData.Subspecies}", "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph($"Age:  {animalData.Age}", "Heading3").Format.Font.Size = 14;
-            document.LastSection.AddParagraph($"Gender: {animalData.Gender}", "Heading3").Format.Font.Size = 14;
-            paragraph.Format.Font.Size = 14;
-            paragraph.Format.Font.Bold = false;
-            document.LastSection.AddParagraph(" ", "Heading3");
-
-            Paragraph paragraphContageusAnimals = document.LastSection.AddParagraph("Contageus Animal", "Heading1");
-            paragraphContageusAnimals.Format.Font.Size = 20;
-            //tablica contageusAnimalsDb
-            Table tablecontageus = new Table();
-            tablecontageus.Borders.Width = 0.5;
-            Column columncontageus = tablecontageus.AddColumn(Unit.FromCentimeter(4));
-            tablecontageus.AddColumn(Unit.FromCentimeter(4));
-            tablecontageus.AddColumn(Unit.FromCentimeter(6));
-            tablecontageus.AddColumn(Unit.FromCentimeter(3));
-            Row rowcontageus = tablecontageus.AddRow();
-            rowcontageus.Shading.Color = Colors.Gray;
-            tablecontageus.Borders.Visible = false;
-            tablecontageus.Format.Font.Size = Unit.FromPoint(14);
-            tablecontageus.TopPadding = 0.5;
-            tablecontageus.BottomPadding = 0.5;
-            tablecontageus.LeftPadding = 0.5;
-            tablecontageus.RightPadding = 0.5;
-
-            Cell cellcontageus = rowcontageus.Cells[0];
-            cellcontageus.AddParagraph("DesisseName");
-            cellcontageus = rowcontageus.Cells[1];
-            cellcontageus.AddParagraph("Contageus");
-            cellcontageus = rowcontageus.Cells[2];
-            cellcontageus.AddParagraph("Description");
-            cellcontageus = rowcontageus.Cells[3];
-            cellcontageus.AddParagraph("Date");
-
-
-            foreach (ContageusAnimalsDomain m in contageusAnimalsDomain)
+            try
             {
-                rowcontageus = tablecontageus.AddRow();
-                cellcontageus = rowcontageus.Cells[0];
-                cellcontageus.AddParagraph(m.DesisseName);
-                cellcontageus = rowcontageus.Cells[1];
-                cellcontageus.AddParagraph(Convert.ToString(m.Contageus));
-                cellcontageus = rowcontageus.Cells[2];
-                cellcontageus.AddParagraph(Convert.ToString(m.Description));
-                cellcontageus = rowcontageus.Cells[3];
-                cellcontageus.AddParagraph(Convert.ToString(m.StartTime));
+                // Dohvati podatke o životinji
+                var animalData = _appDbContext.Animals
+                    .Where(a => a.IdAnimal == idAnimal)
+                    .Select(e => new AnimalDomain(
+                        e.IdAnimal,
+                        e.Name,
+                        e.Family,
+                        e.Species,
+                        e.Subspecies,
+                        e.Age,
+                        e.Gender,
+                        e.Weight,
+                        e.Height,
+                        e.Length,
+                        e.Neutered,
+                        e.Vaccinated,
+                        e.Microchipped,
+                        e.Trained,
+                        e.Socialized,
+                        e.HealthIssues,
+                        e.Picture,
+                        e.PersonalityDescription,
+                        e.Adopted))
+                    .FirstOrDefault();
 
-            }
-            tablecontageus.Rows.Alignment = RowAlignment.Center;
-            tablecontageus.BottomPadding = 25;
-            document.LastSection.Add(tablecontageus);
+                if (animalData == null)
+                    return NotFound($"Animal with ID {idAnimal} not found.");
 
+                // Dohvati podatke iz baze
+                var contageusAnimalsDomain = _appDbContext.ContageusAnimals
+                    .Where(c => c.AnimalId == idAnimal)
+                    .Select(c => new ContageusAnimalsDomain(
+                        c.Id,
+                        c.AnimalId,
+                        c.DesisseName,
+                        c.Description,
+                        c.Contageus,
+                        c.StartTime))
+                    .ToList();
 
+                var vetVisitDomain = _appDbContext.VetVisits
+                    .Where(v => v.AnimalId == idAnimal)
+                    .Select(v => new VetVisitsDomain(
+                        v.Id,
+                        v.AnimalId,
+                        v.StartTime,
+                        v.EndTime,
+                        v.TypeOfVisit,
+                        v.Notes))
+                    .ToList();
 
-            document.LastSection.AddParagraph(" ", "Heading3");
-            document.LastSection.AddParagraph(" ", "Heading3");
-            Paragraph paragraphMedicinesDomain = document.LastSection.AddParagraph("Medicines", "Heading1");
-            paragraphMedicinesDomain.Format.Font.Size = 20;
-            tablecontageus.Rows.Alignment = RowAlignment.Center;
-            tablecontageus.BottomPadding = 25;
-            document.LastSection.Add(tablecontageus);
-            document.LastSection.AddParagraph(" ", "Heading3");         
-          //Ljekovi svi u jednu tablicu
-            Table tableMeds = new Table();
-            tableMeds.Borders.Width = 0.5;
-            Column columnMeds = tableMeds.AddColumn(Unit.FromCentimeter(4));
-            tableMeds.AddColumn(Unit.FromCentimeter(3));
-            tableMeds.AddColumn(Unit.FromCentimeter(4));
-            tableMeds.AddColumn(Unit.FromCentimeter(3));
-            tableMeds.AddColumn(Unit.FromCentimeter(3));
-            Row rowm = tableMeds.AddRow();
-            rowm.Shading.Color = Colors.Gray;
-            tableMeds.Borders.Visible = false;
-            tableMeds.Format.Font.Size = Unit.FromPoint(14);
-            tableMeds.TopPadding = 0.5;
-            tableMeds.BottomPadding = 0.5;
-            tableMeds.LeftPadding = 0.5;
-            tableMeds.RightPadding = 0.5;
+                var labs = _appDbContext.Labs
+                    .Where(l => l.AnimalId == idAnimal)
+                    .Select(l => new LabsDomain(
+                        l.Id,
+                        l.AnimalId,
+                        l.DateTime))
+                    .ToList();
 
-            Cell cellMeds = rowm.Cells[0];
-            cellMeds.AddParagraph("Description");
-            cellMeds = rowm.Cells[1];
-            cellMeds.AddParagraph("Name");
-            cellMeds = rowm.Cells[2];
-            cellMeds.AddParagraph("Amount");
-            cellMeds = rowm.Cells[3];
-            cellMeds.AddParagraph("Intake");
-            cellMeds = rowm.Cells[4];
-            cellMeds.AddParagraph("Frequency");
+                var medicinesDomain = _appDbContext.Medicines
+                    .Where(m => m.AnimalId == idAnimal)
+                    .Select(m => new MedicinesDomain(
+                        m.Id,
+                        m.AnimalId,
+                        m.NameOfMedicines,
+                        m.Description,
+                        m.VetUsername,
+                        m.AmountOfMedicine,
+                        m.MesurmentUnit,
+                        m.MedicationIntake,
+                        m.FrequencyOfMedicationUse,
+                        m.Usage))
+                    .ToList();
 
-            foreach (MedicinesDomain m in medicinesDomain)
-            {
-                rowm = tableMeds.AddRow();
-                cellMeds = rowm.Cells[0];
-                cellMeds.AddParagraph(m.Description);
-                cellMeds = rowm.Cells[1];
-                cellMeds.AddParagraph(m.NameOfMedicines);
-                cellMeds = rowm.Cells[2];
-                cellMeds.AddParagraph(Convert.ToString(m.AmountOfMedicine) + m.MesurmentUnit);
-                cellMeds = rowm.Cells[3];
-                cellMeds.AddParagraph(Convert.ToString(m.MedicationIntake));
-                cellMeds = rowm.Cells[4];
-                cellMeds.AddParagraph(m.FrequencyOfMedicationUse);
+                var document = new MigraDoc.DocumentObjectModel.Document();
+                var section = document.AddSection();
 
-            }
+                // Naslov dokumenta
+                var title = section.AddParagraph("Medical History");
+                title.Format.Font.Size = 24;
+                title.Format.Font.Bold = true;
+                title.Format.SpaceAfter = Unit.FromCentimeter(0.5);
+                title.Format.Alignment = ParagraphAlignment.Center;
 
-            tableMeds.Rows.Alignment = RowAlignment.Center;
-            tableMeds.BottomPadding = 25;
-            document.LastSection.Add(tableMeds);
+                // Podaci o životinji
+                var animalInfo = section.AddParagraph();
+                animalInfo.Format.Font.Size = 14;
+                animalInfo.AddFormattedText("Name: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Name}\n");
 
+                animalInfo.AddFormattedText("Family: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Family}, {animalData.Species}, {animalData.Subspecies}\n");
 
-            //Vet visit sve u jednu tablicu
-            document.LastSection.AddParagraph(" ", "Heading3");
-            document.LastSection.AddParagraph(" ", "Heading3");
-            Paragraph paragraphVetVisitsDomain = document.LastSection.AddParagraph("Vet Visits", "Heading1");
-            paragraphVetVisitsDomain.Format.Font.Size = 20;
-            document.LastSection.AddParagraph(" ", "Heading3");
-            Table table = new Table();
-            table.Borders.Width = 0.5;
-            Column column = table.AddColumn(Unit.FromCentimeter(4));
-            table.AddColumn(Unit.FromCentimeter(4));
-            table.AddColumn(Unit.FromCentimeter(4));
-            table.AddColumn(Unit.FromCentimeter(5));
+                animalInfo.AddFormattedText("Age: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Age}\n");
 
-            Row row = tableMeds.AddRow();
-             row.Shading.Color = Colors.Gray;
-            table.Borders.Visible = false;
-            table.Format.Font.Size = Unit.FromPoint(14);
-            table.TopPadding = 0.5;
-            table.BottomPadding = 0.5;
-            table.LeftPadding = 0.5;
-            table.RightPadding = 0.5;
+                animalInfo.AddFormattedText("Gender: ", TextFormat.Bold);
+                animalInfo.AddText($"{animalData.Gender}\n");
 
-            Cell cell = row.Cells[0];
-            cell.AddParagraph("Type Of Visit");
-            cell = row.Cells[1];
-            cell.AddParagraph("Start Time");
-            cell = row.Cells[2];
-            cell.AddParagraph("End Time");
-            cell = row.Cells[3];
-            cell.AddParagraph("Notes");
-            
+                section.AddParagraph();
 
-            foreach (VetVisitsDomain m in vetVisitDomain)
-            {
-                row = table.AddRow();
-                cell = row.Cells[0];
-                cell.AddParagraph(m.TypeOfVisit);
-                cell = row.Cells[1];
-                cell.AddParagraph(Convert.ToString(m.StartTime));
-                cell = row.Cells[2];
-                cell.AddParagraph(Convert.ToString(m.EndTime));
-                cell = row.Cells[3];
-                cell.AddParagraph(Convert.ToString(m.Notes));
+                // Contageus Animals tablica
+                var contageusTitle = section.AddParagraph("Contagious Animals");
+                contageusTitle.Format.Font.Size = 20;
+                contageusTitle.Format.SpaceBefore = Unit.FromCentimeter(0.5);
+                contageusTitle.Format.SpaceAfter = Unit.FromCentimeter(0.3);
 
-            }
+                var tableContageus = new Table();
+                tableContageus.Borders.Width = 0.75;
+                tableContageus.AddColumn(Unit.FromCentimeter(4)); // Disease Name
+                tableContageus.AddColumn(Unit.FromCentimeter(3)); // Contagious (bool)
+                tableContageus.AddColumn(Unit.FromCentimeter(6)); // Description
+                tableContageus.AddColumn(Unit.FromCentimeter(3)); // Date
 
-            table.Rows.Alignment = RowAlignment.Center;
-            tableMeds.BottomPadding = 25;
-            document.LastSection.Add(table);
-            //
+                var headerRowContageus = tableContageus.AddRow();
+                headerRowContageus.Shading.Color = Colors.LightGray;
+                headerRowContageus.Format.Font.Bold = true;
+                headerRowContageus.Cells[0].AddParagraph("Disease Name");
+                headerRowContageus.Cells[1].AddParagraph("Contagious");
+                headerRowContageus.Cells[2].AddParagraph("Description");
+                headerRowContageus.Cells[3].AddParagraph("Date");
 
-            document.LastSection.AddParagraph(" ", "Heading3");
-            document.LastSection.AddParagraph(" ", "Heading3");
-            Paragraph paragraphLabs = document.LastSection.AddParagraph("Labs", "Heading1");
-            paragraphLabs.Format.Font.Size = 20;
-            foreach (LabsDomain l in labs)
-            {
-                document.LastSection.AddParagraph(" ", "Heading3");
-
-                var parameterDb = _appDbContext.Parameter.ToList();
-                var parameterDomain = parameterDb.Select(e => new ParameterDomain(
-                    e.Id,
-                    e.LabId,
-                    e.ParameterName,
-                    e.ParameterValue,
-                    e.Remarks,
-                    e.MeasurementUnits
-                    )).Where(a => a.LabId == l.Id);
-
-
-                Table tablelabs = new Table();
-                tablelabs.Borders.Width = 0.5;
-                document.LastSection.AddParagraph($"Lab: {l.Id} Date: {l.DateTime}", "Heading3").Format.Font.Size = 14;
-                Column columnlabs = tablelabs.AddColumn(Unit.FromCentimeter(7));
-                tablelabs.AddColumn(Unit.FromCentimeter(5));
-                tablelabs.AddColumn(Unit.FromCentimeter(5));
-               
-
-                Row rowlabs = tablelabs.AddRow();
-                rowlabs.Shading.Color = Colors.Gray;
-                tablelabs.Borders.Visible = false;
-                tablelabs.Format.Font.Size = Unit.FromPoint(14);
-                tablelabs.TopPadding = 0.5;
-                tablelabs.BottomPadding = 0.5;
-                tablelabs.LeftPadding = 0.5;
-                tablelabs.RightPadding = 0.5;
-
-                Cell celllabs = rowlabs.Cells[0];
-                celllabs.AddParagraph("Parameter Name");
-                celllabs = rowlabs.Cells[1];
-                celllabs.AddParagraph("Parameter Value");
-                celllabs = rowlabs.Cells[2];
-                celllabs.AddParagraph("Remarks");
-
-                foreach (ParameterDomain m in parameterDomain)
+                foreach (var cont in contageusAnimalsDomain)
                 {
-                    rowlabs = tablelabs.AddRow();
-                    celllabs = rowlabs.Cells[0];
-                    celllabs.AddParagraph(m.ParameterName);
-                    celllabs = rowlabs.Cells[1];
-                    celllabs.AddParagraph(Convert.ToString(m.ParameterValue)+m.MeasurementUnits);
-                    celllabs = rowlabs.Cells[2];
-                    celllabs.AddParagraph(Convert.ToString(m.Remarks));
+                    var row = tableContageus.AddRow();
+                    row.Cells[0].AddParagraph(cont.DesisseName ?? "-");
+                    row.Cells[1].AddParagraph(cont.Contageus ? "Yes" : "No");
+                    row.Cells[2].AddParagraph(cont.Description ?? "-");
+                    row.Cells[3].AddParagraph(cont.StartTime.ToString("dd.MM.yyyy"));
                 }
 
-                tablelabs.Rows.Alignment = RowAlignment.Center;
-                tableMeds.BottomPadding = 10;
-                document.LastSection.Add(tablelabs);
-            }
+                section.Add(tableContageus);
+
+                // Medicines tablica
+                var medsTitle = section.AddParagraph("Medicines");
+                medsTitle.Format.Font.Size = 20;
+                medsTitle.Format.SpaceBefore = Unit.FromCentimeter(1);
+                medsTitle.Format.SpaceAfter = Unit.FromCentimeter(0.3);
+
+                var tableMeds = new Table();
+                tableMeds.Borders.Width = 0.75;
+                tableMeds.AddColumn(Unit.FromCentimeter(4)); // Description
+                tableMeds.AddColumn(Unit.FromCentimeter(3)); // Name
+                tableMeds.AddColumn(Unit.FromCentimeter(3)); // Amount
+                tableMeds.AddColumn(Unit.FromCentimeter(3)); // Intake
+                tableMeds.AddColumn(Unit.FromCentimeter(3)); // Frequency
+
+                var headerRowMeds = tableMeds.AddRow();
+                headerRowMeds.Shading.Color = Colors.LightGray;
+                headerRowMeds.Format.Font.Bold = true;
+                headerRowMeds.Cells[0].AddParagraph("Description");
+                headerRowMeds.Cells[1].AddParagraph("Name");
+                headerRowMeds.Cells[2].AddParagraph("Amount");
+                headerRowMeds.Cells[3].AddParagraph("Intake");
+                headerRowMeds.Cells[4].AddParagraph("Frequency");
+
+                foreach (var med in medicinesDomain)
+                {
+                    var row = tableMeds.AddRow();
+                    row.Cells[0].AddParagraph(med.Description ?? "-");
+                    row.Cells[1].AddParagraph(med.NameOfMedicines ?? "-");
+                    row.Cells[2].AddParagraph($"{med.AmountOfMedicine} {med.MesurmentUnit}".Trim());
+                    row.Cells[3].AddParagraph(med.MedicationIntake.ToString() ?? "-");
+                    row.Cells[4].AddParagraph(med.FrequencyOfMedicationUse ?? "-");
+                }
+
+                section.Add(tableMeds);
+
+                // Vet Visits tablica
+                var vetTitle = section.AddParagraph("Vet Visits");
+                vetTitle.Format.Font.Size = 20;
+                vetTitle.Format.SpaceBefore = Unit.FromCentimeter(1);
+                vetTitle.Format.SpaceAfter = Unit.FromCentimeter(0.3);
+
+                var tableVet = new Table();
+                tableVet.Borders.Width = 0.75;
+                tableVet.AddColumn(Unit.FromCentimeter(4)); // Type Of Visit
+                tableVet.AddColumn(Unit.FromCentimeter(4)); // Start Time
+                tableVet.AddColumn(Unit.FromCentimeter(4)); // End Time
+                tableVet.AddColumn(Unit.FromCentimeter(5)); // Notes
+
+                var headerRowVet = tableVet.AddRow();
+                headerRowVet.Shading.Color = Colors.LightGray;
+                headerRowVet.Format.Font.Bold = true;
+                headerRowVet.Cells[0].AddParagraph("Type Of Visit");
+                headerRowVet.Cells[1].AddParagraph("Start Time");
+                headerRowVet.Cells[2].AddParagraph("End Time");
+                headerRowVet.Cells[3].AddParagraph("Notes");
+
+                foreach (var visit in vetVisitDomain)
+                {
+                    var row = tableVet.AddRow();
+                    row.Cells[0].AddParagraph(visit.TypeOfVisit ?? "-");
+                    row.Cells[1].AddParagraph(visit.StartTime.ToString("dd.MM.yyyy HH:mm"));
+                    row.Cells[2].AddParagraph(visit.EndTime != null ? visit.EndTime.ToString("dd.MM.yyyy HH:mm") : "-");
+                    row.Cells[3].AddParagraph(visit.Notes ?? "-");
+                }
+
+                section.Add(tableVet);
+
+                // Labs and Parameters
+                var labsTitle = section.AddParagraph("Labs");
+                labsTitle.Format.Font.Size = 20;
+                labsTitle.Format.SpaceBefore = Unit.FromCentimeter(1);
+                labsTitle.Format.SpaceAfter = Unit.FromCentimeter(0.3);
+
+                foreach (var lab in labs)
+                {
+                    section.AddParagraph($"Lab ID: {lab.Id}   Date: {lab.DateTime.ToString("dd.MM.yyyy HH:mm")}", "Heading3")
+                           .Format.Font.Size = 14;
+
+                    var parameters = _appDbContext.Parameter
+                        .Where(p => p.LabId == lab.Id)
+                        .Select(p => new ParameterDomain(
+                            p.Id,
+                            p.LabId,
+                            p.ParameterName,
+                            p.ParameterValue,
+                            p.Remarks,
+                            p.MeasurementUnits))
+                        .ToList();
+
+                    var tableLabs = new Table();
+                    tableLabs.Borders.Width = 0.75;
+                    tableLabs.AddColumn(Unit.FromCentimeter(7)); // Parameter Name
+                    tableLabs.AddColumn(Unit.FromCentimeter(5)); // Parameter Value
+                    tableLabs.AddColumn(Unit.FromCentimeter(5)); // Remarks
+
+                    var headerRowLabs = tableLabs.AddRow();
+                    headerRowLabs.Shading.Color = Colors.LightGray;
+                    headerRowLabs.Format.Font.Bold = true;
+                    headerRowLabs.Cells[0].AddParagraph("Parameter Name");
+                    headerRowLabs.Cells[1].AddParagraph("Parameter Value");
+                    headerRowLabs.Cells[2].AddParagraph("Remarks");
+
+                    foreach (var param in parameters)
+                    {
+                        var row = tableLabs.AddRow();
+                        row.Cells[0].AddParagraph(param.ParameterName ?? "-");
+                        row.Cells[1].AddParagraph($"{param.ParameterValue} {param.MeasurementUnits}".Trim());
+                        row.Cells[2].AddParagraph(param.Remarks ?? "-");
+                    }
+
+                    section.Add(tableLabs);
+                }
+
+                
 
 
 
-
-
-
-
-
-
-
-            //ovo dalje za pdf
-            MemoryStream memoryStream = new MemoryStream();
-            var pdfRenderer = new PdfDocumentRenderer();
-            pdfRenderer.Document = document;
-            pdfRenderer.RenderDocument();
-            pdfRenderer.PdfDocument.Save(memoryStream, false);
-            memoryStream.Seek(0, SeekOrigin.Begin);
+               //ovo dalje za pdf
+                    MemoryStream memoryStream = new MemoryStream();
+                        var pdfRenderer = new PdfDocumentRenderer();
+                        pdfRenderer.Document = document;
+                        pdfRenderer.RenderDocument();
+                        pdfRenderer.PdfDocument.Save(memoryStream, false);
+                        memoryStream.Seek(0, SeekOrigin.Begin);
             return File(memoryStream.ToArray(), "application/pdf", "medicalhistory.pdf");
 
+            }
+            catch (Exception ex)
+            {
+                // Logiraj grešku po potrebi
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        
+
+
+
+
+
+
+
+
+
+
+     
 
 
         }

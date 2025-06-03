@@ -197,11 +197,6 @@ namespace ANIMAL.Service.Common
 
 
 
-        //DELETE
-        public Task<bool> DeleteAdoptedAsync(int adoptedId);//ovo se ne koristi
-        public  void DeleteAdoptedReturn(int adoptedId); //ovo se ne koristi
-        public  Task DeleteAnimal(int idAnimal);//ovo se ne koristi
-        public Task DeleteNews(int id);
-
+ 
     }
 }

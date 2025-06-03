@@ -486,24 +486,17 @@ namespace ANIMAL.Service
         async Task IService.AddAnimalRecord(int idAnimal)
         {          
             try
-            {
-                await _repository.AddAnimalRecord(idAnimal);             
-            }
+            {             await _repository.AddAnimalRecord(idAnimal);                         }
             catch (Exception ex)
-            {             
-                throw new Exception($"Failed to add record service message: {ex.Message}");
-            }          
+            {                          throw new Exception($"Failed to add record service message: {ex.Message}");         }          
         }
         async  Task IService.AddFoundRecord(int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId)
         {
             try
-            {
-                await _repository.AddFoundRecord( animalId,  date,  adress,  description,  ownerName,  ownerSurname,  ownerPhoneNumber,  ownerOIB,  registerId);
-            }
+            {               await _repository.AddFoundRecord( animalId,  date,  adress,  description,  ownerName,  ownerSurname,  ownerPhoneNumber,  ownerOIB,  registerId);          }
             catch (Exception ex)
-            {        
-                throw new Exception($"Failed to add found animal service message: {ex.Message}");
-            }
+            {             throw new Exception($"Failed to add found animal service message: {ex.Message}");
+          }
         }
         async Task IService.AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight)
         {
@@ -520,16 +513,9 @@ namespace ANIMAL.Service
         async   Task IService.AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes)
         {
             try
-            {
-                await _repository.AddVetVsit( animalId,  startTime,  endTime,  typeOfVisit,  notes)
-    ;
-
-            }
+            {               await _repository.AddVetVsit( animalId,  startTime,  endTime,  typeOfVisit,  notes) ;}
             catch (Exception ex)
-            {
-             
-                throw new Exception($"Failed to add found animal service message: {ex.Message}");
-            }
+            { throw new Exception($"Failed to add found animal service message: {ex.Message}"); }
         }
         async Task IService.AddSystemRecord(int recordNumber, string recordName, string recordDescription)
         {
@@ -564,23 +550,16 @@ namespace ANIMAL.Service
         Task<LabsDomain> IService.AddLab(int animalId, DateTime date)
         {
             try
-            {
-                Task<LabsDomain> labs = _repository.AddLab(animalId, date);
-
-                return labs;
-            }
+            {              Task<LabsDomain> labs = _repository.AddLab(animalId, date);  return labs;  }
             catch (Exception ex)
-            {
-
-                throw new Exception($"Failed to add lab service: {ex.Message}");
+            {   throw new Exception($"Failed to add lab service: {ex.Message}");
             }
         }
         async Task IService.AddParametar(ParameterDomain parametar)
         {
             await _repository.AddParametar(parametar);
         }
-
-       async Task IService.AddTransactions(TransactionsDomain transactions)
+        async Task IService.AddTransactions(TransactionsDomain transactions)
         {
             await _repository.AddTransactions(transactions);
         }
@@ -613,91 +592,40 @@ namespace ANIMAL.Service
         async Task<bool> IService.UpdateBird(BirdDomain animal)
         {
             try
-            {
-                await _repository.UpdateBird(animal);
-                return true;
-            }
+            { await _repository.UpdateBird(animal);return true; }
             catch { return false; }
         }
         async Task<bool> IService.UpdateMammal(MammalDomain animal)
         {
             try
-            {
-                await _repository.UpdateMammal(animal);
-                return true;
-            }
+            {  await _repository.UpdateMammal(animal); return true; }
             catch { return false; }
         }
         async Task<bool> IService.UpdateFish(FishDomain animal)
         {
             try
-            {
-                await _repository.UpdateFish(animal);
-                return true;
-            }
+            {    await _repository.UpdateFish(animal);  return true;     }
             catch { return false; }
         }
         async Task<bool> IService.UpdateReptile(ReptileDomain animal)
         {
             try
-            {
-                await _repository.UpdateReptile(animal);
-                return true;
+            { await _repository.UpdateReptile(animal);   return true;
             }
             catch { return false; }
         }
         async Task<bool> IService.UpdateAmphibian(AmphibianDomain animal)
         {
             try
-            {
-                await _repository.UpdateAmphibian(animal);
-                return true;
+            { await _repository.UpdateAmphibian(animal);  return true;
             }
             catch { return false; }
         }     
 
 
 
-
-        //DELETE
-        async Task IService.DeleteNews(int id)
-        {
-            await _repository.DeleteNews(id);
-           
-          
-        }
-        async Task<bool> IService.DeleteAdoptedAsync(int adoptedId)
-        {
-            await _repository.DeleteAdoptedAsync(adoptedId);
-            return true;
-        }      
-        public  void DeleteAdoptedReturn(int adoptedId)
-        {
-             _repository.DeleteAdoptedReturn(adoptedId);
-            
-        }   
-        public async Task DeleteAnimal(int idAnimal)
-        {
-            try
-            {
-                // Ensure that the idAnimal is valid (Optional)
-                if (idAnimal <= 0)
-                {
-                    throw new ArgumentException("Invalid animal ID.");
-                }
-
-                // Delegate to the repository's DeleteAnimal method
-                await _repository.DeleteAnimal(idAnimal);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception (replace Console.WriteLine with proper logging)
-                Console.WriteLine($"Error deleting animal with ID {idAnimal}: {ex.Message}");
-
-                // Optionally, rethrow the exception if it needs to be handled at a higher level
-                throw;
-            }
-        }
+  
+    
 
         
     }

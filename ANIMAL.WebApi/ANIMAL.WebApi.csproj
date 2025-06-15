@@ -20,6 +20,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
     <PackageReference Include="PDFsharp" Version="6.1.1" />
     <PackageReference Include="PDFsharp-MigraDoc" Version="6.1.1" />
   </ItemGroup>

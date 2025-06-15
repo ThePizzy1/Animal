@@ -14,6 +14,8 @@ using ANIMAL.Model;
 using Microsoft.AspNetCore.Authorization;
 using ANIMAL.Repository.Automaper;
 using Microsoft.EntityFrameworkCore;
+using NLog;
+using Microsoft.Extensions.Logging;
 
 namespace ANIMAL.WebApi.Controllers
 {
@@ -22,13 +24,15 @@ namespace ANIMAL.WebApi.Controllers
     
     public class AuthController : ControllerBase
     {
+        private readonly ILogger<AuthController> _logger;
         private readonly UserManager<ApplicationUser> _userManager; 
         private readonly SignInManager<ApplicationUser> _signInManager; 
         private readonly IConfiguration _configuration;
         private readonly AnimalRescueDbContext _context;
         private IRepositoryMappingService _mappingService;
-        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IRepositoryMappingService mapper)
+        public AuthController(ILogger<AuthController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IRepositoryMappingService mapper)
         {
+            _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
@@ -46,11 +50,12 @@ namespace ANIMAL.WebApi.Controllers
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "Admin");
+                await _userManager.AddToRoleAsync(user, "User");
                 return Ok(new { message = "User registered successfully" });
             }
             else
             {
+              _logger.LogWarning("Error registering User");
                 return BadRequest(result.Errors);
             }
         }
@@ -67,8 +72,14 @@ namespace ANIMAL.WebApi.Controllers
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, model.Role);
+                _logger.LogInformation("User registered successfully ");
                 return Ok(new { message = "User registered successfully" });
             }
+            else
+            {
+                _logger.LogWarning("Error registering User");
+            }
+            
             return BadRequest(result.Errors);
         }
         [HttpGet("getAll")]
@@ -92,7 +103,12 @@ namespace ANIMAL.WebApi.Controllers
 
             if (userList == null)
             {
+                _logger.LogError("Korisnik nije pronađen.");
                 return NotFound($"Korisnik nije pronađen.");
+            }
+            else
+            {
+                _logger.LogInformation("Korisnik je pronađen.");
             }
             return Ok(userList);
         }
@@ -103,6 +119,7 @@ namespace ANIMAL.WebApi.Controllers
 
             if (user == null)
             {
+                _logger.LogWarning("Korisnik nije pronađen.");
                 return NotFound($"Korisnik s korisničkim imenom '{username}' nije pronađen.");
             }
             var userDto = new
@@ -110,6 +127,10 @@ namespace ANIMAL.WebApi.Controllers
                 Id = user.Id,
                 Username = user.UserName,                         
             };
+            if (user != null)
+            {
+                _logger.LogInformation("Korisnik je pronađen.");
+            }
             return Ok(userDto);
         }
         [HttpPost("login")]
@@ -121,7 +142,12 @@ namespace ANIMAL.WebApi.Controllers
             {
                 var user = await _userManager.FindByNameAsync(model.Username);
                 var token = GenerateJwtToken(user);
+                _logger.LogInformation("Korisnik je logiran. Ovo je log iz auth");
                 return Ok(new { token });
+            }
+            else
+            {
+                _logger.LogError("Korisnik nije logiran. Ovo je log iz auth");
             }
             return Unauthorized();
         }

@@ -93,7 +93,7 @@ namespace ANIMAL.WebApi
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = { "Admin", "User","Vet","HeadVet","Surenderer", "AnimalWelffereOfficer","Association","Worker","Menager","HeadAdmin" };
+            string[] roleNames = { "Admin", "User","Vet","HeadVet","Surenderer", "AnimalWelffereOfficer","Association","Worker","Menager" };
             IdentityResult roleResult;
 
             foreach (var roleName in roleNames)

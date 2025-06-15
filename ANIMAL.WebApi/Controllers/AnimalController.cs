@@ -527,6 +527,7 @@ namespace ANIMAL.WebApi.Controllers
             if (request == null || request.Adopter == null)
             {
                 return BadRequest("Invalid data. Adopter information is missing.");
+                
             }
 
             var createdAdopter = await _service.CreateAdopterAsync(
@@ -632,8 +633,7 @@ namespace ANIMAL.WebApi.Controllers
               
                 createReturnedAnimalDto.AdoptionCode,
                 createReturnedAnimalDto.AnimalId,
-                createReturnedAnimalDto.AdopterId,
-                createReturnedAnimalDto.ReturnDate,
+                createReturnedAnimalDto.AdopterId,  
                 createReturnedAnimalDto.ReturnReason
             );
 

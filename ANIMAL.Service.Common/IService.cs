@@ -150,7 +150,7 @@ namespace ANIMAL.Service.Common
         string personalityDescription,
         bool adopted)
         ;
-         public Task<bool> CreateReturnedAnimalAsync( int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason);
+         public Task<bool> CreateReturnedAnimalAsync( int adoptionCode, int animalId, int adopterId, string returnReason);
          public  Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate);
         //novo
         public Task AddAnimalRecord(int idAnimal);

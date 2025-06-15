@@ -912,32 +912,25 @@ namespace ANIMAL.Repository
 
             public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId)
             {
-                if (adopterId <= 0)
-                    return Enumerable.Empty<AdoptedDomain>();
+            //uključi i record da bi vidjela dali je životinja na stanju 7
+            //ovo stavi u listu samo životinje koje su posvojene i nisu vraćene
+            var animalDb = _appDbContext.Adopted.Where(a => _appDbContext.ReturnedAnimal
+                                                .Any(ar => ar.AdoptionCode != a.Code))
+                                                .Include(a => a.Animal)
+                                                .Include(a => a.Adopter)
+                                                .ToList();
 
-                // Dohvati posvojene koje nisu vraćene (pretpostavka: Adopted kod nije u ReturnedAnimal)
-                var animalDb = _appDbContext.Adopted
-                    .Where(a => !_appDbContext.ReturnedAnimal.Any(ar => ar.AdoptionCode == a.Code))
-                    .Include(a => a.Animal)
-                    .Include(a => a.Adopter)
-                    .ToList();
+            //provjerava dali je žvotinja po rekordu i Adopted parametru posvojena
+                var adoptedEntities =  animalDb
+                                       .Where(a => _appDbContext.AnimalRecord
+                                       .Any(an=>an.RecordId==7 && a.AdopterId == adopterId ))      
+                                       .ToList();
 
-                if (!animalDb.Any())
-                    return Enumerable.Empty<AdoptedDomain>();
-
-                // Filtriraj po udomitelju i životinjama sa RecordId 7 (npr. status "posvojeno")
-                var adoptedEntities = animalDb
-                    .Where(a => _appDbContext.AnimalRecord
-                        .Any(an => an.RecordId == 7 && a.AdopterId == adopterId))
-                    .ToList();
-
-                if (!adoptedEntities.Any())
-                    return Enumerable.Empty<AdoptedDomain>();
-
-                var adoptedDomains = adoptedEntities.Select(e => new AdoptedDomain
+             var adoptedDomains = adoptedEntities 
+            .Select(e => new AdoptedDomain
                 {
                     Code = e.Code,
-                    Animal = e.Animal == null ? null : new AnimalDomain(
+                    Animal = new AnimalDomain(
                         e.Animal.IdAnimal,
                         e.Animal.Name,
                         e.Animal.Species,
@@ -956,22 +949,26 @@ namespace ANIMAL.Repository
                         e.Animal.HealthIssues,
                         e.Animal.Picture,
                         e.Animal.PersonalityDescription,
-                        e.Animal.Adopted),
+                        e.Animal.Adopted
+                    ),
                     AdoptionDate = e.AdoptionDate,
-                    Adopter = e.Adopter == null ? null : new AdopterDomain(
+                    Adopter = new AdopterDomain(
                         e.Adopter.Id,
                         e.Adopter.FirstName,
                         e.Adopter.LastName,
                         e.Adopter.Residence,
                         e.Adopter.DateOfBirth,
                         e.Adopter.NumAdoptedAnimals,
-                        e.Adopter.NumReturnedAnimals)
+                        e.Adopter.NumReturnedAnimals
+            
+            
+            ),
+
                 }).ToList();
 
                 return adoptedDomains;
-            }
-
-            public async Task<Animals> GetByIdAsync(int id)
+            } 
+          public async Task<Animals> GetByIdAsync(int id)
             {
                 if (id <= 0)
                     return null;
@@ -1497,51 +1494,36 @@ namespace ANIMAL.Repository
 
                 await _appDbContext.SaveChangesAsync();
 
-                return _mappingService.Map<AnimalDomain>(animal);
-            }
+            // Map the updated animal back to the domain model and return it
+            return _mappingService.Map<AnimalDomain>(animal);
+        }
+        public async Task<bool> AdoptionStatus(int animalId)
+        {
+            // Fetch the existing adopter from the database using registerId
+            var animal = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
 
-            public async Task<bool> AdoptionStatus(int animalId)
-            {
-                var animal = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
+            animal.Adopted = true;
+           
 
-                if (animal == null)
-                {
-                    // Životinja nije pronađena
-                    return false;
-                }
+            _appDbContext.Animals.Update(animal);
+            await _appDbContext.SaveChangesAsync();
 
-                if (animal.Adopted == true)
-                {
-                    // Već je postavljeno na true, nema potrebe za updateom
-                    return true;
-                }
+            return true;
+        }
+        public async Task<bool> AdoptionStatusFalse(int animalId)
+        {
+            // Fetch the existing adopter from the database using registerId
+            var animal = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
 
-                animal.Adopted = true;
-                await _appDbContext.SaveChangesAsync();
-                return true;
-            }
+            animal.Adopted = false;
 
-            public async Task<bool> AdoptionStatusFalse(int animalId)
-            {
-                var animal = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
 
-                if (animal == null)
-                {
-                    // Životinja nije pronađena
-                    return false;
-                }
+            _appDbContext.Animals.Update(animal);
+            await _appDbContext.SaveChangesAsync();
 
-                if (animal.Adopted == false)
-                {
-                    // Već je postavljeno na false, nema potrebe za updateom
-                    return true;
-                }
-
-                animal.Adopted = false;
-                await _appDbContext.SaveChangesAsync();
-                return true;
-            }
-
+            return true;
+        }
+    
 
 
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2023,39 +2005,20 @@ namespace ANIMAL.Repository
                         _appDbContext.Adopter.Add(adopter);
                         await _appDbContext.SaveChangesAsync();
 
-                        var result = _mappingService.Map<AdopterDomain>(adopter);
-                        if (result == null)
-                            throw new Exception("Mapping failed when returning adopter data.");
-
-                        return result;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception($"Failed to create adopter: {ex.Message}", ex);
-                    }
-                }
-
-                public async Task<bool> CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
-                {
-                    try
-                    {
-                        if (adoptionCode <= 0)
-                            throw new ArgumentException("Invalid adoption code.");
-                        if (animalId <= 0)
-                            throw new ArgumentException("Invalid animal ID.");
-                        if (adopterId <= 0)
-                            throw new ArgumentException("Invalid adopter ID.");
-                        if (string.IsNullOrWhiteSpace(returnReason))
-                            throw new ArgumentException("Return reason is required.");
-
-                        var returnedAnimalDomain = new ReturnedAnimal
-                        {
-                            AdoptionCode = adoptionCode,
-                            AnimalId = animalId,
-                            AdopterId = adopterId,
-                            ReturnDate = returnDate,
-                            ReturnReason = returnReason
-                        };
+            return _mappingService.Map<AdopterDomain>(adopter);
+        }
+        public async Task<bool> CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
+        {
+         
+            var returnedAnimalDomain = new ReturnedAnimal
+            {
+              
+                AdoptionCode = adoptionCode,
+                AnimalId = animalId,
+                AdopterId = adopterId,
+                ReturnDate = returnDate,
+                ReturnReason = returnReason
+            };
 
                         var returnedAnimal = _mappingService.Map<ReturnedAnimal>(returnedAnimalDomain);
                         if (returnedAnimal == null)

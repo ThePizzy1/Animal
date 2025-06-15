@@ -127,7 +127,7 @@ namespace ANIMAL.Repository.Common
 
 
         //DODAVANJE
-        public Task<bool> CreateReturnedAnimalAsync( int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason);
+        public Task<bool> CreateReturnedAnimalAsync( int adoptionCode, int animalId, int adopterId,  string returnReason);
         //nakon ovoga i dalje vidimživotinju u ponudi za posvajanje
         public  Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate);    
         public  Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);   

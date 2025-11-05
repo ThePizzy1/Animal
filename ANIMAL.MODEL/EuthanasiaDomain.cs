@@ -20,21 +20,26 @@ namespace ANIMAL.DAL.DataModel
             NameOfDesissse = nameOfDesissse;
             Animal = animal;
         }
-        public EuthanasiaDomain(int id, int animalId, DateTime date, string nameOfDesissse)
+        public EuthanasiaDomain(int id, int animalId, DateTime date, string nameOfDesissse, bool complited)
         {
             Id = id;
             AnimalId = animalId;
             Date = date;
             NameOfDesissse = nameOfDesissse;
+            Complited = complited;
       
         }
-        public EuthanasiaDomain(int id, DateTime date, bool complited)
+        public EuthanasiaDomain(int id, DateTime date)
         {
             Id = id;
             Date = date;
+         
+        }
+        public EuthanasiaDomain(int id,  bool complited)
+        {
+            Id = id;
             Complited = complited;
         }
-
         public EuthanasiaDomain( int animalId, DateTime date, string nameOfDesissse, bool complited)
         {
          

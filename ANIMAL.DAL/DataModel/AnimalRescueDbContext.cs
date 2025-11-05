@@ -83,6 +83,7 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasOne(d => d.Animal)
                     .WithMany(p => p.AdoptedNavigation)
                     .HasForeignKey(d => d.AnimalId)
+                    .HasPrincipalKey(a => a.IdAnimal)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Adopted__AnimalI__4D94879B");
             });
@@ -133,8 +134,22 @@ namespace ANIMAL.DAL.DataModel
             // Animals entity configuration
             modelBuilder.Entity<Animals>(entity =>
             {
-                entity.HasKey(e => e.IdAnimal)
-                    .HasName("PK__Animals__951092F0A1868E05");
+                entity.HasKey(e => e.AnimalCode);
+
+                entity.Property(e => e.AnimalCode)
+                    .IsRequired()
+                    .HasColumnType("uniqueidentifier")
+                    .HasDefaultValueSql("NEWID()");
+
+                // 🔹 IdAnimal — ručno unosiš, ali mora biti jedinstven
+                entity.Property(e => e.IdAnimal)
+                    .ValueGeneratedNever(); // ne generira se automatski
+                entity.HasIndex(e => e.IdAnimal)
+                    .IsUnique()
+                    .HasName("UQ_Animals_IdAnimal");
+
+
+
 
                 entity.Property(e => e.Family)
                     .IsRequired()
@@ -189,6 +204,8 @@ namespace ANIMAL.DAL.DataModel
                     .HasOne(d => d.Animal)
                     .WithOne(p => p.Birds)
                     .HasForeignKey<Birds>(d => d.AnimalId)
+                    .HasPrincipalKey<Animals>(a => a.IdAnimal)
+
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Birds__AnimalId__5812160E");
        
@@ -200,6 +217,7 @@ namespace ANIMAL.DAL.DataModel
                     .HasOne(d => d.Animal)
                     .WithOne(d=>d.Amphibians)
                     .HasForeignKey<Amphibians>(d => d.AnimalId)
+                    .HasPrincipalKey<Animals>(a => a.IdAnimal)
                     .HasConstraintName("FK__Amphibian__Anima__5CD6CB2B");
 
                 // Fish 
@@ -212,6 +230,7 @@ namespace ANIMAL.DAL.DataModel
                         .HasOne(d => d.Animal)
                         .WithOne(d=>d.Fish)
                         .HasForeignKey<Fish>(d => d.AnimalId)
+                        .HasPrincipalKey<Animals>(a => a.IdAnimal)
                         .HasConstraintName("FK__Fish__AnimalId__5EBF139D");
                 //Mammel
 
@@ -223,6 +242,7 @@ namespace ANIMAL.DAL.DataModel
                         .HasOne(d => d.Animal)
                         .WithOne(d=> d.Mammals)
                         .HasForeignKey<Mammals>(d => d.AnimalId)
+                        .HasPrincipalKey<Animals>(a => a.IdAnimal)
                         .HasConstraintName("FK__Mammals__AnimalId__5EBF139D");
 
 
@@ -236,6 +256,7 @@ namespace ANIMAL.DAL.DataModel
                         .HasOne(d => d.Animal)
                         .WithOne(d=> d.Reptiles)
                         .HasForeignKey<Reptiles>(d => d.AnimalId)
+                        .HasPrincipalKey<Animals>(a => a.IdAnimal)
                         .HasConstraintName("FK__Reptiles__AnimalId__5EBF139D");
 
 
@@ -268,6 +289,7 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasOne(d => d.Animal)
                     .WithMany(p => p.ReturnedAnimal)
                     .HasForeignKey(d => d.AnimalId)
+                    .HasPrincipalKey(a => a.IdAnimal)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ReturnedA__Anima__52593CB8");
             });
@@ -282,6 +304,7 @@ namespace ANIMAL.DAL.DataModel
                 .HasOne(r => r.Animal)
                 .WithOne(a => a.AnimalRecord)
                 .HasForeignKey<AnimalRecord>(a => a.AnimalId)
+                .HasPrincipalKey<Animals>(a => a.IdAnimal)
                 .HasConstraintName("FK__AnimalRecord__Animals__AnimalId");
  
 
@@ -406,6 +429,7 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasOne(d => d.Animals)
                     .WithMany()
                     .HasForeignKey(d => d.AnimalId)
+                    .HasPrincipalKey(a => a.IdAnimal)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ContageusAnimals__Animal");
 
@@ -431,6 +455,8 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasOne(d => d.Animals)
                     .WithMany()
                     .HasForeignKey(d => d.AnimalId)
+                    .HasPrincipalKey(a => a.IdAnimal)
+
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Euthanasia__Animal");
 
@@ -508,6 +534,8 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasOne(d => d.Animal)
                     .WithMany(d=>d.FoundRecord)
                     .HasForeignKey(d => d.AnimalId)
+                    .HasPrincipalKey(a => a.IdAnimal)
+
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__FoundRecord__Animal");
 
@@ -586,6 +614,8 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasOne(d => d.Animal)
                     .WithMany()
                     .HasForeignKey(d => d.AnimalId)
+                    .HasPrincipalKey(a => a.IdAnimal)
+
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Labs__Animals");
            
@@ -601,6 +631,8 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasOne(d => d.Animal)
                     .WithMany()
                     .HasForeignKey(d => d.AnimalId)
+                    .HasPrincipalKey(a => a.IdAnimal)
+
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Medicines__Animal");
 
@@ -730,6 +762,8 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasOne(d => d.Animals)
                     .WithMany()
                     .HasForeignKey(d => d.AnimalId)
+                    .HasPrincipalKey(a => a.IdAnimal)
+
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__VetVisits__Animal");
 

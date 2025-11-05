@@ -17,8 +17,9 @@ namespace ANIMAL.MODEL
             ReturnDate = returnedAnimal.ReturnDate;
             ReturnReason = returnedAnimal.ReturnReason;
         }
-        public ReturnedAnimalDomain( int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
+        public ReturnedAnimalDomain(int returnCode,  int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
         {
+            ReturnCode = returnCode;
             AdoptionCode = adoptionCode;
             AnimalId = animalId;
             AdopterId = adopterId;

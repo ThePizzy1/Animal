@@ -59,6 +59,8 @@ namespace ANIMAL.WebApi.Controllers
                 return BadRequest(result.Errors);
             }
         }
+
+        //koristi ovo za izradu početnog admina
         [HttpPost("registerAdmin")]
         public async Task<IActionResult> RegisterWorker([FromBody] RgisterModel model)
         {
@@ -133,6 +135,72 @@ namespace ANIMAL.WebApi.Controllers
             }
             return Ok(userDto);
         }
+        [HttpGet("getUserById/{id}")]
+        public async Task<IActionResult> GetUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                _logger.LogWarning("Korisnik nije pronađen.");
+                return NotFound($"Korisnik s ID-jem '{id}' nije pronađen.");
+            }
+
+            var userDto = new
+            {
+                Id = user.Id,
+                Username = user.UserName,
+                Name=user.FirstName,
+                Surname=user.LastName,
+                Phone=user.PhoneNumber,
+             
+            };
+
+            _logger.LogInformation("Korisnik je pronađen.");
+            return Ok(userDto);
+        }
+        [HttpPut("updateUserById/{id}")]
+        public async Task<IActionResult> UpdateUserById(string id, [FromBody] RegisterModel updateDto)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                _logger.LogWarning("Korisnik za ažuriranje nije pronađen.");
+                return NotFound($"Korisnik s ID-jem '{id}' nije pronađen.");
+            }
+
+            // Ažuriranje osnovnih podataka
+            user.UserName = updateDto.Username ?? user.UserName;
+            user.FirstName = updateDto.FirstName ?? user.FirstName;
+            user.LastName = updateDto.LastName ?? user.LastName;
+            user.Email = updateDto.Email ?? user.Email;
+            user.PhoneNumber = updateDto.PhoneNumber ?? user.PhoneNumber;
+
+            // Ako je poslana nova lozinka, koristi UserManager za promjenu
+            if (!string.IsNullOrWhiteSpace(updateDto.Password))
+            {
+                // Ukloni postojeću lozinku i postavi novu (ako korisnik ima password hash)
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var passwordResult = await _userManager.ResetPasswordAsync(user, token, updateDto.Password);
+
+                if (!passwordResult.Succeeded)
+                {
+                    _logger.LogError("Greška prilikom promjene lozinke.");
+                    return BadRequest(passwordResult.Errors);
+                }
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                _logger.LogError("Greška prilikom ažuriranja korisnika.");
+                return BadRequest(result.Errors);
+            }
+
+            _logger.LogInformation("Korisnik je uspješno ažuriran.");
+            return Ok(new { message = "Korisnik je uspješno ažuriran." });
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {

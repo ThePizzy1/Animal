@@ -46,14 +46,29 @@ namespace ANIMAL.WebApi.Controllers
             return animalDb;
         }
         [HttpGet]
-        [Route("animalA_db")]
+        [Route("animalAVet_db")]
         [AllowAnonymous]
         public IEnumerable<AnimalDomain> GetAnimalDomainsAdopt()
         {
             IEnumerable<AnimalDomain> animalDb = _service.GetAllAnimalDomainAdopt();
             return animalDb;
         }
-     
+        [HttpGet]
+        [Route("animalA_db")]
+        [AllowAnonymous]
+        public IEnumerable<AnimalDomain> GetAllAnimalDomainUserAdopt()
+        {
+            IEnumerable<AnimalDomain> animalDb = _service.GetAllAnimalDomainUserAdopt();
+            return animalDb;
+        }
+        [HttpGet]
+        [Route("animal_social")]
+        [AllowAnonymous]
+        public IEnumerable<AnimalDomain> GetAllAnimalDomainSocial()
+        {
+            IEnumerable<AnimalDomain> animalDb = _service.GetAllAnimalDomainSocial();
+            return animalDb;
+        }
         [HttpGet]
         [Route("adopter_db")]
         [AllowAnonymous]
@@ -316,6 +331,14 @@ namespace ANIMAL.WebApi.Controllers
             return animalDb;
         }
         [HttpGet]
+        [Route("adopterInt/{id}")]
+        [AllowAnonymous]
+        public AdopterDomain GetAdopterByIdNumber(int id)
+        {
+            AdopterDomain animalDb = _service.GetAdopterByIdNumber(id);
+            return animalDb;
+        }
+        [HttpGet]
         [Route("adopter/{id}")]
         [AllowAnonymous]
         public AdopterDomain GetAdopterById(string id)
@@ -361,7 +384,14 @@ namespace ANIMAL.WebApi.Controllers
             return parametar;
         }
         //-----------------------------------------------------------------------------------------------------------------------------
-
+        [HttpGet]
+        [Route("adoptedCode/{id}")]
+        [AllowAnonymous]
+        public AdoptedDomain GetOneAdoptedAnimal(int id)
+        {
+            AdoptedDomain parametar = _service.GetOneAdoptedAnimal(id);
+            return parametar;
+        }
         [HttpGet]
         [Route("toy/{id}")]
         [AllowAnonymous]
@@ -546,6 +576,7 @@ namespace ANIMAL.WebApi.Controllers
         [HttpPost("addAnimal")]
         [AllowAnonymous]
         public async Task<IActionResult> AddAnimalAsync(
+                    [FromForm] int idAnimal,
                    [FromForm] string name,
                    [FromForm] string family,
                    [FromForm] string species,
@@ -581,7 +612,7 @@ namespace ANIMAL.WebApi.Controllers
                 }
 
                 AnimalDomain success = await _service.AddAnimalAsync(
-                    name, family, species, subspecies, age, gender, weight, height, length,
+                   idAnimal, name, family, species, subspecies, age, gender, weight, height, length,
                     neutered, vaccinated, microchipped, trained, socialized, healthIssues, pictureBytes,
                     personalityDescription, adopted);
 
@@ -625,19 +656,27 @@ namespace ANIMAL.WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreateReturnedAnimal([FromBody] ReturnedAnimalDomain  createReturnedAnimalDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
-                 await _service.CreateReturnedAnimalAsync(
-              
-                createReturnedAnimalDto.AdoptionCode,
-                createReturnedAnimalDto.AnimalId,
-                createReturnedAnimalDto.AdopterId,  
-                createReturnedAnimalDto.ReturnReason
-            );
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                await _service.CreateReturnedAnimalAsync(
 
-            return Ok();
+               createReturnedAnimalDto.AdoptionCode,
+               createReturnedAnimalDto.AnimalId,
+               createReturnedAnimalDto.AdopterId,
+               createReturnedAnimalDto.ReturnReason
+           );
+
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return BadRequest();
+            }
         }
 
 
@@ -702,7 +741,8 @@ namespace ANIMAL.WebApi.Controllers
                 response.ExporationDate,
                 response.Quantity,
                 response.Notes,
-                response.MeasurementWeight
+                response.MeasurementWeight,
+                response.Price
 
             );
             
@@ -728,7 +768,8 @@ namespace ANIMAL.WebApi.Controllers
               response.Hight,
               response.Width,
               response.Quantity,
-              response.Notes
+              response.Notes,
+              response.Price
 
             );
 
@@ -1037,6 +1078,8 @@ namespace ANIMAL.WebApi.Controllers
          * 14.food-                                   --RADI
          * 15.vet visit-                              --RADI
         */
+     
+
         [HttpPut("updateAnimalRecord")]
         [AllowAnonymous]
         public async Task UpdateAnimalRecordDomain([FromBody] AnimalRecordDomain record)
@@ -1073,8 +1116,7 @@ namespace ANIMAL.WebApi.Controllers
             try
             {
                 await _service.UpdateContageusAnimalsDomain(
-             record.Id,
-             record.Contageus
+             record.Id 
                       );
             }
             catch (Exception ex)
@@ -1092,8 +1134,8 @@ namespace ANIMAL.WebApi.Controllers
             {
                 await _service.UpdateEuthanasiaDomain(
              record.Id,
-            record.Date,
-            record.Complited
+            record.Date
+         
                       );
             }
             catch (Exception ex)
@@ -1102,6 +1144,25 @@ namespace ANIMAL.WebApi.Controllers
             }
             return Ok(new { Message = "Animal record updated successfully" });
         }
+        [HttpPut("updateEuthanasiaDomainDone")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateEuthanasiaDomainDone([FromBody] EuthanasiaDomain record)
+        {
+            try
+            {
+                await _service.UpdateEuthanasiaDomainDone(
+             record.Id,
+            record.Complited
+
+                      );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+            }
+            return Ok(new { Message = "Animal record updated successfully" });
+        }
+
 
         [HttpPut("updateFoodDomainIncrement")]
         [AllowAnonymous]
@@ -1279,6 +1340,7 @@ namespace ANIMAL.WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> UpdateNewsDomain([FromBody] NewsDomain record)
         {
+            Console.WriteLine("id:" + record.Id);
             try
             {
                 await _service.UpdateNewsDomain(
@@ -1516,70 +1578,7 @@ namespace ANIMAL.WebApi.Controllers
         // Napravi u onom record ako je životinja mrtva da umjesto ovoga joj se stavi dead u recordu 
 
 
-        [HttpPut("code/{code}")]
-        [AllowAnonymous]
-        public IActionResult DeleteAdoptedReturn(int code)
-        {
-            try
-            {
-                _service.DeleteAdoptedReturn(code);
-                return Ok("Životinja uspješno obrisana.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Došlo je do greške: {ex.Message}");
-            }
-        }
-        [HttpDelete("deleteNews/{idNews}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> DeleteNews(int id) {
-            try
-            {
-                await _service.DeleteNews(id);
-                return Ok("News successfully deleted.");
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound($"News with ID {id} not found.");
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
-            }
-        }
-        [HttpDelete("{idAnimal}")]
-         [AllowAnonymous]
-         public async Task<IActionResult> Delete(int idAnimal)
-         {
-             try
-             {
-
-
-                 await _service.DeleteAnimal(idAnimal);
-
-
-                 return Ok("Animal successfully deleted.");
-             }
-             catch (KeyNotFoundException)
-             {
-                 return NotFound($"Animal with ID {idAnimal} not found.");
-             }
-             catch (InvalidOperationException ex)
-             {
-
-                 return BadRequest(ex.Message);
-             }
-             catch (Exception ex)
-             {
-               
-
-                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
-             }
-         }
+    
 
 
 

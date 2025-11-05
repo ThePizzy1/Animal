@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ANIMAL.DAL.DataModel
-{
+{//ovo su naši rečuni ima ih 4 za četiri različite potrebe azila
     public partial class Balans
     {
         public int Id {  get; set; }

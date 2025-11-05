@@ -11,6 +11,8 @@ namespace ANIMAL.DAL.DataModel
             ReturnedAnimal = new HashSet<ReturnedAnimal>();
         }
 
+        public Guid AnimalCode { get; set; } 
+
         public int IdAnimal { get; set; }
         public string Name { get; set; }
         public string Family { get; set; }

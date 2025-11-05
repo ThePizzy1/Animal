@@ -1,4 +1,4 @@
-using ANIMAL.DAL.DataModel;
+﻿using ANIMAL.DAL.DataModel;
 
 using ANIMAL.Repository.Automaper;
 using ANIMAL.Repository.Common;
@@ -63,14 +63,17 @@ namespace ANIMAL.WebApi
                         };
                     });
 
-                    services.AddCors(options =>
-                    {
-                        options.AddPolicy("AllowSpecificOrigin",
-                            builder => builder.WithOrigins("http://localhost:5173") // Dozvoljava pristup s odre�enog URL-a
-                                              .AllowAnyHeader() // Dozvoljava sve zaglavlja
-                                              .AllowAnyMethod()); // Dozvoljava sve HTTP metode
-                    });
-                        services.AddControllers();
+                        services.AddCors(options =>
+                        {
+                            options.AddPolicy("AllowSpecificOrigin", builder =>
+                            {
+                                builder.AllowAnyOrigin()     // ✅ Dozvoljava bilo koji origin
+                                       .AllowAnyHeader()     // ✅ Dozvoljava bilo koja zaglavlja
+                                       .AllowAnyMethod();    // ✅ Dozvoljava bilo koju HTTP metodu
+                            });
+                        });
+
+            services.AddControllers();
                 }
 
 

@@ -11,6 +11,12 @@
     <Compile Remove="Migrations\20250206111358_Migracija_06-02_2025_13.Designer.cs" />
     <Compile Remove="Migrations\20250317114132_Migration_17_03_2025_03.cs" />
     <Compile Remove="Migrations\20250317114132_Migration_17_03_2025_03.Designer.cs" />
+    <Compile Remove="Migrations\20250403071310_Migration_03_04_2025_02.cs" />
+    <Compile Remove="Migrations\20250403071310_Migration_03_04_2025_02.Designer.cs" />
+    <Compile Remove="Migrations\20251105112944_Migration_5_11_2025_01.cs" />
+    <Compile Remove="Migrations\20251105112944_Migration_5_11_2025_01.Designer.cs" />
+    <Compile Remove="Migrations\20251105113933_Migration_5_11_2025_02.cs" />
+    <Compile Remove="Migrations\20251105113933_Migration_5_11_2025_02.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

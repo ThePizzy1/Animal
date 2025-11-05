@@ -12,13 +12,17 @@ namespace ANIMAL.Repository.Common
      
         //GET ALL     
         // public IEnumerable<AnimalDomain> ();
+       
         IEnumerable<AnimalDomain> GetAllAnimalDomain();
         //izbacuje sve životinje koje su bileposvojene umjesto one koja je trenutno
         IEnumerable<AnimalDomain> GetAllAnimalDomainAdopt();
+        IEnumerable<AnimalDomain> GetAllAnimalDomainUserAdopt();
+        IEnumerable<AnimalDomain> GetAllAnimalDomainSocial();
         IEnumerable<AdopterDomain> GetAllAdopterDomain();
         IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain();
         public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture();     
         IEnumerable<AdoptedDomain> GetAllAdoptedDomain();
+  
          //novo
         public IEnumerable<AnimalRecordDomain> GetAllAnimalRecordDomain();
         public IEnumerable<BalansDomain> GetAllBlansDomain();
@@ -39,6 +43,7 @@ namespace ANIMAL.Repository.Common
 
         //GET BY ID
         //   public MammalDomain GetOne(int id);
+        public AdoptedDomain GetOneAdoptedAnimal(int adoptionCode);
         public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId);
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId); 
         public MammalDomain GetAllMammalDomain(int id);
@@ -50,7 +55,7 @@ namespace ANIMAL.Repository.Common
         public AnimalDomain GetAllAnimalById(int animalId);
         public AdopterDomain GetAdopterByUsername(string username);
         public AdopterDomain GetAdopterById(string id);
-
+        public AdopterDomain GetAdopterByIdNumber(int id);
         //get by id novo
         //ispisuje se kad u tablici sa tim parametrima kliknemo na jedan
         public ToysDomain GetOneToysDomain(int id);
@@ -102,10 +107,11 @@ namespace ANIMAL.Repository.Common
          * 15.vet visit-                              --RADI
         */
         //
-        public Task UpdateAnimalRecordDomain(int id, int recordId);
+        public Task<int> UpdateAnimalRecordDomain(int id, int recordId);
         public  Task<bool> UpdateAnimalBalansDomain(int id, decimal balance);
-        public  Task<bool> UpdateContageusAnimalsDomain(int id, bool contageus);
-        public  Task<bool> UpdateEuthanasiaDomain(int id, DateTime date, bool complited);
+        public  Task<bool> UpdateContageusAnimalsDomain(int id);
+        public  Task<bool> UpdateEuthanasiaDomain(int id, DateTime date);
+        public Task<bool> UpdateEuthanasiaDomainDone(int id,  bool complited);
         public  Task<bool> UpdateFoodDomainIncrement(int id);
         public  Task<bool> UpdateFoodDomainDecrement(int id );
         public Task<bool> UpdateFoodDomain(FoodDomain food);
@@ -131,7 +137,7 @@ namespace ANIMAL.Repository.Common
         //nakon ovoga i dalje vidimživotinju u ponudi za posvajanje
         public  Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate);    
         public  Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);   
-        Task<AnimalDomain> AddAnimalAsync( string name, string family,  string species,  string subspecies,  int age, string gender, decimal weight, decimal height, decimal length,      bool neutered, bool vaccinated,   bool microchipped,   bool trained,  bool socialized,   string healthIssues,   byte[] picture, string personalityDescription, bool adopted);
+        Task<AnimalDomain> AddAnimalAsync(int idAnimal, string name, string family,  string species,  string subspecies,  int age, string gender, decimal weight, decimal height, decimal length,      bool neutered, bool vaccinated,   bool microchipped,   bool trained,  bool socialized,   string healthIssues,   byte[] picture, string personalityDescription, bool adopted);
 
 
 
@@ -158,8 +164,8 @@ namespace ANIMAL.Repository.Common
         //Ovo oboje treba kad se životinja dodaje
         public Task AddAnimalRecord(int idAnimal);
         public Task AddFoundRecord( int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);//RADI
-        public Task AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
-        public Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes);
+        public Task AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight, decimal price);
+        public Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes, decimal price);
         public Task AddNews(string name, string description, DateTime dateTime);
         public Task AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes);
         public Task AddSystemRecord(int recordNumber, string recordName, string recordDescription);

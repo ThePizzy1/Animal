@@ -12,6 +12,8 @@ namespace ANIMAL.Service.Common
         //GET ALL
         IEnumerable<AnimalDomain> GetAllAnimalDomain();
         IEnumerable<AnimalDomain> GetAllAnimalDomainAdopt();
+        public IEnumerable<AnimalDomain> GetAllAnimalDomainSocial();
+        IEnumerable<AnimalDomain> GetAllAnimalDomainUserAdopt();
         IEnumerable<AdopterDomain> GetAllAdopterDomain(); 
         IEnumerable<AdoptedDomain> GetAllAdoptedDomain();
         IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain();
@@ -19,6 +21,7 @@ namespace ANIMAL.Service.Common
 
 
         //novo
+     
         public IEnumerable<AnimalRecordDomain> GetAllAnimalRecordDomain();
         public IEnumerable<BalansDomain> GetAllBlansDomain();
         public IEnumerable<ContactDomain> GetaAllContactDomain();
@@ -40,6 +43,7 @@ namespace ANIMAL.Service.Common
 
 
         //GET BY ID
+        public AdoptedDomain GetOneAdoptedAnimal(int adoptionCode);
         public MammalDomain GetAllMammalDomain(int id);
         public BirdDomain GetAllBirdDomain(int id);
         public AmphibianDomain GetAllAmphibianDomain(int id);
@@ -49,6 +53,7 @@ namespace ANIMAL.Service.Common
         public AnimalDomain GetAllAnimalById(int animalId);
         public AdopterDomain GetAdopterByUsername(string username);
         public AdopterDomain GetAdopterById(string id);
+        public AdopterDomain GetAdopterByIdNumber(int id);
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId);
          public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalsForAdopter(int adopterId);
 
@@ -105,8 +110,9 @@ namespace ANIMAL.Service.Common
         //novo
         public Task UpdateAnimalRecordDomain(int id, int recordId);
         public Task<bool> UpdateAnimalBalansDomain(int id, decimal balance);
-        public Task<bool> UpdateContageusAnimalsDomain(int id, bool contageus);
-        public Task<bool> UpdateEuthanasiaDomain(int id, DateTime date, bool complited);
+        public Task<bool> UpdateContageusAnimalsDomain(int id);
+        public Task<bool> UpdateEuthanasiaDomain(int id, DateTime date);
+        public Task<bool> UpdateEuthanasiaDomainDone(int id, bool complited);
         public Task<bool> UpdateFoodDomainIncrement(int id);
         public Task<bool> UpdateFoodDomainDecrement(int id);
         public Task<bool> UpdateFoodDomain(FoodDomain food);
@@ -131,6 +137,7 @@ namespace ANIMAL.Service.Common
         //ADD
         public Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId);    
         Task<AnimalDomain> AddAnimalAsync(
+            int idAnimal,
         string name,
         string family,
         string species,
@@ -155,8 +162,8 @@ namespace ANIMAL.Service.Common
         //novo
         public Task AddAnimalRecord(int idAnimal);
         public Task AddFoundRecord(int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);
-        public Task AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight);
-        public Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes);
+        public Task AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight, decimal price);
+        public Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes, decimal price);
         public Task AddNews(string name, string description, DateTime dateTime);
         public Task AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes);
         public Task AddSystemRecord(int recordNumber, string recordName, string recordDescription);

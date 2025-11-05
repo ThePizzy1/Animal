@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ANIMAL.DAL.Migrations
 {
-    public partial class Migration_03_04_2025_02 : Migration
+    public partial class Migration_5_11_2025_03 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -33,8 +33,8 @@ namespace ANIMAL.DAL.Migrations
                 name: "Animals",
                 columns: table => new
                 {
-                    IdAnimal = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AnimalCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    IdAnimal = table.Column<int>(nullable: false),
                     Name = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
                     Family = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
                     Species = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
@@ -56,7 +56,8 @@ namespace ANIMAL.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Animals__951092F0A1868E05", x => x.IdAnimal);
+                    table.PrimaryKey("PK_Animals", x => x.AnimalCode);
+                    table.UniqueConstraint("AK_Animals_IdAnimal", x => x.IdAnimal);
                 });
 
             migrationBuilder.CreateTable(
@@ -767,6 +768,12 @@ namespace ANIMAL.DAL.Migrations
                 name: "IX_AnimalRecord_RecordId",
                 table: "AnimalRecord",
                 column: "RecordId");
+
+            migrationBuilder.CreateIndex(
+                name: "UQ_Animals_IdAnimal",
+                table: "Animals",
+                column: "IdAnimal",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

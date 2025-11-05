@@ -34,16 +34,18 @@ namespace ANIMAL.Repository
                 {
                     try
                     {
-                        // Get all adopted animals that have not been returned
-                        var animalDb = _appDbContext.Adopted
-                            .Where(a => !_appDbContext.ReturnedAnimal.Any(ar => ar.AdoptionCode == a.Code))
-                            .Include(a => a.Animal)
-                            .ToList();
+                // Get all adopted animals that have not been returned
+                var animalDb = _appDbContext.Adopted
+                    .Where(a => !_appDbContext.ReturnedAnimal.Any(ar => ar.AdoptionCode == a.Code))
+                    .Include(a => a.Animal)
+                    .Include(a => a.Adopter) // Dodaj da bi dobio podatke o korisniku
+                    .ToList();
+                ;
 
-                        // Filter only those with RecordId == 7 and marked as adopted
-                        var adoptedEntities = animalDb
+                // Filter only those with RecordId == 7 and marked as adopted
+                var adoptedEntities = animalDb
                             .Where(a => _appDbContext.AnimalRecord
-                                .Any(an => an.RecordId == 7 && an.AnimalId == a.Animal.IdAnimal && a.Animal.Adopted == true))
+                                .Any(an =>  an.AnimalId == a.Animal.IdAnimal && a.Animal.Adopted == true))
                             .ToList();
 
                         if (adoptedEntities == null || !adoptedEntities.Any())
@@ -54,6 +56,8 @@ namespace ANIMAL.Repository
                         var adoptedDomains = adoptedEntities.Select(e => new AdoptedDomain
                         {
                             Code = e.Code,
+                            AnimalId = e.Animal.IdAnimal,
+                            AdopterId = e.Adopter.Id,
                             Animal = new AnimalDomain(
                                 e.Animal.IdAnimal,
                                 e.Animal.Name,
@@ -89,38 +93,31 @@ namespace ANIMAL.Repository
 
                 public IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain()
                         {
-                            try
-                            {
+                         
                                 var returnedAnimalEntities = _appDbContext.ReturnedAnimal.ToList();
 
-                                if (returnedAnimalEntities == null || !returnedAnimalEntities.Any())
-                                {
-                                    throw new InvalidOperationException("No returned animals found in the database.");
-                                }
+                             
 
                                 var returnedAnimalDomains = returnedAnimalEntities
-                                    .Select(r => new ReturnedAnimalDomain(r))
+                                    .Select(r => new ReturnedAnimalDomain(
+                                        r.ReturnCode,
+                                        r.AdoptionCode,
+                                        r.AnimalId,
+                                        r.AdopterId,
+                                        r.ReturnDate,
+                                        r.ReturnReason
+                                        ))
                                     .ToList();
 
                                 return returnedAnimalDomains;
-                            }
-                            catch (Exception ex)
-                            {
-                                // Optional: log the exception or handle it differently
-                                throw new Exception("Error retrieving returned animal data: " + ex.Message, ex);
-                            }
+                        
                         }
 
                 public IEnumerable<AdopterDomain> GetAllAdopterDomain()
                         {
-                            try
-                            {
+                          
                                 var adopterDb = _appDbContext.Adopter.ToList();
 
-                                if (adopterDb == null || !adopterDb.Any())
-                                {
-                                    throw new InvalidOperationException("No adopters found in the database.");
-                                }
 
                                 var adopterDomain = adopterDb.Select(a => new AdopterDomain(
                                     a.Id,
@@ -137,18 +134,12 @@ namespace ANIMAL.Repository
                                 )).ToList();
 
                                 return adopterDomain;
-                            }
-                            catch (Exception ex)
-                            {
-                                // Optional: add logging here if needed
-                                throw new Exception("Error retrieving adopters: " + ex.Message, ex);
-                            }
+                           
                         }
 
                 public AmphibianDomain GetAllAmphibianDomain(int id)
                         {
-                            try
-                            {
+                            
                                 var amphibian = _appDbContext.Amphibians
                                     .Join(_appDbContext.Animals,
                                           a => a.AnimalId,
@@ -161,33 +152,20 @@ namespace ANIMAL.Repository
                                         e.Amphibian.Temperature))
                                     .FirstOrDefault();
 
-                                if (amphibian == null)
-                                {
-                                    throw new InvalidOperationException($"Thers no animal with AnimalId = {id}.");
-                                }
+                                
 
                                 return amphibian;
-                            }
-                            catch (Exception ex)
-                            {
-                                // Opcionalno logiranje
-                                throw new Exception( ex.Message, ex);
-                            }
+                         
                         }
 
                 public IEnumerable<AnimalDomain> GetAllAnimalDomainAdopt()
                 {
-                    try
-                    {
+                    
                         var animals = _appDbContext.Animals
-                            .Where(a => _appDbContext.AnimalRecord.Any(ar => ar.RecordId == 6 && ar.AnimalId == a.IdAnimal))
+                            .Where(a => _appDbContext.AnimalRecord.Any(ar => ar.RecordId == 5 && ar.AnimalId == a.IdAnimal))
                             .ToList();
 
-                        if (animals == null || !animals.Any())
-                        {
-                            throw new InvalidOperationException("There's no animal with (RecordId == 6).");
-                        }
-
+                      
                         var animalDomain = animals.Select(e => new AnimalDomain(
                             e.IdAnimal,
                             e.Name,
@@ -208,27 +186,82 @@ namespace ANIMAL.Repository
                             e.Picture,
                             e.PersonalityDescription,
                             e.Adopted)).ToList();
-
+            Console.WriteLine("Id Animal:" + animalDomain.Count);
                         return animalDomain;
-                    }
-                    catch (Exception ex)
-                    {
-                        // Opcionalno: ovdje možeš logirati grešku
-                        throw new Exception( ex.Message, ex);
-                    }
+                
                 }
+        public IEnumerable<AnimalDomain> GetAllAnimalDomainUserAdopt()
+        {
 
-                //samo životinje koje su broj 6 se smiju prikazati na glavnoj stranici za posvajanje, 6 odobrava veterinar
-                public IEnumerable<AnimalDomain> GetAllAnimalDomain()
+            var animals = _appDbContext.Animals
+                .Where(a => _appDbContext.AnimalRecord.Any(ar => ar.RecordId == 6 && ar.AnimalId == a.IdAnimal))
+                .ToList();
+
+
+            var animalDomain = animals.Select(e => new AnimalDomain(
+                e.IdAnimal,
+                e.Name,
+                e.Family,
+                e.Species,
+                e.Subspecies,
+                e.Age,
+                e.Gender,
+                e.Weight,
+                e.Height,
+                e.Length,
+                e.Neutered,
+                e.Vaccinated,
+                e.Microchipped,
+                e.Trained,
+                e.Socialized,
+                e.HealthIssues,
+                e.Picture,
+                e.PersonalityDescription,
+                e.Adopted)).ToList();
+            Console.WriteLine("Id Animal User:" + animalDomain.Count);
+            return animalDomain;
+
+        }
+        public IEnumerable<AnimalDomain> GetAllAnimalDomainSocial()
+        {
+
+            var animals = _appDbContext.Animals
+                .Where(a => _appDbContext.AnimalRecord.Any(ar => ar.RecordId == 4 && ar.AnimalId == a.IdAnimal))
+                .ToList();
+
+
+            var animalDomain = animals.Select(e => new AnimalDomain(
+                e.IdAnimal,
+                e.Name,
+                e.Family,
+                e.Species,
+                e.Subspecies,
+                e.Age,
+                e.Gender,
+                e.Weight,
+                e.Height,
+                e.Length,
+                e.Neutered,
+                e.Vaccinated,
+                e.Microchipped,
+                e.Trained,
+                e.Socialized,
+                e.HealthIssues,
+                e.Picture,
+                e.PersonalityDescription,
+                e.Adopted)).ToList();
+
+            return animalDomain;
+
+        }
+        //samo životinje koje su broj 6 se smiju prikazati na glavnoj stranici za posvajanje, 6 odobrava veterinar
+        public IEnumerable<AnimalDomain> GetAllAnimalDomain()
                 {
                     var animals = _appDbContext.Animals
                         .Where(a => !_appDbContext.AnimalRecord.Any(ar => ar.RecordId == 8 && ar.AnimalId == a.IdAnimal))
                         .ToList();
 
-                    if (animals == null || !animals.Any())
-                    {
-                        throw new InvalidOperationException("There's no animal with ( RecordId == 8).");
-                    }
+                    
 
                     var animalDomain = animals.Select(e => new AnimalDomain(
                         e.IdAnimal,
@@ -257,18 +290,14 @@ namespace ANIMAL.Repository
 
                  public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture()
         {
-            try
-            {
+            
                 // Get all animals that are NOT marked as deceased (RecordId != 8)
                 var animalDb = _appDbContext.Animals
                     .Where(a => _appDbContext.AnimalRecord
                         .Any(ar => ar.RecordId != 8 && ar.AnimalId == a.IdAnimal))
                     .ToList();
 
-                if (animalDb == null || !animalDb.Any())
-                {
-                    throw new InvalidOperationException("No valid (non-deceased) animals found in the database.");
-                }
+                
 
                 // Project to AnimalDomain without the Picture field
                 var animalDomain = animalDb.Select(e => new AnimalDomain(
@@ -294,43 +323,31 @@ namespace ANIMAL.Repository
                 )).ToList();
 
                 return animalDomain;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error retrieving animals without pictures: " + ex.Message, ex);
-            }
+        
         }
 
 
         //Get all novo
             IEnumerable<AnimalRecordDomain> IRepository.GetAllAnimalRecordDomain()
             {
-                try
-                {
+               
                     var animalDb = _appDbContext.AnimalRecord.ToList();
 
-                    if (animalDb == null || !animalDb.Any())
-                        throw new InvalidOperationException("No animal records found.");
+                  
 
                     return animalDb.Select(e => new AnimalRecordDomain(
                         e.AnimalId,
                         e.RecordId
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving animal records: " + ex.Message, ex);
-                }
+              
             }
 
             IEnumerable<BalansDomain> IRepository.GetAllBlansDomain()
             {
-                try
-                {
+               
                     var balansDb = _appDbContext.Balans.ToList();
 
-                    if (balansDb == null || !balansDb.Any())
-                        throw new InvalidOperationException("No balance records found.");
+                
 
                     return balansDb.Select(e => new BalansDomain(
                         e.Id,
@@ -340,21 +357,15 @@ namespace ANIMAL.Repository
                         e.Password,
                         e.Type
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving balance records: " + ex.Message, ex);
-                }
+                
             }
 
             IEnumerable<ContactDomain> IRepository.GetaAllContactDomain()
             {
-                try
-                {
+               
                     var contactDb = _appDbContext.Contact.ToList();
 
-                    if (contactDb == null || !contactDb.Any())
-                        throw new InvalidOperationException("No contact records found.");
+                 
 
                     return contactDb.Select(e => new ContactDomain(
                         e.Id,
@@ -364,66 +375,49 @@ namespace ANIMAL.Repository
                         e.AdopterId,
                         e.Read
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving contact records: " + ex.Message, ex);
-                }
+              
             }
 
             IEnumerable<ContageusAnimalsDomain> IRepository.GetAllContageusAnimalsDomain()
             {
-                try
-                {
+               
                     var contagiousDb = _appDbContext.ContageusAnimals.ToList();
 
-                    if (contagiousDb == null || !contagiousDb.Any())
-                        throw new InvalidOperationException("No contagious animal records found.");
+             
 
                     return contagiousDb.Select(e => new ContageusAnimalsDomain(
                         e.Id,
                         e.AnimalId,
                         e.DesisseName,
-                        e.Description,
-                        e.Contageus
+                        e.Description,           
+                        e.Contageus,
+                        e.StartTime
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving contagious animal records: " + ex.Message, ex);
-                }
+              
             }
 
             IEnumerable<EuthanasiaDomain> IRepository.GetAllEuthanasiaDomain()
             {
-                try
-                {
+                
                     var euthanasiaDb = _appDbContext.Euthanasia.ToList();
 
-                    if (euthanasiaDb == null || !euthanasiaDb.Any())
-                        throw new InvalidOperationException("No euthanasia records found.");
 
                     return euthanasiaDb.Select(e => new EuthanasiaDomain(
                         e.Id,
                         e.AnimalId,
                         e.Date,
-                        e.NameOfDesissse
+                        e.NameOfDesissse,
+                        e.Complited
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving euthanasia records: " + ex.Message, ex);
-                }
+               
             }
 
             IEnumerable<FoodDomain> IRepository.GetAllFoodDomain()
             {
-                try
-                {
+                
                     var foodDb = _appDbContext.Food.ToList();
 
-                    if (foodDb == null || !foodDb.Any())
-                        throw new InvalidOperationException("No food records found.");
+            
 
                     return foodDb.Select(e => new FoodDomain(
                         e.Id,
@@ -444,21 +438,15 @@ namespace ANIMAL.Repository
                         e.MeasurementWeight,
                         e.Price
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving food records: " + ex.Message, ex);
-                }
+              
             }
 
             IEnumerable<FoundRecordDomain> IRepository.GetAllFoundRecord()
             {
-                try
-                {
+                
                     var foundDb = _appDbContext.FoundRecord.ToList();
 
-                    if (foundDb == null || !foundDb.Any())
-                        throw new InvalidOperationException("No found animal records found.");
+              
 
                     return foundDb.Select(e => new FoundRecordDomain(
                         e.Id,
@@ -472,21 +460,14 @@ namespace ANIMAL.Repository
                         e.OwnerOIB,
                         e.RegisterId
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving found records: " + ex.Message, ex);
-                }
+             
             }
 
             IEnumerable<FundsDomain> IRepository.GetAllFundsDomain()
             {
-                try
-                {
+                
                     var fundDb = _appDbContext.Funds.ToList();
 
-                    if (fundDb == null || !fundDb.Any())
-                        throw new InvalidOperationException("No funds records found.");
 
                     return fundDb.Select(e => new FundsDomain(
                         e.Id,
@@ -496,42 +477,29 @@ namespace ANIMAL.Repository
                         e.DateTimed,
                         e.Iban
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving funds records: " + ex.Message, ex);
-                }
+            
             }
 
             IEnumerable<LabsDomain> IRepository.GetAllLabsDomain()
             {
-                try
-                {
+                
                     var labDb = _appDbContext.Labs.ToList();
 
-                    if (labDb == null || !labDb.Any())
-                        throw new InvalidOperationException("No lab records found.");
+            
 
                     return labDb.Select(e => new LabsDomain(
                         e.Id,
                         e.AnimalId,
                         e.DateTime
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving lab records: " + ex.Message, ex);
-                }
+                
             }
 
             IEnumerable<MedicinesDomain> IRepository.GetAllMedicinesDomain()
             {
-                try
-                {
+               
                     var medicinesDb = _appDbContext.Medicines.ToList();
 
-                    if (medicinesDb == null || !medicinesDb.Any())
-                        throw new InvalidOperationException("No medicines records found.");
 
                     return medicinesDb.Select(e => new MedicinesDomain(
                         e.Id,
@@ -545,21 +513,15 @@ namespace ANIMAL.Repository
                         e.FrequencyOfMedicationUse,
                         e.Usage
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving medicines records: " + ex.Message, ex);
-                }
+              
             }
 
             IEnumerable<NewsDomain> IRepository.GetAllNewsDomain()
             {
-                try
-                {
+                
                     var newsDb = _appDbContext.News.ToList();
 
-                    if (newsDb == null || !newsDb.Any())
-                        throw new InvalidOperationException("No news records found.");
+           
 
                     return newsDb.Select(e => new NewsDomain(
                         e.Id,
@@ -567,21 +529,14 @@ namespace ANIMAL.Repository
                         e.Description,
                         e.DateTime
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving news records: " + ex.Message, ex);
-                }
+               
             }
 
             IEnumerable<ParameterDomain> IRepository.GetAllParameterDomain(int id)
             {
-                try
-                {
+                
                     var parameterDb = _appDbContext.Parameter.Where(a => a.LabId == id).ToList();
 
-                    if (parameterDb == null || !parameterDb.Any())
-                        throw new InvalidOperationException($"No parameters found for LabId = {id}.");
 
                     return parameterDb.Select(e => new ParameterDomain(
                         e.Id,
@@ -591,42 +546,30 @@ namespace ANIMAL.Repository
                         e.Remarks,
                         e.MeasurementUnits
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Error retrieving parameters for LabId {id}: " + ex.Message, ex);
-                }
+              
             }
 
             IEnumerable<SystemRecordDomain> IRepository.GetAllSystemRecordDomain()
             {
-                try
-                {
+              
                     var systemDb = _appDbContext.SystemRecord.ToList();
 
-                    if (systemDb == null || !systemDb.Any())
-                        throw new InvalidOperationException("No system records found.");
+              
 
                     return systemDb.Select(e => new SystemRecordDomain(
                         e.Id,
                         e.RecordName,
                         e.RecordDescription
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving system records: " + ex.Message, ex);
-                }
+            
             }
 
             IEnumerable<ToysDomain> IRepository.GetAllToysDomain()
             {
-                try
-                {
+                
                     var toysDb = _appDbContext.Toys.ToList();
 
-                    if (toysDb == null || !toysDb.Any())
-                        throw new InvalidOperationException("No toys records found.");
+               
 
                     return toysDb.Select(e => new ToysDomain(
                         e.Id,
@@ -641,21 +584,14 @@ namespace ANIMAL.Repository
                         e.Notes,
                         e.Price
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving toys records: " + ex.Message, ex);
-                }
+            
             }
 
             IEnumerable<VetVisitsDomain> IRepository.GetAllVetVisitsDomain()
             {
-                try
-                {
+             
                     var vetVisitDb = _appDbContext.VetVisits.ToList();
 
-                    if (vetVisitDb == null || !vetVisitDb.Any())
-                        throw new InvalidOperationException("No vet visit records found.");
 
                     return vetVisitDb.Select(e => new VetVisitsDomain(
                         e.Id,
@@ -665,21 +601,16 @@ namespace ANIMAL.Repository
                         e.TypeOfVisit,
                         e.Notes
                     ));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error retrieving vet visit records: " + ex.Message, ex);
-                }
+                
+             
             }
 
             IEnumerable<TransactionsDomain> IRepository.GetAllTransactionsDomain()
         {
-            try
-            {
+            
                 var transactionsDb = _appDbContext.Transactions.ToList();
 
-                if (transactionsDb == null || !transactionsDb.Any())
-                    throw new InvalidOperationException("No transaction records found.");
+             
 
                 var transactionsDomain = transactionsDb.Select(e => new TransactionsDomain(
                     e.Id,
@@ -692,11 +623,7 @@ namespace ANIMAL.Repository
                 ));
 
                 return transactionsDomain;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error retrieving transaction records: " + ex.Message, ex);
-            }
+      
         }
 
 
@@ -710,8 +637,7 @@ namespace ANIMAL.Repository
         //--------------------------------------------------------------------------------------------------------------------------------------------
             public BirdDomain GetAllBirdDomain(int id)
             {
-                try
-                {
+               
                     var bird = _appDbContext.Birds
                         .Join(_appDbContext.Animals, b => b.AnimalId, a => a.IdAnimal,
                             (b, a) => new { Bird = b, Animal = a })
@@ -723,21 +649,14 @@ namespace ANIMAL.Repository
                             x.Bird.Sociability))
                         .FirstOrDefault();
 
-                    if (bird == null)
-                        throw new KeyNotFoundException($"Bird with AnimalId {id} not found.");
-
+                  
                     return bird;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Error retrieving BirdDomain for AnimalId {id}: {ex.Message}", ex);
-                }
+               
             }
 
             public FishDomain GetAllFishDomain(int id)
             {
-                try
-                {
+                
                     var fish = _appDbContext.Fish
                         .Join(_appDbContext.Animals, f => f.AnimalId, a => a.IdAnimal,
                             (f, a) => new { Fish = f, Animal = a })
@@ -749,21 +668,14 @@ namespace ANIMAL.Repository
                             x.Fish.RecommendedItems))
                         .FirstOrDefault();
 
-                    if (fish == null)
-                        throw new KeyNotFoundException($"Fish with AnimalId {id} not found.");
-
+                  
                     return fish;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Error retrieving FishDomain for AnimalId {id}: {ex.Message}", ex);
-                }
+              
             }
 
             public MammalDomain GetAllMammalDomain(int id)
             {
-                try
-                {
+              
                     var mammal = _appDbContext.Mammals
                         .Join(_appDbContext.Animals, m => m.AnimalId, a => a.IdAnimal,
                             (m, a) => new { Mammal = m, Animal = a })
@@ -774,21 +686,14 @@ namespace ANIMAL.Repository
                             x.Mammal.GroomingProducts))
                         .FirstOrDefault();
 
-                    if (mammal == null)
-                        throw new KeyNotFoundException($"Mammal with AnimalId {id} not found.");
-
+                  
                     return mammal;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Error retrieving MammalDomain for AnimalId {id}: {ex.Message}", ex);
-                }
+               
             }
 
             public ReptileDomain GetAllReptileDomain(int id)
             {
-                try
-                {
+             
                     var reptile = _appDbContext.Reptiles
                         .Join(_appDbContext.Animals, r => r.AnimalId, a => a.IdAnimal,
                             (r, a) => new { Reptile = r, Animal = a })
@@ -801,21 +706,14 @@ namespace ANIMAL.Repository
                             x.Reptile.RecommendedItems))
                         .FirstOrDefault();
 
-                    if (reptile == null)
-                        throw new KeyNotFoundException($"Reptile with AnimalId {id} not found.");
-
+                  
                     return reptile;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Error retrieving ReptileDomain for AnimalId {id}: {ex.Message}", ex);
-                }
+               
             }
 
             public AnimalDomain GetAnimalById(int animalId)
             {
-                try
-                {
+               
                     var animalData = _appDbContext.Animals
                         .Where(a => a.IdAnimal == animalId
                                     && _appDbContext.AnimalRecord.Any(an => an.AnimalId == animalId && an.RecordId != 7))
@@ -841,15 +739,9 @@ namespace ANIMAL.Repository
                             e.Adopted))
                         .FirstOrDefault();
 
-                    if (animalData == null)
-                        throw new KeyNotFoundException($"Animal with ID {animalId} not found or has RecordId 7 (excluded).");
-
+                   
                     return animalData;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Error retrieving AnimalDomain for ID {animalId}: {ex.Message}", ex);
-                }
+               
             }
 
             public AnimalDomain GetAllAnimalById(int animalId)
@@ -914,61 +806,60 @@ namespace ANIMAL.Repository
             {
             //uključi i record da bi vidjela dali je životinja na stanju 7
             //ovo stavi u listu samo životinje koje su posvojene i nisu vraćene
-            var animalDb = _appDbContext.Adopted.Where(a => _appDbContext.ReturnedAnimal
-                                                .Any(ar => ar.AdoptionCode != a.Code))
-                                                .Include(a => a.Animal)
-                                                .Include(a => a.Adopter)
-                                                .ToList();
+            var adoptedAnimals = _appDbContext.Adopted
+       .Include(a => a.Animal)
+       .Include(a => a.Adopter)
+       .Where(a => a.AdopterId == adopterId
+                   && !_appDbContext.ReturnedAnimal.Any(r => r.AdoptionCode == a.Code))
+       .ToList();
 
-            //provjerava dali je žvotinja po rekordu i Adopted parametru posvojena
-                var adoptedEntities =  animalDb
-                                       .Where(a => _appDbContext.AnimalRecord
-                                       .Any(an=>an.RecordId==7 && a.AdopterId == adopterId ))      
-                                       .ToList();
+            var filteredAdopted = adoptedAnimals
+                .Where(a => _appDbContext.AnimalRecord
+                    .Any(ar => ar.AnimalId == a.Animal.IdAnimal && ar.RecordId == 7))
+                .ToList();
 
-             var adoptedDomains = adoptedEntities 
-            .Select(e => new AdoptedDomain
-                {
-                    Code = e.Code,
-                    Animal = new AnimalDomain(
-                        e.Animal.IdAnimal,
-                        e.Animal.Name,
-                        e.Animal.Species,
-                        e.Animal.Family,
-                        e.Animal.Subspecies,
-                        e.Animal.Age,
-                        e.Animal.Gender,
-                        e.Animal.Weight,
-                        e.Animal.Height,
-                        e.Animal.Length,
-                        e.Animal.Neutered,
-                        e.Animal.Vaccinated,
-                        e.Animal.Microchipped,
-                        e.Animal.Trained,
-                        e.Animal.Socialized,
-                        e.Animal.HealthIssues,
-                        e.Animal.Picture,
-                        e.Animal.PersonalityDescription,
-                        e.Animal.Adopted
-                    ),
-                    AdoptionDate = e.AdoptionDate,
-                    Adopter = new AdopterDomain(
-                        e.Adopter.Id,
-                        e.Adopter.FirstName,
-                        e.Adopter.LastName,
-                        e.Adopter.Residence,
-                        e.Adopter.DateOfBirth,
-                        e.Adopter.NumAdoptedAnimals,
-                        e.Adopter.NumReturnedAnimals
-            
-            
-            ),
-
-                }).ToList();
-
+            var adoptedDomains = filteredAdopted.Select(e => new AdoptedDomain
+            {
+                Code = e.Code,
+                Animal = new AnimalDomain(
+                    e.Animal.IdAnimal,
+                    e.Animal.Name,
+                    e.Animal.Species,
+                    e.Animal.Family,
+                    e.Animal.Subspecies,
+                    e.Animal.Age,
+                    e.Animal.Gender,
+                    e.Animal.Weight,
+                    e.Animal.Height,
+                    e.Animal.Length,
+                    e.Animal.Neutered,
+                    e.Animal.Vaccinated,
+                    e.Animal.Microchipped,
+                    e.Animal.Trained,
+                    e.Animal.Socialized,
+                    e.Animal.HealthIssues,
+                    e.Animal.Picture,
+                    e.Animal.PersonalityDescription,
+                    e.Animal.Adopted
+                ),
+                AdoptionDate = e.AdoptionDate,
+                Adopter = new AdopterDomain(
+                    e.Adopter.Id,
+                    e.Adopter.FirstName,
+                    e.Adopter.LastName,
+                    e.Adopter.Residence,
+                    e.Adopter.DateOfBirth,
+                    e.Adopter.NumAdoptedAnimals,
+                    e.Adopter.NumReturnedAnimals
+                ),
+            }).ToList();
+            Console.WriteLine("Id:" + adopterId);
+            Console.WriteLine("Adopted:" + adoptedDomains.Count);
                 return adoptedDomains;
-            } 
-          public async Task<Animals> GetByIdAsync(int id)
+            }
+       
+
+        public async Task<Animals> GetByIdAsync(int id)
             {
                 if (id <= 0)
                     return null;
@@ -1253,7 +1144,8 @@ namespace ANIMAL.Repository
                         e.Id,
                         e.AnimalId,
                         e.Date,
-                        e.NameOfDesissse))
+                        e.NameOfDesissse,
+                        e.Complited))
                     .FirstOrDefault();
 
                 return euthanasia;
@@ -1299,7 +1191,71 @@ namespace ANIMAL.Repository
 
         //-----------------------------------------------------------------------------------------------------------------------
         //Get one by id animal
-            public MedicinesDomain GetOneMedicinesAnimal(int animalId)
+        public AdoptedDomain GetOneAdoptedAnimal(int adoptionCode)
+        {
+            var adoption = _appDbContext.Adopted
+        .Include(a => a.Animal)
+        .Include(a => a.Adopter)
+        .FirstOrDefault(a => a.Code == adoptionCode &&
+                             !_appDbContext.ReturnedAnimal.Any(r => r.AdoptionCode == a.Code));
+
+            if (adoption == null)
+                return null; // vraća praznu kolekciju
+
+            // Provjeri da li životinja ima zapis sa RecordId == 7
+            var hasRecord = _appDbContext.AnimalRecord
+                .Any(ar => ar.AnimalId == adoption.Animal.IdAnimal && ar.RecordId == 7);
+
+            if (!hasRecord)
+                return null; // vraća praznu kolekciju
+
+            // Vrati jedan element unutar IEnumerable
+            var adopted = _appDbContext.Adopted
+                     .Include(a => a.Animal)
+                     .Include(a => a.Adopter)
+                     .Where(a => a.Code == adoptionCode &&
+                                 !_appDbContext.ReturnedAnimal.Any(r => r.AdoptionCode == a.Code))
+                     .Select(adoption => new AdoptedDomain
+                     {
+                         Code = adoption.Code,
+                         Animal = new AnimalDomain(
+                             adoption.Animal.IdAnimal,
+                             adoption.Animal.Name,
+                             adoption.Animal.Species,
+                             adoption.Animal.Family,
+                             adoption.Animal.Subspecies,
+                             adoption.Animal.Age,
+                             adoption.Animal.Gender,
+                             adoption.Animal.Weight,
+                             adoption.Animal.Height,
+                             adoption.Animal.Length,
+                             adoption.Animal.Neutered,
+                             adoption.Animal.Vaccinated,
+                             adoption.Animal.Microchipped,
+                             adoption.Animal.Trained,
+                             adoption.Animal.Socialized,
+                             adoption.Animal.HealthIssues,
+                             adoption.Animal.Picture,
+                             adoption.Animal.PersonalityDescription,
+                             adoption.Animal.Adopted
+                         ),
+                         AdoptionDate = adoption.AdoptionDate,
+                         Adopter = new AdopterDomain(
+                             adoption.Adopter.Id,
+                             adoption.Adopter.FirstName,
+                             adoption.Adopter.LastName,
+                             adoption.Adopter.Residence,
+                             adoption.Adopter.DateOfBirth,
+                             adoption.Adopter.NumAdoptedAnimals,
+                             adoption.Adopter.NumReturnedAnimals
+                         )
+                     })
+                     .FirstOrDefault();
+            Console.WriteLine("animal" + adopted.Animal);
+                            return adopted;
+
+        }
+        public MedicinesDomain GetOneMedicinesAnimal(int animalId)
             {
                 if (animalId <= 0)
                     return null;
@@ -1562,79 +1518,87 @@ namespace ANIMAL.Repository
                 return true;
             }
 
-            public async Task UpdateAnimalRecordDomain(int animalId, int newRecordId)
+        public async Task<int> UpdateAnimalRecordDomain(int animalId, int newRecordId)
+        {try
             {
-                // Fetch required data
-                var animalRecord = await _appDbContext.AnimalRecord.FirstOrDefaultAsync(a => a.AnimalId == animalId);
-                var euthanasia = await _appDbContext.Euthanasia.FirstOrDefaultAsync(e => e.AnimalId == animalId);
+                var animalRecord = await _appDbContext.AnimalRecord.FirstOrDefaultAsync(a => a.AnimalId == animalId);  
                 var hasVetVisit = await _appDbContext.VetVisits.AnyAsync(v => v.AnimalId == animalId);
 
                 if (animalRecord == null)
                     throw new Exception("Animal record not found.");
 
-                if (euthanasia != null)
-                    throw new Exception("Animal has been euthanized. Status cannot be changed.");
-
                 var currentStatus = animalRecord.RecordId;
+
+               
+                Console.WriteLine($"AnimalId: {animalId}, CurrentStatus: {currentStatus}, NewRecordId: {newRecordId}, HasVetVisit: {hasVetVisit}");
+
+                bool canUpdate = false;
 
                 switch (newRecordId)
                 {
-                    case 1: // Arrival
-                        if (currentStatus == 1)
-                            break;
-                        throw new Exception("Arrival status can only be set during initial registration.");
+                    case 1:
+                        canUpdate = currentStatus == 1;
+                        break;
 
-                    case 2: // First Vet Visit
-                        if (currentStatus == 1 && hasVetVisit)
-                            break;
-                        throw new Exception("First Vet Visit requires animal to be in Arrival state and have at least one vet visit recorded.");
+                    case 2:
+                        canUpdate = currentStatus == 1 && !hasVetVisit; // ISPRAVLJENO
+                        break;
 
-                    case 3: // Quarantine
-                        if (currentStatus >= 2 && currentStatus != 7 && currentStatus != 8)
-                            break;
-                        throw new Exception("Quarantine can only follow First Vet Visit and not after Adoption or Euthanasia.");
+                    case 3:
+                        canUpdate = currentStatus == 2 || currentStatus == 9;
+                        break;
 
-                    case 4: // Shelter
-                        if (currentStatus == 3)
-                            break;
-                        throw new Exception("Shelter status can only follow Quarantine.");
+                    case 4:
+                        canUpdate = currentStatus == 3 || currentStatus == 9;
+                        break;
 
-                    case 5: // Socialized
-                        if (currentStatus == 4)
-                            break;
-                        throw new Exception("Socialized status can only follow Shelter.");
+                    case 5:
+                        canUpdate = currentStatus == 4;
+                        break;
 
-                    case 6: // Approved for Adoption
-                        if (currentStatus == 5)
-                            break;
-                        throw new Exception("Approval for adoption requires the animal to be Socialized.");
+                    case 6:
+                        canUpdate = currentStatus == 5;
+                        break;
 
-                    case 7: // Adopted
-                        if (currentStatus == 6)
-                            break;
-                        throw new Exception("Animal must be approved for adoption before it can be adopted.");
+                    case 7:
+                        canUpdate = currentStatus == 6;
+                        break;
 
-                    case 8: // Euthanasia
-                        if (currentStatus != 7)
-                            break;
-                        throw new Exception("Euthanasia can only be performed if the animal has not been adopted.");
+                    case 8:
+                        canUpdate = currentStatus < 7 || currentStatus >7;
+                        break;
 
-                    case 9: // Returned
-                        if (currentStatus != 8)
-                            break;
-                        throw new Exception("Returned status is only valid after euthanasia. Restart process from Quarantine.");
+                    case 9:
+                        canUpdate = currentStatus == 7;
+                        break;
 
                     default:
-                        throw new Exception("Invalid status ID.");
+                        canUpdate = false;
+                        break;
                 }
 
-                // Update status
+                // Logging
+                Console.WriteLine($"AnimalId: {animalId}, CurrentStatus: {currentStatus}, NewRecordId: {newRecordId}, HasVetVisit: {hasVetVisit}");
+                Console.WriteLine($"CanUpdate: {canUpdate}");
+
+                if (!canUpdate)
+                    throw new InvalidOperationException($"Invalid status transition: cannot move from {currentStatus} to {newRecordId} for AnimalId={animalId}.");
+
+                // Update
                 animalRecord.RecordId = newRecordId;
                 _appDbContext.AnimalRecord.Update(animalRecord);
                 await _appDbContext.SaveChangesAsync();
-            }
 
-            public async Task<bool> UpdateAnimalBalansDomain(int id, decimal balance)
+                return newRecordId;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"Greška: {e.Message}");
+                return 0;
+            }
+        }
+
+        public async Task<bool> UpdateAnimalBalansDomain(int id, decimal balance)
             {
                 var balans = await _appDbContext.Balans.FirstOrDefaultAsync(a => a.Id == id);
                 if (balans == null)
@@ -1655,13 +1619,13 @@ namespace ANIMAL.Repository
                 return true;
             }
 
-            public async Task<bool> UpdateContageusAnimalsDomain(int id, bool contageus)
+            public async Task<bool> UpdateContageusAnimalsDomain(int id )
             {
                 var animal = await _appDbContext.ContageusAnimals.FirstOrDefaultAsync(a => a.Id == id);
                 if (animal == null)
                     throw new Exception("Contagious animal record not found.");
 
-                animal.Contageus = contageus;
+                animal.Contageus = false;
 
                 _appDbContext.ContageusAnimals.Update(animal);
                 await _appDbContext.SaveChangesAsync();
@@ -1669,22 +1633,35 @@ namespace ANIMAL.Repository
                 return true;
             }
 
-            public async Task<bool> UpdateEuthanasiaDomain(int id, DateTime date, bool complited)
+            public async Task<bool> UpdateEuthanasiaDomain(int id, DateTime date)
             {
                 var animal = await _appDbContext.Euthanasia.FirstOrDefaultAsync(a => a.Id == id);
                 if (animal == null)
                     throw new Exception("Euthanasia record not found.");
 
                 animal.Date = date;
-                animal.Complited = complited;
+           
 
                 _appDbContext.Euthanasia.Update(animal);
                 await _appDbContext.SaveChangesAsync();
 
                 return true;
             }
+        public async Task<bool> UpdateEuthanasiaDomainDone(int id, bool complited)
+        {
+            var animal = await _appDbContext.Euthanasia.FirstOrDefaultAsync(a => a.Id == id);
+            if (animal == null)
+                throw new Exception("Euthanasia record not found.");
 
-            public async Task<bool> UpdateFoodDomainIncrement(int id)
+         
+            animal.Complited = complited;
+
+            _appDbContext.Euthanasia.Update(animal);
+            await _appDbContext.SaveChangesAsync();
+
+            return true;
+        }
+        public async Task<bool> UpdateFoodDomainIncrement(int id)
             {
                 var food = await _appDbContext.Food.FirstOrDefaultAsync(a => a.Id == id);
                 if (food == null)
@@ -1844,6 +1821,8 @@ namespace ANIMAL.Repository
 
             public async Task<bool> UpdateNewsDomain(int id, string name, string description, DateTime dateTime)  // Updates news if there's an error
             {
+            try
+            {
                 var news = await _appDbContext.News.FirstOrDefaultAsync(a => a.Id == id);
                 if (news == null)
                     throw new Exception($"News with ID {id} not found.");
@@ -1855,6 +1834,12 @@ namespace ANIMAL.Repository
                 _appDbContext.News.Update(news);
                 await _appDbContext.SaveChangesAsync();
                 return true;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Message news:" + e.Message);
+                return false;
+            }
             }
 
             public async Task<bool> UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes)  // Updates vet visit if needed
@@ -1898,6 +1883,7 @@ namespace ANIMAL.Repository
         //----------------------------------------------------------------------------------
         //ADD
                 public async Task<AnimalDomain> AddAnimalAsync(
+            int idAnimal,
              string name,
              string family,
              string species,
@@ -1928,6 +1914,7 @@ namespace ANIMAL.Repository
 
                         var newAnimal = new Animals
                         {
+                            IdAnimal=idAnimal,
                             Name = name,
                             Family = family,
                             Species = species,
@@ -1971,8 +1958,7 @@ namespace ANIMAL.Repository
 
                 public async Task<AdopterDomain> CreateAdopterAsync(string firstName, string lastName, DateTime dateOfBirth, string residence, string username, string password, string registerId)
                 {
-                    try
-                    {
+                    
                         if (string.IsNullOrWhiteSpace(firstName))
                             throw new ArgumentException("First name is required.");
                         if (string.IsNullOrWhiteSpace(lastName))
@@ -2007,35 +1993,38 @@ namespace ANIMAL.Repository
 
             return _mappingService.Map<AdopterDomain>(adopter);
         }
-        public async Task<bool> CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, DateTime returnDate, string returnReason)
+        public async Task<bool> CreateReturnedAnimalAsync(int adoptionCode, int animalId, int adopterId, string returnReason)
         {
-         
-            var returnedAnimalDomain = new ReturnedAnimal
+            try
             {
-              
-                AdoptionCode = adoptionCode,
-                AnimalId = animalId,
-                AdopterId = adopterId,
-                ReturnDate = returnDate,
-                ReturnReason = returnReason
-            };
+                var returnedAnimalDomain = new ReturnedAnimal
+                {
+                    AdoptionCode = adoptionCode,
+                    AnimalId = animalId,
+                    AdopterId = adopterId,
+                    ReturnReason = returnReason
+                };
 
-                        var returnedAnimal = _mappingService.Map<ReturnedAnimal>(returnedAnimalDomain);
-                        if (returnedAnimal == null)
-                            throw new Exception("Mapping failed for returned animal.");
+                var returnedAnimal = _mappingService.Map<ReturnedAnimal>(returnedAnimalDomain);
 
-                        _appDbContext.ReturnedAnimal.Add(returnedAnimal);
-                        await _appDbContext.SaveChangesAsync();
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception($"Failed to create returned animal record: {ex.Message}", ex);
-                    }
+                if (returnedAnimal == null)
+                {
+                    throw new Exception("Mapping failed for returned animal.");
                 }
 
-                public async Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate)
+                _appDbContext.ReturnedAnimal.Add(returnedAnimal);
+                await _appDbContext.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to create returned animal record: {ex.Message}", ex);
+            }
+        }
+
+
+        public async Task<bool> CreateAdoptedAsync(int animalId, int adopterId, DateTime adoptionDate)
                 {
                     try
                     {
@@ -2126,7 +2115,7 @@ namespace ANIMAL.Repository
             public async Task AddFood(string brandName, string name, string foodType, string animalType, string ageGroup,
            decimal weight, decimal caloriesPerServing,
            decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent,
-           DateTime expirationDate, int quantity, string notes, string measurementWeight)
+           DateTime expirationDate, int quantity, string notes, string measurementWeight, decimal price)
             {
                 try
                 {
@@ -2146,7 +2135,8 @@ namespace ANIMAL.Repository
                         ExporationDate = expirationDate,
                         Quantity = quantity,
                         Notes = notes,
-                        MeasurementWeight = measurementWeight
+                        MeasurementWeight = measurementWeight,
+                        Price=price
                     };
 
                     var foodResponse = _mappingService.Map<Food>(food);
@@ -2159,7 +2149,7 @@ namespace ANIMAL.Repository
                 }
             }
 
-            public async Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal height, decimal width, int quantity, string notes)
+            public async Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal height, decimal width, int quantity, string notes, decimal price)
             {
                 try
                 {
@@ -2173,7 +2163,8 @@ namespace ANIMAL.Repository
                         Hight = height,
                         Width = width,
                         Quantity = quantity,
-                        Notes = notes
+                        Notes = notes,
+                        Price=price
                     };
 
                     var toyResponse = _mappingService.Map<Toys>(toy);
@@ -2260,6 +2251,7 @@ namespace ANIMAL.Repository
                         AmountOfMedicine = amountOfMedicine,
                         MesurmentUnit = mesurmentUnit,
                         FrequencyOfMedicationUse = frequencyOfMedicationUse,
+                        MedicationIntake=medicationIntake,
                         Usage = usage
                     };
 
@@ -2296,6 +2288,8 @@ namespace ANIMAL.Repository
             }
 
             public async Task AddEuthanasia(int animalId, DateTime date, string nameOfDesissse, bool complited)
+        {
+            try
             {
                 var animalExists = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
                 if (animalExists != null)
@@ -2316,6 +2310,11 @@ namespace ANIMAL.Repository
                 {
                     throw new Exception($"Animal with ID {animalId} does not exist!");
                 }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Message:"+ex.Message);
+            }
             }
 
             public async Task AddContageus(int animalId, string desisseName, DateTime startTime, string description, bool contageus)
@@ -2777,6 +2776,29 @@ namespace ANIMAL.Repository
             return true;
         }
 
-       
+        AdopterDomain IRepository.GetAdopterByIdNumber(int id)
+        {
+          
+
+            var adopterDb = _appDbContext.Adopter.FirstOrDefault(a => a.Id == id);
+
+            if (adopterDb == null)
+                return null;
+
+            var adopterDomain = new AdopterDomain(
+                adopterDb.Id,
+                adopterDb.FirstName,
+                adopterDb.LastName,
+                adopterDb.DateOfBirth,
+                adopterDb.Residence,
+                adopterDb.Username,
+                adopterDb.Password,
+                adopterDb.NumAdoptedAnimals,
+                adopterDb.NumReturnedAnimals,
+                adopterDb.Flag,
+                adopterDb.RegisterId);
+
+            return adopterDomain;
+        }
     }
 }

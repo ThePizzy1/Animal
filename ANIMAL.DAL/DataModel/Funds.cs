@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ANIMAL.DAL.DataModel
-{
+{//Ovo je za donacije da se vidi ko šalje točno sa kojeg računa i vidi se ko je logiran itd
     public partial class Funds
     {
         public int Id { get; set; }

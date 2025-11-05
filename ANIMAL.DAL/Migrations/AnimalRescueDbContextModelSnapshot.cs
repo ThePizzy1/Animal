@@ -141,10 +141,10 @@ namespace ANIMAL.DAL.Migrations
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.Animals", b =>
                 {
-                    b.Property<int>("IdAnimal")
+                    b.Property<Guid>("AnimalCode")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<bool>("Adopted")
                         .HasColumnType("bit");
@@ -171,6 +171,9 @@ namespace ANIMAL.DAL.Migrations
 
                     b.Property<decimal>("Height")
                         .HasColumnType("decimal(10, 2)");
+
+                    b.Property<int>("IdAnimal")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Length")
                         .HasColumnType("decimal(10, 2)");
@@ -220,8 +223,11 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<decimal>("Weight")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.HasKey("IdAnimal")
-                        .HasName("PK__Animals__951092F0A1868E05");
+                    b.HasKey("AnimalCode");
+
+                    b.HasIndex("IdAnimal")
+                        .IsUnique()
+                        .HasName("UQ_Animals_IdAnimal");
 
                     b.ToTable("Animals");
                 });
@@ -1244,6 +1250,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithMany("AdoptedNavigation")
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__Adopted__AnimalI__4D94879B")
+                        .HasPrincipalKey("IdAnimal")
                         .IsRequired();
                 });
 
@@ -1253,6 +1260,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithOne("Amphibians")
                         .HasForeignKey("ANIMAL.DAL.DataModel.Amphibians", "AnimalId")
                         .HasConstraintName("FK__Amphibian__Anima__5CD6CB2B")
+                        .HasPrincipalKey("ANIMAL.DAL.DataModel.Animals", "IdAnimal")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1263,6 +1271,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithOne("AnimalRecord")
                         .HasForeignKey("ANIMAL.DAL.DataModel.AnimalRecord", "AnimalId")
                         .HasConstraintName("FK__AnimalRecord__Animals__AnimalId")
+                        .HasPrincipalKey("ANIMAL.DAL.DataModel.Animals", "IdAnimal")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1279,6 +1288,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithOne("Birds")
                         .HasForeignKey("ANIMAL.DAL.DataModel.Birds", "AnimalId")
                         .HasConstraintName("FK__Birds__AnimalId__5812160E")
+                        .HasPrincipalKey("ANIMAL.DAL.DataModel.Animals", "IdAnimal")
                         .IsRequired();
                 });
 
@@ -1297,6 +1307,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__ContageusAnimals__Animal")
+                        .HasPrincipalKey("IdAnimal")
                         .IsRequired();
                 });
 
@@ -1306,6 +1317,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__Euthanasia__Animal")
+                        .HasPrincipalKey("IdAnimal")
                         .IsRequired();
                 });
 
@@ -1315,6 +1327,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithOne("Fish")
                         .HasForeignKey("ANIMAL.DAL.DataModel.Fish", "AnimalId")
                         .HasConstraintName("FK__Fish__AnimalId__5EBF139D")
+                        .HasPrincipalKey("ANIMAL.DAL.DataModel.Animals", "IdAnimal")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1325,6 +1338,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithMany("FoundRecord")
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__FoundRecord__Animal")
+                        .HasPrincipalKey("IdAnimal")
                         .IsRequired();
 
                     b.HasOne("ANIMAL.DAL.DataModel.ApplicationUser", "User")
@@ -1348,6 +1362,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__Labs__Animals")
+                        .HasPrincipalKey("IdAnimal")
                         .IsRequired();
                 });
 
@@ -1357,6 +1372,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithOne("Mammals")
                         .HasForeignKey("ANIMAL.DAL.DataModel.Mammals", "AnimalId")
                         .HasConstraintName("FK__Mammals__AnimalId__5EBF139D")
+                        .HasPrincipalKey("ANIMAL.DAL.DataModel.Animals", "IdAnimal")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1367,6 +1383,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__Medicines__Animal")
+                        .HasPrincipalKey("IdAnimal")
                         .IsRequired();
                 });
 
@@ -1385,6 +1402,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithOne("Reptiles")
                         .HasForeignKey("ANIMAL.DAL.DataModel.Reptiles", "AnimalId")
                         .HasConstraintName("FK__Reptiles__AnimalId__5EBF139D")
+                        .HasPrincipalKey("ANIMAL.DAL.DataModel.Animals", "IdAnimal")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1407,6 +1425,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithMany("ReturnedAnimal")
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__ReturnedA__Anima__52593CB8")
+                        .HasPrincipalKey("IdAnimal")
                         .IsRequired();
                 });
 
@@ -1429,6 +1448,7 @@ namespace ANIMAL.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("AnimalId")
                         .HasConstraintName("FK__VetVisits__Animal")
+                        .HasPrincipalKey("IdAnimal")
                         .IsRequired();
                 });
 

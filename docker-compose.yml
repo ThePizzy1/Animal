@@ -11,11 +11,8 @@ services:
       - myapp-data:/app/data
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    ports:
-      - "1433:1433"  # expose SQL Server port to host
+      - ConnectionStrings__ANIMAL_DBConnection=Server=databas.cqi6vhlpyl9j.us-east-1.rds.amazonaws.com,1433;Database=AnimalRescue;User Id=admin;Password=FHBT38Gj.;TrustServerCertificate=True;
+      - ApiSettings__BaseEndpoint=https://override-endpoint.com/api
 
 volumes:
   myapp-data:

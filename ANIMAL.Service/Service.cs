@@ -48,7 +48,18 @@ namespace ANIMAL.Service
         {
             IEnumerable<AnimalDomain> adoptedDomains = _repository.GetAllAnimalDomainAdopt();
             return adoptedDomains;
-        }  
+        }
+        IEnumerable<AnimalDomain> IService.GetAllAnimalDomainUserAdopt()
+        {
+            IEnumerable<AnimalDomain> adoptedDomains = _repository.GetAllAnimalDomainUserAdopt();
+            return adoptedDomains;
+        }
+  
+        IEnumerable<AnimalDomain> IService.GetAllAnimalDomainSocial()
+        {
+            IEnumerable<AnimalDomain> adoptedDomains = _repository.GetAllAnimalDomainSocial();
+            return adoptedDomains;
+        }
         IEnumerable<AnimalDomain> IService.GetAllAnimalDomainNoPicture()
         {
             IEnumerable<AnimalDomain> animalDomains = _repository.GetAllAnimalDomainNoPicture();
@@ -184,6 +195,11 @@ namespace ANIMAL.Service
             AdopterDomain adoptedDomains = _repository.GetAdopterById(id);
             return adoptedDomains;
         }
+        AdopterDomain IService.GetAdopterByIdNumber(int id)
+        {
+            AdopterDomain adoptedDomains = _repository.GetAdopterByIdNumber(id);
+            return adoptedDomains;
+        }
         public IEnumerable<AdoptedDomain> GetAllAdoptedDomainForAdopter(int adopterId)
         {
             IEnumerable<AdoptedDomain> adoptedDomains = _repository.GetAllAdoptedDomainForAdopter(adopterId);
@@ -253,6 +269,11 @@ namespace ANIMAL.Service
 
         //get by id novo novo
         //-----------------------------------------------------------
+        AdoptedDomain IService.GetOneAdoptedAnimal(int adoptionCode)
+        {
+            AdoptedDomain domain = _repository.GetOneAdoptedAnimal(adoptionCode);
+            return domain;
+        }
         AdopterDomain IService.GetAdopterByIdInt(int id)
         {
             AdopterDomain domain = _repository.GetAdopterByIdInt(id);
@@ -344,14 +365,19 @@ namespace ANIMAL.Service
             await _repository.UpdateAnimalBalansDomain( id,  balance);
             return true;
         }
-        async Task<bool> IService.UpdateContageusAnimalsDomain(int id, bool contageus)
+        async Task<bool> IService.UpdateContageusAnimalsDomain(int id)
         {
-            await _repository.UpdateContageusAnimalsDomain( id,  contageus);
+            await _repository.UpdateContageusAnimalsDomain( id);
             return true;
         }
-        async Task<bool> IService.UpdateEuthanasiaDomain(int id, DateTime date, bool complited)
+        async Task<bool> IService.UpdateEuthanasiaDomain(int id, DateTime date )
         {
-            await _repository.UpdateEuthanasiaDomain( id,  date,  complited);
+            await _repository.UpdateEuthanasiaDomain( id,  date  );
+            return true;
+        }
+       async Task<bool> IService.UpdateEuthanasiaDomainDone(int id, bool complited)
+        {
+            await _repository.UpdateEuthanasiaDomainDone(id, complited);
             return true;
         }
         async Task<bool> IService.UpdateFoodDomainIncrement(int id)
@@ -437,11 +463,12 @@ namespace ANIMAL.Service
             IEnumerable<ReturnedAnimalDomain> animalDomains = _repository.GetAllReturnedAnimalsForAdopter(adopterId);
             return animalDomains;
         }
-        public  Task<AnimalDomain> AddAnimalAsync(string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, byte[] picture, string personalityDescription, bool adopted)
+        public  Task<AnimalDomain> AddAnimalAsync(int idAnimal,string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, byte[] picture, string personalityDescription, bool adopted)
         {
             try
             {
                 Task<AnimalDomain> animal = _repository.AddAnimalAsync(
+                    idAnimal,
                     name,
                     family,
                     species,
@@ -498,13 +525,13 @@ namespace ANIMAL.Service
             {             throw new Exception($"Failed to add found animal service message: {ex.Message}");
           }
         }
-        async Task IService.AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight)
+        async Task IService.AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight, decimal price)
         {
-            await _repository.AddFood(brandName, name, foodType, animalType, ageGroup, weight, caloriesPerServing, weightPerServing, measurementPerServing, fatContent, fiberContent, exporationDate, quantity, notes, measurementWeight);
+            await _repository.AddFood(brandName, name, foodType, animalType, ageGroup, weight, caloriesPerServing, weightPerServing, measurementPerServing, fatContent, fiberContent, exporationDate, quantity, notes, measurementWeight, price);
         }
-        async Task IService.AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes)
+        async Task IService.AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes, decimal price)
        {
-            await _repository.AddToys(brandName, name, animalType, toyType, ageGroup, hight, width, quantity, notes);
+            await _repository.AddToys(brandName, name, animalType, toyType, ageGroup, hight, width, quantity, notes,price);
        }
         async Task IService.AddNews(string name, string description, DateTime dateTime)
         {
@@ -620,13 +647,8 @@ namespace ANIMAL.Service
             { await _repository.UpdateAmphibian(animal);  return true;
             }
             catch { return false; }
-        }     
+        }
 
-
-
-  
-    
-
-        
+      
     }
 }

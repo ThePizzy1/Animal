@@ -426,9 +426,9 @@ namespace ANIMAL.Service
             await _repository.UpdateMedicinesDomain( id,  amountOfMedicine,  mesurmentUnit,  medicationIntake,  frequencyOfMedicationUse);
             return true;
         }
-        async Task<bool> IService.UpdateNewsDomain(int id, string name, string description, DateTime dateTime)
+        async Task<bool> IService.UpdateNewsDomain(int id, string name, string description, DateTime dateTime, byte[] picture)
         {
-            await _repository.UpdateNewsDomain( id,  name,  description,  dateTime);
+            await _repository.UpdateNewsDomain( id,  name,  description,  dateTime, picture);
             return true;
         }
         async Task<bool> IService.UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes)
@@ -533,9 +533,9 @@ namespace ANIMAL.Service
        {
             await _repository.AddToys(brandName, name, animalType, toyType, ageGroup, hight, width, quantity, notes,price);
        }
-        async Task IService.AddNews(string name, string description, DateTime dateTime)
+        async Task IService.AddNews(string name, string description, DateTime dateTime, byte[] picture)
         {
-            await _repository.AddNews( name,  description,  dateTime);
+            await _repository.AddNews( name,  description,  dateTime, picture);
         }
         async   Task IService.AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes)
         {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ANIMAL.DAL.Migrations
 {
-    public partial class Migration_5_11_2025_03 : Migration
+    public partial class Migration_6_11_2025_01 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,22 +11,21 @@ namespace ANIMAL.DAL.Migrations
                 name: "Adopter",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false, defaultValueSql: "((ABS(CHECKSUM(NEWID())) % 900000) + 100000)"),
                     FirstName = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
                     LastName = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "date", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(nullable: false),
                     Residence = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
                     Username = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
                     Password = table.Column<string>(unicode: false, maxLength: 255, nullable: false),
-                    NumAdoptedAnimals = table.Column<int>(unicode: false, maxLength: 255, nullable: false),
-                    NumReturnedAnimals = table.Column<int>(unicode: false, maxLength: 255, nullable: false),
+                    NumAdoptedAnimals = table.Column<int>(nullable: false),
+                    NumReturnedAnimals = table.Column<int>(nullable: false),
                     Flag = table.Column<bool>(nullable: false),
                     RegisterId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Adopter", x => x.Id);
+                    table.PrimaryKey("PK__Adopter", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -381,14 +380,13 @@ namespace ANIMAL.DAL.Migrations
                 name: "Labs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false, defaultValueSql: "((ABS(CHECKSUM(NEWID())) % 900000) + 100000)"),
                     AnimalId = table.Column<int>(nullable: false),
                     DateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Labs_1235468", x => x.Id);
+                    table.PrimaryKey("PK__Labs", x => x.Id);
                     table.ForeignKey(
                         name: "FK__Labs__Animals",
                         column: x => x.AnimalId,

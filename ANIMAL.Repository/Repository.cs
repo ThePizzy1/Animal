@@ -516,23 +516,21 @@ namespace ANIMAL.Repository
               
             }
 
-            IEnumerable<NewsDomain> IRepository.GetAllNewsDomain()
-            {
-                
-                    var newsDb = _appDbContext.News.ToList();
+        IEnumerable<NewsDomain> IRepository.GetAllNewsDomain()
+        {
+            var newsDb = _appDbContext.News.ToList();
 
-           
+            return newsDb.Select(e => new NewsDomain(
+                e.Id,
+                e.Name,
+                e.Description,
+                e.DateTime,
+                e.Picture
+            ));
+        }
 
-                    return newsDb.Select(e => new NewsDomain(
-                        e.Id,
-                        e.Name,
-                        e.Description,
-                        e.DateTime
-                    ));
-               
-            }
 
-            IEnumerable<ParameterDomain> IRepository.GetAllParameterDomain(int id)
+        IEnumerable<ParameterDomain> IRepository.GetAllParameterDomain(int id)
             {
                 
                     var parameterDb = _appDbContext.Parameter.Where(a => a.LabId == id).ToList();
@@ -990,22 +988,22 @@ namespace ANIMAL.Repository
                     toyDb.Price);
             }
 
-            NewsDomain IRepository.GetOneNewsDomain(int id)
-            {
-                if (id <= 0)
-                    return null;
+        public NewsDomain GetOneNewsDomain(int id)
+        {
+            var news = _appDbContext.News.FirstOrDefault(e => e.Id == id);
+            if (news == null) throw new Exception($"News with ID {id} not found");
 
-                var newsDb = _appDbContext.News.FirstOrDefault(n => n.Id == id);
-                if (newsDb == null) return null;
+            return new NewsDomain(
+                news.Id,
+                news.Name,
+                news.Description,
+                news.DateTime,
+                news.Picture
+            );
+        }
 
-                return new NewsDomain(
-                    newsDb.Id,
-                    newsDb.Name,
-                    newsDb.Description,
-                    newsDb.DateTime);
-            }
 
-            FoodDomain IRepository.GetOneFoodDomain(int id)
+        FoodDomain IRepository.GetOneFoodDomain(int id)
             {
                 if (id <= 0)
                     return null;
@@ -1819,8 +1817,8 @@ namespace ANIMAL.Repository
                 return true;
             }
 
-            public async Task<bool> UpdateNewsDomain(int id, string name, string description, DateTime dateTime)  // Updates news if there's an error
-            {
+        public async Task<bool> UpdateNewsDomain(int id, string name, string description, DateTime dateTime, byte[] picture)
+        {
             try
             {
                 var news = await _appDbContext.News.FirstOrDefaultAsync(a => a.Id == id);
@@ -1830,19 +1828,21 @@ namespace ANIMAL.Repository
                 news.Name = name;
                 news.Description = description;
                 news.DateTime = dateTime;
+                news.Picture = picture;
 
                 _appDbContext.News.Update(news);
                 await _appDbContext.SaveChangesAsync();
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Message news:" + e.Message);
                 return false;
             }
-            }
+        }
 
-            public async Task<bool> UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes)  // Updates vet visit if needed
+
+        public async Task<bool> UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes)  // Updates vet visit if needed
             {
                 var visit = await _appDbContext.VetVisits.FirstOrDefaultAsync(a => a.Id == id);
                 if (visit == null)
@@ -2177,28 +2177,30 @@ namespace ANIMAL.Repository
                 }
             }
 
-            public async Task AddNews(string name, string description, DateTime dateTime)
+        public async Task AddNews(string name, string description, DateTime dateTime, byte[] picture)
+        {
+            try
             {
-                try
+                var news = new NewsDomain
                 {
-                    var news = new NewsDomain
-                    {
-                        Name = name,
-                        Description = description,
-                        DateTime = dateTime
-                    };
+                    Name = name,
+                    Description = description,
+                    DateTime = dateTime,
+                    Picture = picture
+                };
 
-                    var newsResponse = _mappingService.Map<News>(news);
-                    _appDbContext.News.Add(newsResponse);
-                    await _appDbContext.SaveChangesAsync();
-                }
-                catch (Exception e)
-                {
-                    throw new Exception($"Failed to add news: {e.Message}");
-                }
+                var newsResponse = _mappingService.Map<News>(news);
+                _appDbContext.News.Add(newsResponse);
+                await _appDbContext.SaveChangesAsync();
             }
+            catch (Exception e)
+            {
+                throw new Exception($"Failed to add news: {e.Message}");
+            }
+        }
 
-            public async Task AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes)
+
+        public async Task AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes)
         {
                 var animalExists = await _appDbContext.Animals.FirstOrDefaultAsync(a => a.IdAnimal == animalId);
                 if (animalExists != null)

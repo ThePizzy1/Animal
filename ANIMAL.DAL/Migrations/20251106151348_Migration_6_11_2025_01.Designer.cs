@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    [Migration("20251105141852_Migration_5_11_2025_03")]
-    partial class Migration_5_11_2025_03
+    [Migration("20251106151348_Migration_6_11_2025_01")]
+    partial class Migration_6_11_2025_01
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,10 +52,10 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasDefaultValueSql("((ABS(CHECKSUM(NEWID())) % 900000) + 100000)");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -73,14 +73,10 @@ namespace ANIMAL.DAL.Migrations
                         .IsUnicode(false);
 
                     b.Property<int>("NumAdoptedAnimals")
-                        .HasColumnType("int")
-                        .HasMaxLength(255)
-                        .IsUnicode(false);
+                        .HasColumnType("int");
 
                     b.Property<int>("NumReturnedAnimals")
-                        .HasColumnType("int")
-                        .HasMaxLength(255)
-                        .IsUnicode(false);
+                        .HasColumnType("int");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -103,7 +99,8 @@ namespace ANIMAL.DAL.Migrations
                         .HasMaxLength(255)
                         .IsUnicode(false);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__Adopter");
 
                     b.ToTable("Adopter");
                 });
@@ -676,7 +673,7 @@ namespace ANIMAL.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasDefaultValueSql("((ABS(CHECKSUM(NEWID())) % 900000) + 100000)");
 
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
@@ -685,7 +682,7 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id")
-                        .HasName("PK__Labs_1235468");
+                        .HasName("PK__Labs");
 
                     b.HasIndex("AnimalId");
 

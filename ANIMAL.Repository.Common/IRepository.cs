@@ -121,7 +121,7 @@ namespace ANIMAL.Repository.Common
         public Task<bool> UpdateFoundRecordDomain(int id, int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);
         public  Task<bool> UpdateMedicinesDomainUsage(int id, bool usage);
         public Task<bool> UpdateMedicinesDomain(int id, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse);
-        public Task<bool> UpdateNewsDomain(int id, string name, string description, DateTime dateTime);
+        public Task<bool> UpdateNewsDomain(int id, string name, string description, DateTime dateTime, byte[] picture);
         public Task<bool> UpdateVetVisitsDomain(int id, DateTime startTime, DateTime endTime, string notes);
         public Task<bool> UpdateContactDomain(int id);
         public Task<bool> UpdateParametar(ParameterDomain p);
@@ -166,7 +166,7 @@ namespace ANIMAL.Repository.Common
         public Task AddFoundRecord( int animalId, DateTime date, string adress, string description, string ownerName, string ownerSurname, string ownerPhoneNumber, string ownerOIB, string registerId);//RADI
         public Task AddFood(string brandName, string name, string foodType, string animalType, string ageGroup, decimal weight, decimal caloriesPerServing, decimal weightPerServing, string measurementPerServing, decimal fatContent, decimal fiberContent, DateTime exporationDate, int quantity, string notes, string measurementWeight, decimal price);
         public Task AddToys(string brandName, string name, string animalType, string toyType, string ageGroup, decimal hight, decimal width, int quantity, string notes, decimal price);
-        public Task AddNews(string name, string description, DateTime dateTime);
+        public Task AddNews(string name, string description, DateTime dateTime, byte[] picture);
         public Task AddVetVsit(int animalId, DateTime startTime, DateTime endTime, string typeOfVisit, string notes);
         public Task AddSystemRecord(int recordNumber, string recordName, string recordDescription);
         public Task AddMedicines(int animalId, string nameOfMedicines, string descriptio, string vetUsername, decimal amountOfMedicine, string mesurmentUnit, int medicationIntake, string frequencyOfMedicationUse, bool usage);

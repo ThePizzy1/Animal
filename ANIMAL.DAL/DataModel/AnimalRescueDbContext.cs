@@ -92,7 +92,13 @@ namespace ANIMAL.DAL.DataModel
             // Adopter entity configuration
             modelBuilder.Entity<Adopter>(entity =>
             {
-                entity.Property(e => e.DateOfBirth).HasColumnType("date");
+                entity.HasKey(e => e.Id)
+                      .HasName("PK__Adopter");
+
+                // 🔸 Generira random broj 6 znamenki između 100000 i 999999 automatski u bazi
+                entity.Property(e => e.Id)
+                      .HasDefaultValueSql("((ABS(CHECKSUM(NEWID())) % 900000) + 100000)")
+                      .ValueGeneratedOnAdd(); // ✅ EF zna da ga generira baza
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
@@ -118,19 +124,9 @@ namespace ANIMAL.DAL.DataModel
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
-
-                entity.Property(e => e.NumAdoptedAnimals)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.NumReturnedAnimals)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
             });
 
-           
+
             // Animals entity configuration
             modelBuilder.Entity<Animals>(entity =>
             {
@@ -608,20 +604,21 @@ namespace ANIMAL.DAL.DataModel
             modelBuilder.Entity<Labs>(entity =>
             {
                 entity.HasKey(e => e.Id)
-                 .HasName("PK__Labs_1235468");
+                      .HasName("PK__Labs");
 
+                // 🔸 Random 6-znamenkasti ID generiran na SQL strani
+                entity.Property(e => e.Id)
+                      .HasDefaultValueSql("((ABS(CHECKSUM(NEWID())) % 900000) + 100000)")
+                      .ValueGeneratedOnAdd();
 
                 entity.HasOne(d => d.Animal)
-                    .WithMany()
-                    .HasForeignKey(d => d.AnimalId)
-                    .HasPrincipalKey(a => a.IdAnimal)
-
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Labs__Animals");
-           
-
+                      .WithMany()
+                      .HasForeignKey(d => d.AnimalId)
+                      .HasPrincipalKey(a => a.IdAnimal)
+                      .OnDelete(DeleteBehavior.ClientSetNull)
+                      .HasConstraintName("FK__Labs__Animals");
             });
-        
+
 
             modelBuilder.Entity<Medicines>(entity =>
             {

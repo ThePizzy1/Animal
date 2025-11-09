@@ -778,23 +778,34 @@ namespace ANIMAL.WebApi.Controllers
 
         [HttpPost("addNews")]
         [AllowAnonymous]
-        public async Task<IActionResult> AddNews([FromBody] NewsDomain response)
-        {
+        public async Task<IActionResult> AddNewsAsync(
+            [FromForm] string name,
+            [FromForm] string description,
+            [FromForm] DateTime dateTime,
+            [FromForm] IFormFile picture)
+                {
+            if (picture == null || picture.Length == 0)
+                return BadRequest("No image file provided.");
 
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                byte[] pictureBytes;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await picture.CopyToAsync(memoryStream);
+                    pictureBytes = memoryStream.ToArray();
+                }
+
+                await _service.AddNews(name, description, dateTime, pictureBytes);
+
+                return Ok(new { Message = "News added successfully!" });
             }
-
-            await _service.AddNews(
-           response.Name,
-           response.Description,
-           response.DateTime
-
-            );
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add news: {ex.Message}");
+            }
         }
+
 
         [HttpPost("addVetVisit")]
         [AllowAnonymous]
@@ -1336,26 +1347,39 @@ namespace ANIMAL.WebApi.Controllers
             return Ok(new { Message = "Animal record updated successfully" });
         }
 
-        [HttpPut("updateNewsDomain")]
+        [HttpPut("updateNews")]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateNewsDomain([FromBody] NewsDomain record)
+        public async Task<IActionResult> UpdateNewsAsync(
+                [FromForm] int id,
+                [FromForm] string name,
+                [FromForm] string description,
+                [FromForm] DateTime dateTime,
+                [FromForm] IFormFile picture)
         {
-            Console.WriteLine("id:" + record.Id);
             try
             {
-                await _service.UpdateNewsDomain(
-                    record.Id,
-                    record.Name,
-                    record.Description,
-                    record.DateTime
-                      );
+                byte[] pictureBytes = null;
+                if (picture != null && picture.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await picture.CopyToAsync(memoryStream);
+                        pictureBytes = memoryStream.ToArray();
+                    }
+                }
+
+                bool success = await _service.UpdateNewsDomain(id, name, description, dateTime, pictureBytes);
+                if (success)
+                    return Ok(new { Message = "News updated successfully!" });
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update news.");
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating animal record: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating news: {ex.Message}");
             }
-            return Ok(new { Message = "Animal record updated successfully" });
         }
+
 
         [HttpPut("updateVetVisitsDomain")]
         [AllowAnonymous]

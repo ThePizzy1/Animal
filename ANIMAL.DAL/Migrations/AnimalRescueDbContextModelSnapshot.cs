@@ -1050,6 +1050,7 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("varchar(21)");
 
                     b.Property<string>("IbanAnimalShelter")
+                        .IsRequired()
                         .HasColumnType("varchar(21)");
 
                     b.Property<string>("Purpose")
@@ -1436,7 +1437,9 @@ namespace ANIMAL.DAL.Migrations
                     b.HasOne("ANIMAL.DAL.DataModel.Balans", "Balans")
                         .WithMany()
                         .HasForeignKey("IbanAnimalShelter")
-                        .HasPrincipalKey("Iban");
+                        .HasPrincipalKey("Iban")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.VetVisits", b =>

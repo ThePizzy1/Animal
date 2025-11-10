@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ANIMAL.DAL.Migrations
 {
-    public partial class Migration_6_11_2025_01 : Migration
+    public partial class Migration_10_11_2025_02 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -655,7 +655,7 @@ namespace ANIMAL.DAL.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Iban = table.Column<string>(nullable: true),
-                    IbanAnimalShelter = table.Column<string>(nullable: true),
+                    IbanAnimalShelter = table.Column<string>(nullable: false),
                     Type = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     Cost = table.Column<decimal>(nullable: false),
@@ -675,7 +675,7 @@ namespace ANIMAL.DAL.Migrations
                         column: x => x.IbanAnimalShelter,
                         principalTable: "Balans",
                         principalColumn: "Iban",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

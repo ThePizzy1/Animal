@@ -1597,27 +1597,25 @@ namespace ANIMAL.Repository
         }
 
         public async Task<bool> UpdateAnimalBalansDomain(int id, decimal balance)
-            {
-                var balans = await _appDbContext.Balans.FirstOrDefaultAsync(a => a.Id == id);
-                if (balans == null)
-                    throw new Exception("Balance record not found.");
+        {
+            var balans = await _appDbContext.Balans.FirstOrDefaultAsync(a => a.Id == id);
+            if (balans == null)
+                throw new Exception("Balance record not found.");
 
-                if (balans.Balance == null)
-                {
-                    balans.Balance = balance;
-                }
-                else
-                {
-                    balans.Balance = balans.Balance + balance;
-                }
+            // ✅ Postavi direktno, ne dodaj
+            balans.Balance = Math.Round(balance, 4);
 
-                _appDbContext.Balans.Update(balans);
-                await _appDbContext.SaveChangesAsync();
+            // (opcionalno) ako želiš zapisati vrijeme promjene:
+            // balans.LastUpdated = DateTime.Now;
 
-                return true;
-            }
+            _appDbContext.Balans.Update(balans);
+            await _appDbContext.SaveChangesAsync();
 
-            public async Task<bool> UpdateContageusAnimalsDomain(int id )
+            return true;
+        }
+
+
+        public async Task<bool> UpdateContageusAnimalsDomain(int id )
             {
                 var animal = await _appDbContext.ContageusAnimals.FirstOrDefaultAsync(a => a.Id == id);
                 if (animal == null)
@@ -2430,11 +2428,10 @@ namespace ANIMAL.Repository
                     throw new ArgumentNullException(nameof(transactions));
 
                 // Optional: validate properties if needed, e.g. IBANs not empty
-                if (string.IsNullOrWhiteSpace(transactions.Iban))
-                    throw new ArgumentException("Iban cannot be empty.", nameof(transactions.Iban));
+             
                 if (string.IsNullOrWhiteSpace(transactions.IbanAnimalShelter))
                     throw new ArgumentException("IbanAnimalShelter cannot be empty.", nameof(transactions.IbanAnimalShelter));
-
+            Console.WriteLine("transakcija:"+transactions);
                 var t = new Transactions
                 {
                     Iban = transactions.Iban,

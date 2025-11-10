@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANIMAL.DAL.Migrations
 {
     [DbContext(typeof(AnimalRescueDbContext))]
-    [Migration("20251106151348_Migration_6_11_2025_01")]
-    partial class Migration_6_11_2025_01
+    [Migration("20251110171452_Migration_10_11_2025_02")]
+    partial class Migration_10_11_2025_02
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1052,6 +1052,7 @@ namespace ANIMAL.DAL.Migrations
                         .HasColumnType("varchar(21)");
 
                     b.Property<string>("IbanAnimalShelter")
+                        .IsRequired()
                         .HasColumnType("varchar(21)");
 
                     b.Property<string>("Purpose")
@@ -1438,7 +1439,9 @@ namespace ANIMAL.DAL.Migrations
                     b.HasOne("ANIMAL.DAL.DataModel.Balans", "Balans")
                         .WithMany()
                         .HasForeignKey("IbanAnimalShelter")
-                        .HasPrincipalKey("Iban");
+                        .HasPrincipalKey("Iban")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ANIMAL.DAL.DataModel.VetVisits", b =>

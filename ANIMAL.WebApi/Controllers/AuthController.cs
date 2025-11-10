@@ -70,10 +70,11 @@ namespace ANIMAL.WebApi.Controllers
             }
             var user = new ApplicationUser { UserName = model.Username, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, PhoneNumber = model.PhoneNumber };
             var result = await _userManager.CreateAsync(user, model.Password);
-
+            Console.WriteLine("Korisnik registerAdmin:" + model.Role);
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, model.Role);
+
                 _logger.LogInformation("User registered successfully ");
                 return Ok(new { message = "User registered successfully" });
             }

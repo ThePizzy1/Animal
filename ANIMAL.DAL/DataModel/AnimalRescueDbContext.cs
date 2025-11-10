@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ANIMAL.DAL.DataModel
 {
-    public partial class AnimalRescueDbContext : IdentityDbContext<ApplicationUser>
+    public partial class AnimalRescueDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
+
     {
         public AnimalRescueDbContext()
         {
@@ -375,18 +376,23 @@ namespace ANIMAL.DAL.DataModel
                 entity.HasKey(e => e.Id)
                     .HasName("Pk__Transactions");
             });
-            //povezuje ibane kako ih nebi morala dodatno provjeravati i da smanjim poguću pogrešku
+
+            // 🔹 Balans veza – ostaje obavezna (uvijek postoji shelter račun)
             modelBuilder.Entity<Transactions>()
                 .HasOne(b => b.Balans)
                 .WithMany()
                 .HasForeignKey(i => i.IbanAnimalShelter)
-                .HasPrincipalKey(i => i.Iban);
+                .HasPrincipalKey(i => i.Iban)
+                .IsRequired(true);
 
+            // 🔹 Funds veza – postaje neobavezna (donacije ili vanjske uplate)
             modelBuilder.Entity<Transactions>()
                .HasOne(b => b.Funds)
                .WithMany()
                .HasForeignKey(i => i.Iban)
-               .HasPrincipalKey(i => i.Iban);
+               .HasPrincipalKey(i => i.Iban)
+               .IsRequired(false); // ❗ OVO DODAŠ
+
 
             modelBuilder.Entity<Contact>(entity =>
             {

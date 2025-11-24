@@ -22,7 +22,8 @@ namespace ANIMAL.Repository.Common
         IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain();
         public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture();     
         IEnumerable<AdoptedDomain> GetAllAdoptedDomain();
-  
+        IEnumerable<AnimalDomain> GetAllAnimalVetDomain();
+
          //novo
         public IEnumerable<AnimalRecordDomain> GetAllAnimalRecordDomain();
         public IEnumerable<BalansDomain> GetAllBlansDomain();

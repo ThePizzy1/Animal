@@ -65,6 +65,11 @@ namespace ANIMAL.Service
             IEnumerable<AnimalDomain> animalDomains = _repository.GetAllAnimalDomainNoPicture();
             return animalDomains;
         }
+        IEnumerable<AnimalDomain> IService.GetAllAnimalVetDomain()
+        {
+            IEnumerable<AnimalDomain> animalDomains = _repository.GetAllAnimalVetDomain();
+            return animalDomains;
+        }
 
 
         //novo
@@ -463,6 +468,7 @@ namespace ANIMAL.Service
             IEnumerable<ReturnedAnimalDomain> animalDomains = _repository.GetAllReturnedAnimalsForAdopter(adopterId);
             return animalDomains;
         }
+
         public  Task<AnimalDomain> AddAnimalAsync(int idAnimal,string name, string family, string species, string subspecies, int age, string gender, decimal weight, decimal height, decimal length, bool neutered, bool vaccinated, bool microchipped, bool trained, bool socialized, string healthIssues, byte[] picture, string personalityDescription, bool adopted)
         {
             try

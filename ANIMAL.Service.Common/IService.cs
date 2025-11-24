@@ -18,10 +18,10 @@ namespace ANIMAL.Service.Common
         IEnumerable<AdoptedDomain> GetAllAdoptedDomain();
         IEnumerable<ReturnedAnimalDomain> GetAllReturnedAnimalDomain();
         public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture();
-
+        IEnumerable<AnimalDomain> GetAllAnimalVetDomain();
 
         //novo
-     
+
         public IEnumerable<AnimalRecordDomain> GetAllAnimalRecordDomain();
         public IEnumerable<BalansDomain> GetAllBlansDomain();
         public IEnumerable<ContactDomain> GetaAllContactDomain();

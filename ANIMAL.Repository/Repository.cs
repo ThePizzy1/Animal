@@ -287,8 +287,40 @@ namespace ANIMAL.Repository
 
                     return animalDomain;
                 }
+        public IEnumerable<AnimalDomain> GetAllAnimalVetDomain()
+        {
+            
+            var animals = _appDbContext.Animals
+                .Where(a => _appDbContext.AnimalRecord.Any(ar => ar.RecordId != 8 && ar.RecordId != 7 && ar.RecordId != 6 && ar.AnimalId == a.IdAnimal))
+                .ToList();
 
-                 public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture()
+
+
+            var animalDomain = animals.Select(e => new AnimalDomain(
+                e.IdAnimal,
+                e.Name,
+                e.Family,
+                e.Species,
+                e.Subspecies,
+                e.Age,
+                e.Gender,
+                e.Weight,
+                e.Height,
+                e.Length,
+                e.Neutered,
+                e.Vaccinated,
+                e.Microchipped,
+                e.Trained,
+                e.Socialized,
+                e.HealthIssues,
+                e.Picture,
+                e.PersonalityDescription,
+                e.Adopted))
+                .ToList();
+
+            return animalDomain;
+        }
+        public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture()
         {
             
                 // Get all animals that are NOT marked as deceased (RecordId != 8)

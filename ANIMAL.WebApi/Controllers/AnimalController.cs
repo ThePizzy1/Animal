@@ -38,6 +38,14 @@ namespace ANIMAL.WebApi.Controllers
             return animalDb;
         }
         [HttpGet]
+        [HttpGet("animal_vet_filter")]
+        [AllowAnonymous]
+        public IEnumerable<AnimalDomain> GetAllAnimalVetDomain()
+        {
+            IEnumerable<AnimalDomain> animalDb = _service.GetAllAnimalVetDomain();
+            return animalDb;
+        }
+        [HttpGet]
         [Route("animal_pc")]
         [AllowAnonymous]
         public IEnumerable<AnimalDomain> GetAllAnimalDomainNoPicture()
